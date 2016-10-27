@@ -16,7 +16,7 @@ var Api = require('./login-api-new');
 // configuration =========
 // =======================
 var port = process.env.PORT || 4000; // used to create, sign, and verify tokens
-mongoose.connect(MONGOLAB_URI); // connect to database
+mongoose.connect('mongodb://mendy:shme3184@ds161315.mlab.com:61315/mendy-edri-db'); // connect to database
 app.set('superSecret', config.secret); // secret variable
 
 // use body parser so we can get info from POST and/or URL parameters
