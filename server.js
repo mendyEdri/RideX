@@ -166,10 +166,24 @@ conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open', function() {
   console.log('db is ready');
 
-  var newUser = new User({
-    email: "mendy@talenttribe.me",
-    password: "102030",
-    admin: true
-  });
-  newUser.save();
+  var songSchema = mongoose.Schema({
+   decade: String,
+   artist: String,
+   song: String,
+   weeksAtOne: Number
+ });
+
+ // Store song documents in a collection called "songs"
+ var Song = mongoose.model('songs', songSchema);
+
+ // Create seed data
+ var seventies = new Song({
+   decade: '1970s',
+   artist: 'Debby Boone',
+   song: 'You Light Up My Life',
+   weeksAtOne: 10
+ });
+
+ seventies.save();
+
 });
