@@ -158,9 +158,24 @@ app.use('/api', apiRoutes);
 // =======================
 // start the server ======
 // =======================
+app.listen(port);
+console.log('🍺🍺 http://localhost:' + port);
+
 var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open', function() {
-  app.listen(port);
-  console.log('DB is ready! http://localhost:' + port);
+  console.log('db is ready');
+
+  var newUser = new User({
+    email: "mendy@talenttribe.me",
+    password: "102030",
+    admin: true
+  });
+
+  newUser.save(function(err) {
+    if (err) throw err;
+    console.log('User saved successfully');
+    res.json({ success: true, message: 'User has saved!'});
+  });
+
 });
