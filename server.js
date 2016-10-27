@@ -16,7 +16,7 @@ var User   = require('./app/models/user'); // get our mongoose model
 // configuration =========
 // =======================
 var port = process.env.PORT || 4000; // used to create, sign, and verify tokens
-mongoose.connect('mongodb://heroku_kc5krpgj:5tbspvggrtia5h8adh2eln4r8n@ds015760.mlab.com:15760/heroku_kc5krpgj'); // connect to database
+mongoose.connect("mongodb://heroku_kc5krpgj:5tbspvggrtia5h8adh2eln4r8n@ds015760.mlab.com:15760/heroku_kc5krpgj");
 app.set('superSecret', config.secret); // secret variable
 
 // use body parser so we can get info from POST and/or URL parameters
@@ -38,7 +38,7 @@ var allowCrossDomain = function(req, res, next) {
     next();
 }
 
-app.use(allowCrossDomain);
+//app.use(allowCrossDomain);
 //apiRoutes.use(allowCrossDomain);
 
 // API ROUTES -------------------
@@ -68,11 +68,8 @@ app.get('/api/test', function(req, res) {
   newUser.save(function(err) {
     if (err) throw err;
     console.log('User saved successfully');
-    res.json({ success: true });
+    res.json({ success: true, message: 'User has saved!'});
   });
-  var data = { message: 'Welcome to the coolest API on earth!' };
-  console.log('data: ' + JSON.stringify(data));
-  res.json(data);
 });
 
 
