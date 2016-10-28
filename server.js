@@ -124,10 +124,9 @@ app.post('/api/login', function(req, res) {
   })
 });
 
-apiRoutes.use(allowCrossDomain);
-
 // route middleware to verify a token
 apiRoutes.use(function(req, res, next) {
+    apiRoutes.use(allowCrossDomain);
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (token) {
       jwt.verify(token, app.get('superSecret'), function(err, decoded) {
