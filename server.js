@@ -98,11 +98,11 @@ app.post('/api/login', function(req, res) {
   User.findOne({email: req.body.email}, function(err, user) {
     if (err) { throw err; }
     if (!user) {
-      res.json({success: false, message: 'Authentication failed. User not found.'});
+      res.send({success: false, message: 'Authentication failed. User not found.'});
     } else if (user) {
       // check if password match
       if (user.password != req.body.password) {
-        res.json({success: false, message: 'Authentication failed. Wrong password.'});
+        res.send({success: false, message: 'Authentication failed. Wrong password.'});
       } else {
         // if user is found and password is right
        // create a token
@@ -110,7 +110,7 @@ app.post('/api/login', function(req, res) {
           expiresIn: 1440
        });
 
-       res.json({
+       res.send({
          success: true,
          message: 'Enjoy Your Token!',
          userId: user._id,
