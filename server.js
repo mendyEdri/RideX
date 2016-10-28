@@ -28,6 +28,8 @@ app.use(morgan('dev'));
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 }
 app.use(allowCrossDomain);
@@ -39,7 +41,6 @@ app.use(allowCrossDomain);
 // API ROUTES -------------------
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
-apiRoutes.use(allowCrossDomain);
 // =======================
 // routes ================
 // =======================
@@ -143,6 +144,8 @@ apiRoutes.use(function(req, res, next) {
       return res.status(403).send({success: false, message: 'No Token Provided'});
     }
 });
+
+apiRoutes.use(allowCrossDomain);
 
 // route to return all users (GET http://localhost:8080/api/users)
 apiRoutes.get('/users', function(req, res) {
