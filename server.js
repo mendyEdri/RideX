@@ -124,6 +124,8 @@ app.post('/api/login', function(req, res) {
   })
 });
 
+apiRoutes.use(allowCrossDomain);
+
 // route middleware to verify a token
 apiRoutes.use(function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -138,12 +140,10 @@ apiRoutes.use(function(req, res, next) {
           }
       });
     } else {
-      //return res.status(403).send({success: false, message: 'No Token Provided'});
-      return res.json({success: false, message: 'Failed to authenticate token.'});
+      return res.status(403).send({success: false, message: 'No Token Provided'});
+      //return res.json({success: false, message: 'Failed to authenticate token.'});
     }
 });
-
-apiRoutes.use(allowCrossDomain);
 
 // route to return all users (GET http://localhost:8080/api/users)
 apiRoutes.get('/users', function(req, res) {
