@@ -40,7 +40,7 @@ var apiRoutes = express.Router();
 // =======================
 // basic route
 app.get('/', function(req, res) {
-    res.send('Hello! The API is at http://localhost:' + port + '/api');
+    res.json({ message: 'Welcome to the coolest API on earth!' });
 });
 
 // route to show a random message (GET http://localhost:8080/api/)
@@ -98,11 +98,11 @@ app.post('/api/login', function(req, res) {
   User.findOne({email: req.body.email}, function(err, user) {
     if (err) { throw err; }
     if (!user) {
-      res.send({success: false, message: 'Authentication failed. User not found.'});
+      res.json({success: false, message: 'Authentication failed. User not found.'});
     } else if (user) {
       // check if password match
       if (user.password != req.body.password) {
-        res.send({success: false, message: 'Authentication failed. Wrong password.'});
+        res.json({success: false, message: 'Authentication failed. Wrong password.'});
       } else {
         // if user is found and password is right
        // create a token
@@ -110,7 +110,7 @@ app.post('/api/login', function(req, res) {
           expiresIn: 1440
        });
 
-       res.send({
+       res.json({
          success: true,
          message: 'Enjoy Your Token!',
          userId: user._id,
