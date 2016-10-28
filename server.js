@@ -54,12 +54,7 @@ app.get('/api/test', function(req, res) {
     password: "102030",
     admin: true
   });
-
-  newUser.save(function(err) {
-    if (err) throw err;
-    console.log('User saved successfully');
-    res.json({ success: true, message: 'User has saved!'});
-  });
+  newUser.save();
 });
 
 
@@ -165,25 +160,4 @@ var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open', function() {
   console.log('db is ready');
-
-  var songSchema = mongoose.Schema({
-   decade: String,
-   artist: String,
-   song: String,
-   weeksAtOne: Number
- });
-
- // Store song documents in a collection called "songs"
- var Song = mongoose.model('songs', songSchema);
-
- // Create seed data
- var seventies = new Song({
-   decade: '1970s',
-   artist: 'Debby Boone',
-   song: 'You Light Up My Life',
-   weeksAtOne: 10
- });
-
- seventies.save();
-
 });
