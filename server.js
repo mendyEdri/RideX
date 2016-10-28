@@ -34,10 +34,7 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
-
-
 //app.use(allowCrossDomain);
-
 // API ROUTES -------------------
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
@@ -141,7 +138,8 @@ apiRoutes.use(function(req, res, next) {
           }
       });
     } else {
-      return res.status(403).send({success: false, message: 'No Token Provided'});
+      //return res.status(403).send({success: false, message: 'No Token Provided'});
+      return res.json({success: false, message: 'Failed to authenticate token.'});
     }
 });
 
