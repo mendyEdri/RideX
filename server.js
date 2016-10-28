@@ -54,7 +54,9 @@ app.get('/api/test', function(req, res) {
     password: "102030",
     admin: true
   });
+
   newUser.save();
+  res.json({ success: true, message: 'User has saved!'});
 });
 
 
