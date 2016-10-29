@@ -38,7 +38,6 @@ app.use(allowCrossDomain);
 // API ROUTES -------------------
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
-//apiRoutes.use(allowCrossDomain);
 // =======================
 // routes ================
 // =======================
@@ -63,8 +62,7 @@ app.get('/api/test', function(req, res) {
   res.json({ success: true, message: 'User has saved!'});
 });
 
-
-app.post('/api/signup', function(req, res) {
+app.post('/signup', function(req, res) {
   // create a sample users
   var newUser = new User({
     email: req.body.email,
@@ -84,7 +82,6 @@ app.post('/api/signup', function(req, res) {
     } else {
       res.json({ success: false });
     }
-
   });
 });
 
@@ -96,7 +93,7 @@ function removeAll(res) {
   res.json({ success: true });
 }
 
-app.post('/api/login', function(req, res) {
+app.post('/login', function(req, res) {
   var data = req.body || req.query || req.headers;
   console.log('data: ' + JSON.stringify(data));
   User.findOne({email: req.body.email}, function(err, user) {
@@ -153,6 +150,8 @@ apiRoutes.get('/users', function(req, res) {
 
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);
+
+apiRoutes.use(allowCrossDomain);
 
 // API ROUTES -------------------
 // we'll get to these in a second
