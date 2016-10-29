@@ -77,13 +77,13 @@ app.post('/signup', function(req, res) {
       newUser.save(function(err) {
         if (err) throw err;
         console.log('User saved successfully');
+        var token = jwt.sign(newUser, app.get('superSecret'), {
+           expiresIn: 1440
+        });
         res.json({ success: true });
       });
     } else {
-      var token = jwt.sign(newUser, app.get('superSecret'), {
-         expiresIn: 1440
-      });
-      res.json({ success: false, token: token });
+      res.json({ success: false });
     }
   });
 });
