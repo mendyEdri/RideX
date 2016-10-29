@@ -80,7 +80,10 @@ app.post('/signup', function(req, res) {
         res.json({ success: true });
       });
     } else {
-      res.json({ success: false });
+      var token = jwt.sign(newUser, app.get('superSecret'), {
+         expiresIn: 1440
+      });
+      res.json({ success: false, token: token });
     }
   });
 });
@@ -95,7 +98,6 @@ function removeAll(res) {
 
 app.post('/login', function(req, res) {
   var data = req.body || req.query || req.headers;
-  console.log('data: ' + JSON.stringify(data));
   User.findOne({email: req.body.email}, function(err, user) {
     if (err) { throw err; }
     if (!user) {
