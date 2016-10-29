@@ -80,7 +80,7 @@ app.post('/signup', function(req, res) {
         var token = jwt.sign(newUser, app.get('superSecret'), {
            expiresIn: 1440
         });
-        res.json({ success: true });
+        res.json({ success: true, token: token});
       });
     } else {
       res.json({ success: false });
