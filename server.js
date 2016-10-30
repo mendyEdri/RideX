@@ -10,7 +10,9 @@ var mongoose    = require('mongoose');
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
 var User   = require('./app/models/user'); // get our mongoose model
-
+var React = require('react');
+var ReactDOMServer = require('react-DOM/server');
+var Component = require('./Component.jsx');
 
 // =======================
 // configuration =========
@@ -43,7 +45,9 @@ var apiRoutes = express.Router();
 // =======================
 // basic route
 app.get('/', function(req, res) {
-  var html = '<h1>Hello Server Rendering</h1>';
+  var html = ReactDOMServer.renderToString(
+      React.createElement(Component);
+  );
   res.send(html);
 });
 
