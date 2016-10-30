@@ -43,7 +43,8 @@ var apiRoutes = express.Router();
 // =======================
 // basic route
 app.get('/', function(req, res) {
-    res.json({ message: 'Welcome to the coolest API on earth!' });
+  var html = '<h1>Hello Server Rendering</h1>';
+  res.send(html);
 });
 
 // route to show a random message (GET http://localhost:8080/api/)
