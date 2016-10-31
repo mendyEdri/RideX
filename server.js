@@ -1,10 +1,6 @@
 // =======================
 // get the packages we need ============
 // =======================
-require('babel-register')({
-  presets: ['es2015', 'react']
-});
-
 var express     = require('express');
 var bodyParser  = require('body-parser');
 var app         = express();
@@ -17,7 +13,6 @@ var User   = require('./app/models/user'); // get our mongoose model
 
 var React = require('react');
 var ReactDOMServer = require('react-DOM/server');
-var Component = require('./Component');
 
 
 // =======================
@@ -43,7 +38,6 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
-//app.use(allowCrossDomain);
 // API ROUTES -------------------
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
@@ -52,10 +46,7 @@ var apiRoutes = express.Router();
 // =======================
 // basic route
 app.get('/', function(req, res) {
-  var html = ReactDOMServer.renderToString(
-    React.createElement(Component)
-  );
-  res.send(html);
+  res.json({ message: 'this is home page' });
 });
 
 
