@@ -1,6 +1,10 @@
 // =======================
 // get the packages we need ============
 // =======================
+require('babel-register')({
+  presets: ['es2015', 'react']
+});
+
 var express     = require('express');
 var bodyParser  = require('body-parser');
 var app         = express();
@@ -10,9 +14,11 @@ var mongoose    = require('mongoose');
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
 var User   = require('./app/models/user'); // get our mongoose model
+
 var React = require('react');
 var ReactDOMServer = require('react-DOM/server');
-var Component = require('./Component.jsx');
+var Component = require('./Component');
+
 
 // =======================
 // configuration =========
@@ -27,6 +33,7 @@ app.use(bodyParser.json());
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
+app.use(express.static('public'));
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -46,10 +53,11 @@ var apiRoutes = express.Router();
 // basic route
 app.get('/', function(req, res) {
   var html = ReactDOMServer.renderToString(
-      React.createElement(Component);
+    React.createElement(Component)
   );
   res.send(html);
 });
+
 
 // route to show a random message (GET http://localhost:8080/api/)
 apiRoutes.get('/api', function(req, res) {
