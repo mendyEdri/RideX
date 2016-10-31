@@ -43,7 +43,6 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
-//app.use(allowCrossDomain);
 // API ROUTES -------------------
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
