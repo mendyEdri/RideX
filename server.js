@@ -152,6 +152,7 @@ apiRoutes.get('/users', function(req, res) {
 
 apiRoutes.get('/validate', function(req, res) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log('validate: ' + token);
   if (token) {
     jwt.verify(token, app.get('superSecret'), function(err, decoded) {
         if (err) {
