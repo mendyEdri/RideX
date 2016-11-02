@@ -151,7 +151,7 @@ apiRoutes.get('/users', function(req, res) {
   });
 });
 
-apiRoutes.get('/api/validate', function(req, res) {
+apiRoutes.get('/validate', function(req, res) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   console.log('validate: ' + JSON.stringify(token));
   if (token) {
