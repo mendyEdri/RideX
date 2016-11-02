@@ -38,6 +38,8 @@ app.use(allowCrossDomain);
 // API ROUTES -------------------
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
+apiRoutes.use(allowCrossDomain);
+
 // =======================
 // routes ================
 // =======================
@@ -46,12 +48,12 @@ app.get('/', function(req, res) {
   res.json({ message: 'this is home page' });
 });
 
-apiRoutes.use(allowCrossDomain);
-
 // route to show a random message (GET http://localhost:8080/api/)
 apiRoutes.get('/api', function(req, res) {
   res.json({ message: 'Welcome to the coolest API on earth!' });
 });
+
+
 
 app.get('/api/test', function(req, res) {
   var newUser = new User({
