@@ -146,13 +146,13 @@ apiRoutes.use(function(req, res, next) {
 
 // route to return all users (GET http://localhost:8080/api/users)
 apiRoutes.get('/users', function(req, res) {
-  res.send({message: 'test'});
-});
-
-apiRoutes.get('/validate', function(req, res) {
   User.find({}, function(err, users) {
     res.json(users);
   });
+});
+
+apiRoutes.get('/validate', function(req, res) {
+  res.send({message: 'test'});
 });
 
 // apply the routes to our application with the prefix /api
