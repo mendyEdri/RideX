@@ -128,7 +128,7 @@ app.post('/login', function(req, res) {
 // route middleware to verify a token
 apiRoutes.use(function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
-    console.log('validate: ' + JSON.stringify(req.body));
+    console.log('validate: ' + JSON.stringify(token));
     if (token) {
       jwt.verify(token, app.get('superSecret'), function(err, decoded) {
           if (err) {
