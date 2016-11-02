@@ -152,9 +152,21 @@ apiRoutes.get('/users', function(req, res) {
 });
 
 apiRoutes.get('/validate', function(req, res) {
-  User.find({}, function(err, users) {
-    res.json(users);
-  });
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log('validate: ' + JSON.stringify(token));
+  if (token) {
+    jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+        if (err) {
+          res.json({success: false, message: 'Failed to authenticate token.'});
+        } else {
+            // if everything is good, save to request for use in other routes
+            req.decoded = decoded;
+            next();
+        }
+    });
+  } else {
+    return res.status(403).send({success: false, message: 'No Token Provided'});
+  }
 });
 
 // apply the routes to our application with the prefix /api
