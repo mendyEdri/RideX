@@ -46,6 +46,7 @@ app.get('/', function(req, res) {
   res.json({ message: 'this is home page' });
 });
 
+apiRoutes.use(allowCrossDomain);
 
 // route to show a random message (GET http://localhost:8080/api/)
 apiRoutes.get('/api', function(req, res) {
@@ -171,8 +172,6 @@ apiRoutes.get('/validate', function(req, res) {
 
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);
-
-apiRoutes.use(allowCrossDomain);
 
 // API ROUTES -------------------
 // we'll get to these in a second
