@@ -11,6 +11,9 @@ var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
 var User   = require('./app/models/user'); // get our mongoose model
 
+var request = require('request');
+var data = require('./dropbox.json');
+var index = 0;
 
 // =======================
 // configuration =========
@@ -48,12 +51,56 @@ app.get('/', function(req, res) {
   res.json({ message: 'this is home page' });
 });
 
+app.get('/sip', function(req, res) {
+  res.json({ message: 'uploading positions..' });
+  //index = 0;
+  //uploadPositions();
+});
+
+app.get('/upload', function(req, res) {
+  res.json({ message: 'uploading positions..' });
+  //index = 0;
+  //uploadPositions();
+});
+
+
+function uploadPositions() {
+  var title = data.source.job[index].title.__cdata;
+  var location = data.source.job[index].city.__cdata + ', ' + data.source.job[index].state.__cdata;
+  var city = data.source.job[index].city.__cdata;
+  var country = data.source.job[index].country.__cdata;
+  var positionNumber = data.source.job[index].referencenumber.__cdata;
+  var description = data.source.job[index].description.__cdata
+  var companyName = data.source.job[index].company.__cdata;
+  var companyId = '47033f3d-e807-4669-b537-a5e9992f3d1e'; //'e510559d-13c9-4072-866c-7f3e4126a22e';
+  console.log('positionnumber: ' + positionNumber);
+
+  request.post(
+    'https://talenttribe.me/tt-server/rest/positionCompany/addUpdateOpenPosition',
+    { json: { title: title, location: { address: location, city: city }, positionNumber: positionNumber, description: description,
+              company: {
+                companyName: companyName,
+                companyId: companyId
+              }   }
+    },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+            index++;
+            if (index < data.source.job.length) {
+              console.log('index: ' + index);
+              uploadPositions();
+            }
+        }
+    }
+);
+}
+
+
 // route to show a random message (GET http://localhost:8080/api/)
 apiRoutes.get('/api', function(req, res) {
   res.json({ message: 'Welcome to the coolest API on earth!' });
 });
-
-
 
 app.get('/api/test', function(req, res) {
   var newUser = new User({
