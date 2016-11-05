@@ -63,9 +63,8 @@ app.get('/send', function(req, res) {
       from: "+15005550006"
   }, function(err, sms) {
       process.stdout.write(sms.sid);
+      res.json({ message: sms.sid });
   });
-
-
 });
 
 app.get('/taxisms', function(req, res) {
