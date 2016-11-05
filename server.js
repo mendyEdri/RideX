@@ -51,8 +51,25 @@ app.get('/', function(req, res) {
   res.json({ message: 'this is home page' });
 });
 
-app.get('/sip', function(req, res) {
-  res.json({ message: 'uploading positions..' });
+app.get('/send', function(req, res) {
+
+  var accountSid = 'AC572771fe456e85c8332996cfcab3684c';
+  var authToken = "4322b0334d35375c3a9e157954d56e69";
+  var client = require('twilio')(accountSid, authToken);
+
+  client.messages.create({
+      body: "Hey, i need a taxi at this place: ..",
+      to: "+14108675309",
+      from: "+15005550006"
+  }, function(err, sms) {
+      process.stdout.write(sms.sid);
+  });
+
+
+});
+
+app.get('/taxisms', function(req, res) {
+  res.json({ message: req });
   //index = 0;
   //uploadPositions();
 });
