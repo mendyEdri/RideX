@@ -59,8 +59,8 @@ app.get('/send', function(req, res) {
 
   client.messages.create({
       body: "Hey, i need a taxi at this place: ..",
-      to: "12406075476",
-      from: "12406075476"
+      to: "18058643424",
+      from: "+12406075476"
   }, function(err, sms) {
       //process.stdout.write(sms.sid);
       console.log('/send ' + sms);
@@ -69,6 +69,10 @@ app.get('/send', function(req, res) {
       }
       res.json({ message: sms });
   });
+});
+
+app.get('sms/out', function(req, res) {
+  res.json({ message: req.query });
 });
 
 app.get('/sms', function(req, res) {
