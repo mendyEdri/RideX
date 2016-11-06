@@ -63,15 +63,19 @@ app.get('/send', function(req, res) {
       from: "+12406075476"
   }, function(err, sms) {
       //process.stdout.write(sms.sid);
+      console.log('/send ' + sms);
       res.json({ message: sms });
   });
 });
 
 app.get('/sms', function(req, res) {
+  console.log('-------- Message --------');
   console.log('Sender: ' + JSON.stringify(req.query.From));
   console.log('Body: ' + JSON.stringify(req.query.Body));
+  console.log('-------- End --------');
   res.json({ message: req.query });
 });
+
 
 app.get('/upload', function(req, res) {
   res.json({ message: 'uploading positions..' });
