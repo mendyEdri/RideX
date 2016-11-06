@@ -64,7 +64,9 @@ app.get('/send', function(req, res) {
   }, function(err, sms) {
       //process.stdout.write(sms.sid);
       console.log('/send ' + sms);
-      console.log('err: ' + err);
+      if (err) {
+        console.log('err: ' + JSON.stringify(err));
+      }
       res.json({ message: sms });
   });
 });
