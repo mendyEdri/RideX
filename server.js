@@ -68,7 +68,8 @@ app.get('/send', function(req, res) {
 });
 
 app.get('/sms', function(req, res) {
-  console.log('sms: ' + JSON.stringify(req.query));
+  console.log('Sender: ' + JSON.stringify(req.query.From));
+  console.log('Body: ' + JSON.stringify(req.query.Body));
   res.json({ message: req.query });
 });
 
