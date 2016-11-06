@@ -67,10 +67,8 @@ app.get('/send', function(req, res) {
   });
 });
 
-app.get('/taxisms', function(req, res) {
+app.get('/sms/replay/in', function(req, res) {
   res.json({ message: req });
-  //index = 0;
-  //uploadPositions();
 });
 
 app.get('/upload', function(req, res) {
