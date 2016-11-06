@@ -53,7 +53,7 @@ app.get('/', function(req, res) {
 
 app.get('/send', function(req, res) {
 
-  var accountSid = 'MG0e8d81983ae25b20171308d531e10682';
+  var accountSid = 'AC2cbcc9d2a2a26af287dd08f68131f4ec';
   var authToken = "4322b0334d35375c3a9e157954d56e69";
   var client = require('twilio')(accountSid, authToken);
 
