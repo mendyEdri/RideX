@@ -60,7 +60,7 @@ app.get('/send', function(req, res) {
   client.messages.create({
       body: "Hey, i need a taxi at this place: ..",
       to: "+972544987877",
-      from: "2406075476"
+      from: "12406075476"
   }, function(err, sms) {
       //process.stdout.write(sms.sid);
       console.log('/send ' + sms);
