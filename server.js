@@ -52,22 +52,22 @@ app.get('/', function(req, res) {
 });
 
 app.get('/send', function(req, res) {
+  var accountSid = 'AC2cbcc9d2a2a26af287dd08f68131f4ec';
+  var authToken = 'd6bdb9ca36ab74d839fd59c6c5be7617';
 
-  var accountSid = 'AC572771fe456e85c8332996cfcab3684c';
-  var authToken = "4322b0334d35375c3a9e157954d56e69";
+  //require the Twilio module and create a REST client
   var client = require('twilio')(accountSid, authToken);
-
   client.messages.create({
-      body: "Hey, i need a taxi at this place: ..",
-      to: "18058643424",
-      from: "+12406075476"
-  }, function(err, sms) {
-      //process.stdout.write(sms.sid);
-      console.log('/send ' + sms);
-      if (err) {
-        console.log('err: ' + JSON.stringify(err));
-      }
-      res.json({ message: sms });
+  	to: "+972544987877",
+  	from: "+12406075476",
+  	body: "Trying Twilio from server",
+  }, function(err, message) {
+  	console.log(message.sid);
+    if (err) {
+      res.json({ error: err });
+      return;
+    }
+    res.json({ message: message.sid });
   });
 });
 
