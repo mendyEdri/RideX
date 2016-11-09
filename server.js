@@ -104,8 +104,6 @@ var geocoding = function(body, callback) {
   var longitude = '';
   var latitude = '';
 
-  console.log('function: ' + body);
-
   googleMapsClient.geocode({
     address: body
   }, function(err, response) {
@@ -148,10 +146,12 @@ var geocoding = function(body, callback) {
         }
 
       } else {
-       res.json({ success: false, message: 'You Must provide street number.'});
+       //res.json({ success: false, message: 'You Must provide street number.'});
+       callback({ success: false, message: 'You Must provide street number.'});
       }
     } else {
-      res.json({ success: false, message: 'Address is not validate. try again', results: response.json.results });
+      //res.json({ success: false, message: 'Address is not validate. try again', results: response.json.results });
+      callback({ success: false, message: 'Address is not validate. try again', results: response.json.results });
     }
   });
 }
