@@ -105,7 +105,7 @@ var geocoding = function(body, callback) {
   var latitude = '';
 
   googleMapsClient.geocode({
-    address: body.address
+    address: body
   }, function(err, response) {
     if (!err) {
       if (response.json.results.length > 0 && response.json.results[0].types[0] === 'street_address') {
@@ -205,7 +205,7 @@ app.post('/order', function(req, res) {
       console.log(messageBody);
       geocoding(messageBody, function(result) {
         if (!result.success) {
-
+          console.log('err: ' + result);
           //sendMessage(passengerGlobal.phoneNumber, result.message);
           res.json(result);
         }
