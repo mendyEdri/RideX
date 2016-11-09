@@ -177,7 +177,7 @@ app.post('/order', function(req, res) {
   }
 
   if (messageBody && !messageBody.includes('ghana')) {
-      messageBody.concat(', ghana');
+      //messageBody.concat(', ghana');
   }
 
   // create Passenger in db if not exist.
@@ -203,7 +203,6 @@ app.post('/order', function(req, res) {
       geocoding(messageBody, function(result) {
         console.log('res: ' + result);
         if (!result.success) {
-
           sendMessage(passengerGlobal.phoneNumber, result.message);
           res.json(result);
           return;
