@@ -160,14 +160,14 @@ app.post('/order', function(req, res) {
   var messageBody = '';
 
   console.log('Twilio Response:');
-  console.log(req);
+  console.log(req.body.From);
 
-  if (req.From) {
-    senderNumber = req.From;
+  if (req.body.From) {
+    senderNumber = req.body.From;
   }
 
-  if (req.Body) {
-    messageBody = req.Body;
+  if (req.body.Body) {
+    messageBody = req.body.Body;
   }
 
   sendMessage(senderNumber, 'Searching for taxi around you..');
