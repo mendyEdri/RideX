@@ -154,7 +154,7 @@ var geocoding = function(body, callback) {
   });
 }
 
-app.get('/order', function(req, res) {
+app.post('/order', function(req, res) {
   console.log('req.body: ' + req.query);
   var passengerGlobal = null;
   sendMessage(req.body.phoneNumber, 'Searching for taxi around you..');
