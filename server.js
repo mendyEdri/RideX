@@ -204,6 +204,7 @@ app.post('/order', function(req, res) {
       // send sms searching for taxi around
       console.log(messageBody);
       geocoding(messageBody, function(result) {
+        console.log('res: ' + result);
         if (!result.success) {
           console.log('err: ' + result);
           //sendMessage(passengerGlobal.phoneNumber, result.message);
