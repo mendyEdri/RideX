@@ -157,25 +157,35 @@ var geocoding = function(body, callback) {
 app.post('/order', function(req, res) {
   console.log(req.body);
   var passengerGlobal = null;
-  if (req.body.phoneNumber) {
-    sendMessage(req.body.phoneNumber, 'Searching for taxi around you..');
+  var senderNumber = '';
+  var messageBody = '';
+
+  if (req.From) {
+    senderNumber = req.From;
   }
+
+  if (req.Body) {
+    messageBody = req.Body;
+  }
+
+  sendMessage(senderNumber, 'Searching for taxi around you..');
+
   for (var i = 0; i < pendingRides.length; i++) {
-    if (pendingRides[i].passengerId == req.body.phoneNumber) {
+    if (pendingRides[i].passengerId == senderNumber) {
         pendingRides.splice(i, 1);
     }
   }
 
-  if (req.body.address && !req.body.address.includes('ghana')) {
-      req.body.address.concat(', ghana');
+  if (messageBody && !messageBody.includes('ghana')) {
+      messageBody.concat(', ghana');
   }
 
   // create Passenger in db if not exist.
-  Passenger.findOne({ phoneNumber: req.body.phoneNumber }, function(err, passenger) {
+  Passenger.findOne({ phoneNumber: senderNumber }, function(err, passenger) {
     if (err) { throw err; }
     if (!passenger) {
       var newPassenger = new Passenger({
-        phoneNumber: req.body.phoneNumber,
+        phoneNumber: senderNumber,
         joinDate: new Date(),
         blocked: false
       });
@@ -189,7 +199,7 @@ app.post('/order', function(req, res) {
 
     if (passengerGlobal) {
       // send sms searching for taxi around
-      geocoding(req.body, function(result) {
+      geocoding(messageBody, function(result) {
         if (!result.success) {
           sendMessage(passengerGlobal.phoneNumber, result.message);
           res.json(result);
