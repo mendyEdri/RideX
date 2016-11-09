@@ -176,11 +176,11 @@ app.post('/order', function(req, res) {
   for (var i = 0; i < pendingRides.length; i++) {
     if (pendingRides[i].passengerId == senderNumber) {
       console.log('pending:' + senderNumber);
-      if (positives.includes(messageBody)) {
+      if (positives.contains(messageBody)) {
           sendMessage(passengerGlobal.phoneNumber, 'Great! the taxi is on the way to you.', function(success) {
 
           });
-      } else if (negatives.includes(messageBody)) {
+      } else if (negatives.contains(messageBody)) {
         sendMessage(passengerGlobal.phoneNumber, 'I won\'t send it. maybe next time.', function(success) {
 
         });
