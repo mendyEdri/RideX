@@ -160,7 +160,6 @@ app.post('/order', function(req, res) {
   var messageBody = '';
 
   console.log('Twilio Response:');
-  console.log(req.body.From);
 
   if (req.body.From) {
     senderNumber = req.body.From;
@@ -170,8 +169,7 @@ app.post('/order', function(req, res) {
     messageBody = req.body.Body;
   }
 
-  sendMessage(senderNumber, 'Searching for taxi around you..');
-
+  sendMessage(senderNumber, 'Hey There..');
   for (var i = 0; i < pendingRides.length; i++) {
     if (pendingRides[i].passengerId == senderNumber) {
         pendingRides.splice(i, 1);
@@ -202,19 +200,21 @@ app.post('/order', function(req, res) {
 
     if (passengerGlobal) {
       // send sms searching for taxi around
+      console.log(messageBody);
       geocoding(messageBody, function(result) {
         if (!result.success) {
-          sendMessage(passengerGlobal.phoneNumber, result.message);
+
+          //sendMessage(passengerGlobal.phoneNumber, result.message);
           res.json(result);
         }
         console.log('we found a taxi ' + result.message.distance + ' from you.');
-        sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.');
+        //sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.');
         setTimeout(function () {
           console.log('It can take a ' + result.message.time + ' to get to you.');
-          sendMessage(passengerGlobal.phoneNumber, 'It can take a ' + result.message.time + ' to get to you.');
+          //sendMessage(passengerGlobal.phoneNumber, 'It can take a ' + result.message.time + ' to get to you.');
           setTimeout(function () {
             console.log('Should we send? (yes/no)');
-            sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)');
+            //sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)');
 
             var driverId = '0526850487';
             var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
