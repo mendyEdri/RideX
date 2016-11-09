@@ -170,9 +170,8 @@ app.post('/order', function(req, res) {
   }
 
   console.log(senderNumber);
-  console.log(messageBody);
 
-  sendMessage(senderNumber, 'Hey There..');
+  //sendMessage(senderNumber, 'Hey There..');
   for (var i = 0; i < pendingRides.length; i++) {
     if (pendingRides[i].passengerId == senderNumber) {
         pendingRides.splice(i, 1);
