@@ -155,6 +155,8 @@ var geocoding = function(body, callback) {
 }
 
 app.post('/order', function(req, res) {
+
+  console.log('req.body: ' + req.body);
   var passengerGlobal = null;
   sendMessage(req.body.phoneNumber, 'Searching for taxi around you..');
   for (var i = 0; i < pendingRides.length; i++) {
