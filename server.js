@@ -243,7 +243,7 @@ app.post('/order', function(req, res) {
                 var driverId = '0526850487';
                 var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
                 pendingRides.push(pendingRide);
-              }, 1000);
+              }, 3000);
             });
           }, 3000);
         });
