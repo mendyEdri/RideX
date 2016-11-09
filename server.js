@@ -104,6 +104,8 @@ var geocoding = function(body, callback) {
   var longitude = '';
   var latitude = '';
 
+  console.log('function: ' + body);
+
   googleMapsClient.geocode({
     address: body
   }, function(err, response) {
