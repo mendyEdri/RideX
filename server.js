@@ -177,15 +177,15 @@ app.post('/order', function(req, res) {
     if (pendingRides[i].passengerId == senderNumber) {
       console.log('pending:' + senderNumber);
       if (positives.indexOf(messageBody) > -1) {
-          sendMessage(passengerGlobal.phoneNumber, 'Great! the taxi is on the way to you.', function(success) {
+          sendMessage(senderNumber, 'Great! the taxi is on the way to you.', function(success) {
 
           });
       } else if (negatives.indexOf(messageBody) > -1) {
-        sendMessage(passengerGlobal.phoneNumber, 'I won\'t send it. maybe next time.', function(success) {
+        sendMessage(senderNumber, 'I won\'t send it. maybe next time.', function(success) {
 
         });
       } else {
-        sendMessage(passengerGlobal.phoneNumber, 'I didn\'t get that. say it again please?', function(success) {
+        sendMessage(senderNumber, 'I didn\'t get that. say it again please?', function(success) {
 
         });
         return;
