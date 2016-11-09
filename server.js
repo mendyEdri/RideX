@@ -155,10 +155,11 @@ var geocoding = function(body, callback) {
 }
 
 app.post('/order', function(req, res) {
-  console.log(req.body);
   var passengerGlobal = null;
   var senderNumber = '';
   var messageBody = '';
+
+  console.log('Twilio Response: ' + req);
 
   if (req.From) {
     senderNumber = req.From;
@@ -184,6 +185,7 @@ app.post('/order', function(req, res) {
   Passenger.findOne({ phoneNumber: senderNumber }, function(err, passenger) {
     if (err) { throw err; }
     if (!passenger) {
+      console.log('senderNumber ' + senderNumber);
       var newPassenger = new Passenger({
         phoneNumber: senderNumber,
         joinDate: new Date(),
