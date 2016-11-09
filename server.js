@@ -154,6 +154,10 @@ var geocoding = function(body, callback) {
   });
 }
 
+app.post('/mendy', function(req, res) {
+  res.json({ message: 'heroku post works' });
+});
+
 app.post('/order', function(req, res) {
   console.log('req.body: ' + req.query);
   var passengerGlobal = null;
