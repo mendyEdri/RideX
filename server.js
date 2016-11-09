@@ -161,8 +161,6 @@ app.post('/order', function(req, res) {
   var senderNumber = '';
   var messageBody = '';
 
-  console.log('Twilio Response:');
-
   if (req.body.From) {
     senderNumber = req.body.From;
   }
@@ -170,8 +168,6 @@ app.post('/order', function(req, res) {
   if (req.body.Body) {
     messageBody = req.body.Body;
   }
-
-  console.log(senderNumber);
 
   //sendMessage(senderNumber, 'Hey There..');
   for (var i = 0; i < pendingRides.length; i++) {
@@ -188,7 +184,6 @@ app.post('/order', function(req, res) {
   Passenger.findOne({ phoneNumber: senderNumber }, function(err, passenger) {
     if (err) { throw err; }
     if (!passenger) {
-      console.log('senderNumber ' + senderNumber);
       var newPassenger = new Passenger({
         phoneNumber: senderNumber,
         joinDate: new Date(),
@@ -208,9 +203,10 @@ app.post('/order', function(req, res) {
       geocoding(messageBody, function(result) {
         console.log('res: ' + result);
         if (!result.success) {
-          console.log('err: ' + result);
-          //sendMessage(passengerGlobal.phoneNumber, result.message);
-          res.json(result);
+          //console.log('err: ' + result);
+          sendMessage(passengerGlobal.phoneNumber, result.message);
+          //res.json(result);
+          return;
         }
         console.log('we found a taxi ' + result.message.distance + ' from you.');
         //sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.');
