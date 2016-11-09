@@ -159,7 +159,7 @@ app.post('/order', function(req, res) {
   var senderNumber = '';
   var messageBody = '';
 
-  console.log('Twilio Response: ' + req);
+  console.log('Twilio Response: ' + JSON.stringify(req));
 
   if (req.From) {
     senderNumber = req.From;
