@@ -174,6 +174,7 @@ app.post('/order', function(req, res) {
   //sendMessage(senderNumber, 'Hey There..');
   for (var i = 0; i < pendingRides.length; i++) {
     if (pendingRides[i].passengerId == senderNumber) {
+      console.log('pending:' +senderNumber);
       if (positives.includes(messageBody)) {
           sendMessage(passengerGlobal.phoneNumber, 'Great! the taxi is on the way to you.', function(success) {
 
