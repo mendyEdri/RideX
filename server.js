@@ -73,10 +73,6 @@ app.get('/', function(req, res) {
   res.json({ message: 'this is home page' });
 });
 
-app.post('/', function(req, res) {
-  res.json({ message: 'this is home page' });
-});
-
 app.post('/sms/out', function(req, res) {
   console.log('sms/out');
   res.json({message: 'done'})
