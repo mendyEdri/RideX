@@ -28,6 +28,8 @@ var googleMapsClient = require('@google/maps').createClient({
 });
 
 var pendingRides = [];
+var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it', '👍', 'alright', 'yes please'];
+var negatives = ['no', 'not this time', 'negative', '👎', 'please dont',];
 
 function PendingRide(passengerId, driverId, rideId, passengerLocation) {
     this.passengerId = passengerId;
@@ -172,7 +174,21 @@ app.post('/order', function(req, res) {
   //sendMessage(senderNumber, 'Hey There..');
   for (var i = 0; i < pendingRides.length; i++) {
     if (pendingRides[i].passengerId == senderNumber) {
-        pendingRides.splice(i, 1);
+      if (positives.includes(messageBody)) {
+          sendMessage(passengerGlobal.phoneNumber, 'Great! the taxi is on the way to you.', function(success) {
+
+          });
+      } else if (negatives.includes(messageBody)) {
+        sendMessage(passengerGlobal.phoneNumber, 'I won\'t send it. maybe next time.', function(success) {
+
+        });
+      } else {
+        sendMessage(passengerGlobal.phoneNumber, 'I didn\'t get that. say it again please?', function(success) {
+
+        });
+        return;
+      }
+      pendingRides.splice(i, 1);
     }
   }
 
@@ -205,7 +221,7 @@ app.post('/order', function(req, res) {
           res.json(result);
           return;
         }
-        console.log('we found a taxi ' + result.message.distance + ' from you.');
+        console.log('I found a taxi ' + result.message.distance + ' from you.');
         sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.', function(success) {
           if (!success) {
             return
@@ -217,7 +233,7 @@ app.post('/order', function(req, res) {
                 return;
               }
               setTimeout(function () {
-                console.log('Should we send? (yes/no)');
+                console.log('Should i send it? (yes/no)');
                 sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)', function(success) {
 
                 });
@@ -471,7 +487,7 @@ function sendMessage(number, body, callback) {
       }
     } else {
       if (callback) {
-        callback(true);  
+        callback(true);
       }
     }
   });
