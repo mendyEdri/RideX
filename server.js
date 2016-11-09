@@ -226,6 +226,7 @@ app.post('/order', function(req, res) {
         res.json(result);
       });
     } else {
+      console.log('try again :(');
       sendMessage(passengerGlobal.phoneNumber, 'Please try again');
       res.json({ success: false, message: 'Please try again.'});
     }
