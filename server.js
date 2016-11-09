@@ -69,7 +69,11 @@ apiRoutes.use(allowCrossDomain);
 // routes ================
 // =======================
 // basic route
-app.all('/', function(req, res) {
+app.get('/', function(req, res) {
+  res.json({ message: 'this is home page' });
+});
+
+app.post('/', function(req, res) {
   res.json({ message: 'this is home page' });
 });
 
