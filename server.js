@@ -180,10 +180,14 @@ app.post('/order', function(req, res) {
           sendMessage(senderNumber, 'Great! the taxi is on the way to you.', function(success) {
 
           });
+          pendingRides.splice(i, 1);
+          return;
       } else if (negatives.indexOf(messageBody.toLowerCase()) > -1) {
         sendMessage(senderNumber, 'I won\'t send it. maybe next time.', function(success) {
 
         });
+        pendingRides.splice(i, 1);
+        return;
       } else {
         sendMessage(senderNumber, 'I didn\'t get that. say it again please?', function(success) {
 
@@ -224,7 +228,7 @@ app.post('/order', function(req, res) {
           return;
         }
         console.log('I found a taxi ' + result.message.distance + ' from you.');
-        sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.', function(success) {
+        sendMessage(passengerGlobal.phoneNumber, 'I found a taxi ' + result.message.distance + ' from you.', function(success) {
           if (!success) {
             return
           }
@@ -236,7 +240,7 @@ app.post('/order', function(req, res) {
               }
               setTimeout(function () {
                 console.log('Should i send it? (yes/no)');
-                sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)', function(success) {
+                sendMessage(passengerGlobal.phoneNumber, 'Should i send it? (yes/no)', function(success) {
 
                 });
 
