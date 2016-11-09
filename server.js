@@ -199,28 +199,37 @@ app.post('/order', function(req, res) {
 
     if (passengerGlobal) {
       // send sms searching for taxi around
-      console.log(messageBody);
       geocoding(messageBody, function(result) {
-        console.log('res: ' + result);
         if (!result.success) {
           sendMessage(passengerGlobal.phoneNumber, result.message);
           res.json(result);
           return;
         }
         console.log('we found a taxi ' + result.message.distance + ' from you.');
-        sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.');
-        setTimeout(function () {
-          console.log('It can take a ' + result.message.time + ' to get to you.');
-          sendMessage(passengerGlobal.phoneNumber, 'It can take a ' + result.message.time + ' to get to you.');
+        sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.', function(success) {
+          if (!success) {
+            return
+          }
           setTimeout(function () {
-            console.log('Should we send? (yes/no)');
-            sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)');
+            console.log('It can take a ' + result.message.time + ' to get to you.');
+            sendMessage(passengerGlobal.phoneNumber, 'It can take a ' + result.message.time + ' to get to you.', function(success) {
+              if (!success) {
+                return;
+              }
+              setTimeout(function () {
+                console.log('Should we send? (yes/no)');
+                sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)', function(success) {
+                  
+                });
 
-            var driverId = '0526850487';
-            var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
-            pendingRides.push(pendingRide);
-          }, 1000);
-        }, 3000);
+                var driverId = '0526850487';
+                var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
+                pendingRides.push(pendingRide);
+              }, 1000);
+            });
+          }, 3000);
+        });
+
         res.json(result);
       });
     } else {
@@ -448,7 +457,7 @@ function generateRideId(passengerId, driverId) {
 
 // Twilio
 
-function sendMessage(number, body) {
+function sendMessage(number, body, callback) {
   client.messages.create({
   	to: number,
   	from: "+12406075476",
@@ -457,6 +466,9 @@ function sendMessage(number, body) {
   	console.log(message);
     if (err) {
       console.log(err);
+      callback(false);
+    } else {
+      callback(true);
     }
   });
 }
