@@ -169,6 +169,9 @@ app.post('/order', function(req, res) {
     messageBody = req.body.Body;
   }
 
+  console.log(senderNumber);
+  console.log(messageBody);
+
   sendMessage(senderNumber, 'Hey There..');
   for (var i = 0; i < pendingRides.length; i++) {
     if (pendingRides[i].passengerId == senderNumber) {
