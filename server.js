@@ -203,19 +203,19 @@ app.post('/order', function(req, res) {
       geocoding(messageBody, function(result) {
         console.log('res: ' + result);
         if (!result.success) {
-          //console.log('err: ' + result);
+
           sendMessage(passengerGlobal.phoneNumber, result.message);
-          //res.json(result);
+          res.json(result);
           return;
         }
         console.log('we found a taxi ' + result.message.distance + ' from you.');
-        //sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.');
+        sendMessage(passengerGlobal.phoneNumber, 'we found a taxi ' + result.message.distance + ' from you.');
         setTimeout(function () {
           console.log('It can take a ' + result.message.time + ' to get to you.');
-          //sendMessage(passengerGlobal.phoneNumber, 'It can take a ' + result.message.time + ' to get to you.');
+          sendMessage(passengerGlobal.phoneNumber, 'It can take a ' + result.message.time + ' to get to you.');
           setTimeout(function () {
             console.log('Should we send? (yes/no)');
-            //sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)');
+            sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)');
 
             var driverId = '0526850487';
             var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
