@@ -154,21 +154,19 @@ var geocoding = function(body, callback) {
   });
 }
 
-app.post('/mendy', function(req, res) {
-  res.json({ message: 'heroku post works' });
-});
-
 app.post('/order', function(req, res) {
-  console.log('req.body: ' + req.query);
+  console.log(req.body);
   var passengerGlobal = null;
-  sendMessage(req.body.phoneNumber, 'Searching for taxi around you..');
+  if (req.body.phoneNumber) {
+    sendMessage(req.body.phoneNumber, 'Searching for taxi around you..');
+  }
   for (var i = 0; i < pendingRides.length; i++) {
     if (pendingRides[i].passengerId == req.body.phoneNumber) {
         pendingRides.splice(i, 1);
     }
   }
 
-  if (!req.body.address.includes('ghana')) {
+  if (req.body.address && !req.body.address.includes('ghana')) {
       req.body.address.concat(', ghana');
   }
 
