@@ -219,7 +219,7 @@ app.post('/order', function(req, res) {
               setTimeout(function () {
                 console.log('Should we send? (yes/no)');
                 sendMessage(passengerGlobal.phoneNumber, 'Should we send? (yes/no)', function(success) {
-                  
+
                 });
 
                 var driverId = '0526850487';
@@ -466,9 +466,13 @@ function sendMessage(number, body, callback) {
   	console.log(message);
     if (err) {
       console.log(err);
-      callback(false);
+      if (callback) {
+        callback(false);
+      }
     } else {
-      callback(true);
+      if (callback) {
+        callback(true);  
+      }
     }
   });
 }
