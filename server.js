@@ -83,10 +83,12 @@ app.post('/sms/out', function(req, res) {
 
 app.post('/location', function(req, res) {
   var address = req.body.address;
-  if (address.indexOf('accra') === -1) {
-    address = address + ' accra';
-  }
   console.log(address);
+
+  if (address.indexOf('ghana') === -1) {
+    address = address + ', ghana';
+  }
+
   googleMapsClient.geocode({
     address: address
   }, function(err, response) {
@@ -108,8 +110,8 @@ app.post('/location', function(req, res) {
             } else {
               longitude = response.json.results[0].geometry.location.lng;
               latitude = response.json.results[0].geometry.location.lat;
-              //res.json({ success: true, message: response.json.results[0].formatted_address, coordinate: [latitude, longitude] });
               var formatedAddress = response.json.results[0].formatted_address;
+              res.json({ success: true, message: response.json.results[0].formatted_address, coordinate: [latitude, longitude] });
             }
             break;
           }
@@ -121,7 +123,7 @@ app.post('/location', function(req, res) {
       res.json({ success: false, message: 'Address is not validate. try again', results: response.json.results });
     }
   });
-  res.json({ success: false, message: 'You Must provide street number.'});
+  //res.json({ success: false, message: 'thanks'});
 });
 
 app.get('/arrivalTime', function(req, res) {
@@ -283,7 +285,7 @@ app.post('/order', function(req, res) {
                 return;
               }
               setTimeout(function () {
-                console.log('Should i send it to ' + result.geocode + ' ?');
+                console.log('Should i send it to ' + result.geocode + '?');
                 sendMessage(passengerGlobal.phoneNumber, 'Should i send it to ' + result.geocode + ' ?', function(success) {
 
                 });
