@@ -154,7 +154,7 @@ var geocoding = function(body, callback) {
     address: body
   }, function(err, response) {
     if (!err) {
-      if (response.json.results.length > 0 && response.json.results[0].types[0] === 'street_address') {
+      if (response.json.results.length > 0) { //&& response.json.results[0].types[0] === 'street_address'
         for (var i = 0; i < response.json.results[0].address_components.length; i++) {
           if (response.json.results[0].address_components[i].types[0] == 'street_number') {
               number = response.json.results[0].address_components[i].long_name;
