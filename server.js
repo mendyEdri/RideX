@@ -241,7 +241,7 @@ app.post('/order', function(req, res) {
       if (positives.indexOf(messageBody.toLowerCase()) > -1) {
           sendMessage(senderNumber, 'Great! the taxi is on the way to you.', function(success) {
             setTimeout(function () {
-              sendMessage(senderNumber, 'the taxi is on the way. driver phone is ' + driverId, function(success) {
+              sendMessage(senderNumber, 'the taxi is on the way. driver phone is ' + pendingRides[i].driverId, function(success) {
 
               });
             }, 6000);
