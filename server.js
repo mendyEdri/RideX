@@ -242,11 +242,10 @@ app.post('/order', function(req, res) {
           sendMessage(senderNumber, 'Great! the taxi is on the way to you.', function(success) {
             setTimeout(function () {
               sendMessage(senderNumber, 'the taxi is on the way. driver phone is ' + pendingRides[i].driverId, function(success) {
-
+                pendingRides.splice(i, 1);
               });
             }, 6000);
           });
-          pendingRides.splice(i, 1);
           return;
       } else if (negatives.indexOf(messageBody.toLowerCase()) > -1) {
         sendMessage(senderNumber, 'I won\'t send it. maybe next time.', function(success) {
@@ -295,7 +294,7 @@ app.post('/order', function(req, res) {
         }
         console.log('I found a taxi ' + result.message.distance + ' from you.');
 
-        var smsText = 'I found a taxi ' + result.message.distance + ' from you. ' + 'It can take a ' + result.message.time + '.  ' + 'Should i send it to ' + result.geocode + '?';
+        var smsText = 'I found a taxi ' + result.message.distance + ' from you. ' + 'It can take ' + result.message.time + '.  ' + 'Should i send it to ' + result.geocode + '?';
         sendMessage(passengerGlobal.phoneNumber, smsText, function(success) {
           if (!success) {
               return;
