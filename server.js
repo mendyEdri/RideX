@@ -12,6 +12,7 @@ var config = require('./config'); // get our config file
 var User   = require('./app/models/user'); // get our mongoose model
 var Driver = require('./app/models/driver'); // get our mongoose model
 var Passenger = require('./app/models/passenger'); // get our mongoose model
+var Ride = require('./app/models/ride'); // get our mongoose model
 
 var request = require('request');
 var data = require('./dropbox.json');
@@ -32,11 +33,13 @@ var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it'
 var negatives = ['no', 'not this time', 'negative', '👎', 'please dont', 'cancel', 'stop'];
 var greetings = ['Hey there! what is your address?', 'i didn\'t understand that. What is your address?'];
 
-function PendingRide(passengerId, driverId, rideId, passengerLocation) {
+function PendingRide(passengerId, driverId, rideId, passengerLocation, orderTime, watingTime) {
     this.passengerId = passengerId;
     this.driverId = driverId;
     this.rideId = rideId;
     this.passengerLocation = passengerLocation;
+    this.orderTime = orderTime;
+    watingTime = watingTime;
 }
 
 // =======================
@@ -247,7 +250,29 @@ app.post('/order', function(req, res) {
       if (positives.indexOf(messageBody.toLowerCase()) > -1) {
           sendMessage(senderNumber, 'Great! the taxi is on the way to you. Driver phone is ' + pendingRides[i].driverId , function(success) {
             // insert pendgin ride to DB
-            pendingRides.splice(i, 1);
+            Ride.findOne({ rideId: pendingRides[i].rideId }, function(err, ride) {
+              if (err) { throw err; }
+              if (!passenger) {
+                var newRide = new Ride({
+                  rideId: pendingRides[i].rideId,
+                  startingDate: new Date(),
+                  blocked: false,
+                  location: pendingRides[i].passengerLocation,
+                  passengerId: pendingRides[i].passengerId,
+                  driverId: pendingRides[i].driverId,
+                  orderTime: pendingRides[i].orderTime,
+                  watingTime: pendingRides[i].watingTime
+                });
+                newRide.save(function(err) {
+                  if (err) throw err;
+
+                });
+              } else if (ride) {
+
+              }
+              pendingRides.splice(i, 1);
+            });
+
           });
           return;
       } else if (negatives.indexOf(messageBody.toLowerCase()) > -1) {
@@ -301,7 +326,7 @@ app.post('/order', function(req, res) {
               return;
           }
           var driverId = '0526850487';
-          var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
+          var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, new Date(), result.message.time));
           pendingRides.push(pendingRide);
         });
         res.json(result);
