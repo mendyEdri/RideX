@@ -175,7 +175,7 @@ var geocoding = function(body, callback) {
             country = response.json.results[0].address_components[i].long_name;
 
             if (response.json.results[0].geometry.location_type === 'APPROXIMATE') {
-              callback({ success: false, message: 'I didn\'t get that. what is your address?'});
+              callback({ success: false, message: greetings[0]});
               return;
             }
 
@@ -239,12 +239,8 @@ app.post('/order', function(req, res) {
     if (pendingRides[i].passengerId == senderNumber) {
       console.log('pending:' + senderNumber);
       if (positives.indexOf(messageBody.toLowerCase()) > -1) {
-          sendMessage(senderNumber, 'Great! the taxi is on the way to you.', function(success) {
-            setTimeout(function () {
-              sendMessage(senderNumber, 'the taxi is on the way. driver phone is ' + pendingRides[i].driverId, function(success) {
-                pendingRides.splice(i, 1);
-              });
-            }, 6000);
+          sendMessage(senderNumber, 'Great! the taxi is on the way to you. Driver phone is ' + pendingRides[i].driverId , function(success) {
+            // insert pendgin ride to DB
           });
           return;
       } else if (negatives.indexOf(messageBody.toLowerCase()) > -1) {
