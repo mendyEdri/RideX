@@ -300,6 +300,9 @@ app.post('/order', function(req, res) {
           if (!success) {
               return;
           }
+          var driverId = '0526850487';
+          var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
+          pendingRides.push(pendingRide);
         });
         res.json(result);
       });
