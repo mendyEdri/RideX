@@ -160,6 +160,10 @@ var geocoding = function(body, callback) {
   var longitude = '';
   var latitude = '';
 
+  if (body.indexOf('ghana') === -1) {
+    body = body + ', ghana';
+  }
+
   googleMapsClient.geocode({
     address: body
   }, function(err, response) {
