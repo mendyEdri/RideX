@@ -247,6 +247,7 @@ app.post('/order', function(req, res) {
       if (positives.indexOf(messageBody.toLowerCase()) > -1) {
           sendMessage(senderNumber, 'Great! the taxi is on the way to you. Driver phone is ' + pendingRides[i].driverId , function(success) {
             // insert pendgin ride to DB
+            pendingRides.splice(i, 1);
           });
           return;
       } else if (negatives.indexOf(messageBody.toLowerCase()) > -1) {
