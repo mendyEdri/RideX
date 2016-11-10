@@ -105,13 +105,20 @@ app.post('/location', function(req, res) {
           } else if (response.json.results[0].address_components[i].types[0] == 'country') {
             country = response.json.results[0].address_components[i].long_name;
 
+            if (response.json.results[0].geometry.location_type === 'APPROXIMATE') {
+              res.json({ success: false, message: 'I need the location with street and number'});
+              return;
+            }
             if (country != 'Ghana') {
               res.json({ success: false, message: 'Currently MyTaxi not supported in ' + country});
             } else {
               longitude = response.json.results[0].geometry.location.lng;
               latitude = response.json.results[0].geometry.location.lat;
               var formatedAddress = response.json.results[0].formatted_address;
-              res.json({ success: true, message: response.json.results[0].formatted_address, coordinate: [latitude, longitude] });
+              if (address.indexOf(', ghana') !== -1) {
+                  address = address.replace(', ghana', '');
+              }
+              res.json({ success: true, message: response.json.results[0].formatted_address, coordinate: [latitude, longitude], userMessage: address });
             }
             break;
           }
@@ -167,6 +174,11 @@ var geocoding = function(body, callback) {
           } else if (response.json.results[0].address_components[i].types[0] == 'country') {
             country = response.json.results[0].address_components[i].long_name;
 
+            if (response.json.results[0].geometry.location_type === 'APPROXIMATE') {
+              callback({ success: false, message: 'I need the location with street and number'});
+              return;
+            }
+
             if (country != 'Ghana') {
               //res.json({ success: false, message: 'Currently MyTaxi not supported in ' + country});
               //callback({ success: false, message: 'Sorry, this address is not valid'});
@@ -182,7 +194,10 @@ var geocoding = function(body, callback) {
                 mode: 'driving'
               }, function(err, response) {
                 if (!err) {
-                  callback({ success: true, geocode: formatedAddress, message: { distance: response.json.rows[0].elements[0].distance.text, time: response.json.rows[0].elements[0].duration.text } });
+                  if (body.indexOf(', ghana') !== -1) {
+                      body = body.replace(', ghana', '');
+                  }
+                  callback({ success: true, geocode: formatedAddress, userMessage: body, message: { distance: response.json.rows[0].elements[0].distance.text, time: response.json.rows[0].elements[0].duration.text } });
                   //res.json({ success: true, message: { distance: response.json.rows[0].elements[0].distance.text, time: response.json.rows[0].elements[0].duration.text } });
                   return;
                 }
@@ -287,6 +302,10 @@ app.post('/order', function(req, res) {
               }
               setTimeout(function () {
                 console.log('Should i send it to ' + result.geocode + '?');
+                if (result.geocode.indexOf(messageBody) !== result.geocode) {
+                  console.log('DIFF:');
+                  console.log(messageBody);
+                }
                 sendMessage(passengerGlobal.phoneNumber, 'Should i send it to ' + result.geocode + ' ?', function(success) {
 
                 });
