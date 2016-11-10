@@ -179,10 +179,10 @@ var geocoding = function(body, callback) {
               return;
             }
 
-            if (country != 'Ghana') {
+            if (country.length > 0 && country != 'Ghana') {
               //res.json({ success: false, message: 'Currently MyTaxi not supported in ' + country});
               //callback({ success: false, message: 'Sorry, this address is not valid'});
-              callback({ success: false, message: greetings[0]});
+              callback({ success: false, message: 'My Taxi is Currently supports only in Ghana.'});
             } else {
               longitude = response.json.results[0].geometry.location.lng;
               latitude = response.json.results[0].geometry.location.lat;
@@ -292,8 +292,6 @@ app.post('/order', function(req, res) {
           res.json(result);
           return;
         }
-        console.log('I found a taxi ' + result.message.distance + ' from you.');
-
         var smsText = 'I found a taxi ' + result.message.distance + ' from you. ' + 'It can take ' + result.message.time + '.  ' + 'Should i send it to ' + result.geocode + '?';
         sendMessage(passengerGlobal.phoneNumber, smsText, function(success) {
           if (!success) {
