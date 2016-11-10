@@ -233,9 +233,6 @@ app.post('/order', function(req, res) {
   var passengerGlobal = null;
   var senderNumber = '';
   var messageBody = '';
-
-  console.log(req);
-
   if (req.body.From) {
     senderNumber = req.body.From;
   }
@@ -254,7 +251,7 @@ app.post('/order', function(req, res) {
             // insert pendgin ride to DB
 
             setTimeout(function(){
-              alert("Hello");
+              sendMessage(senderNumber, 'The taxi should be there any minute now');
             }, 2 * 60000);
             pendingRides.splice(i, 1);
             /*
