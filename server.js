@@ -241,7 +241,7 @@ app.post('/order', function(req, res) {
       if (positives.indexOf(messageBody.toLowerCase()) > -1) {
           sendMessage(senderNumber, 'Great! the taxi is on the way to you.', function(success) {
             setTimeout(function () {
-              sendMessage(passengerGlobal.phoneNumber, 'the taxi is on the way. driver phone is ' + driverId, function(success) {
+              sendMessage(senderNumber, 'the taxi is on the way. driver phone is ' + driverId, function(success) {
 
               });
             }, 6000);
@@ -294,34 +294,13 @@ app.post('/order', function(req, res) {
           return;
         }
         console.log('I found a taxi ' + result.message.distance + ' from you.');
-        sendMessage(passengerGlobal.phoneNumber, 'I found a taxi ' + result.message.distance + ' from you.', function(success) {
+
+        var smsText = 'I found a taxi ' + result.message.distance + ' from you. ' + 'It can take a ' + result.message.time + '.  ' + 'Should i send it to ' + result.geocode + '?';
+        sendMessage(passengerGlobal.phoneNumber, smsText, function(success) {
           if (!success) {
-            return
+              return;
           }
-          setTimeout(function () {
-            console.log('It can take a ' + result.message.time + ' to get to you.');
-            sendMessage(passengerGlobal.phoneNumber, 'It can take a ' + result.message.time + ' to get to you.', function(success) {
-              if (!success) {
-                return;
-              }
-              setTimeout(function () {
-                console.log('Should i send it to ' + result.geocode + '?');
-                if (result.geocode.indexOf(messageBody) !== result.geocode) {
-                  console.log('DIFF:');
-                  console.log(messageBody);
-                }
-                sendMessage(passengerGlobal.phoneNumber, 'Should i send it to ' + result.geocode + '?', function(success) {
-
-                });
-
-                var driverId = '0526850487';
-                var pendingRide = new PendingRide(passengerGlobal.phoneNumber, driverId, generateRideId(passengerGlobal.phoneNumber, driverId, result.geocode));
-                pendingRides.push(pendingRide);
-              }, 3000);
-            });
-          }, 3000);
         });
-
         res.json(result);
       });
     } else {
