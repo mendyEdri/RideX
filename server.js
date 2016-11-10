@@ -30,6 +30,7 @@ var googleMapsClient = require('@google/maps').createClient({
 var pendingRides = [];
 var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it', '👍', 'alright', 'yes please'];
 var negatives = ['no', 'not this time', 'negative', '👎', 'please dont',];
+var greetings = ['Hey there! what is your address?', 'i didn\'t understand that. What is your address?'];
 
 function PendingRide(passengerId, driverId, rideId, passengerLocation) {
     this.passengerId = passengerId;
@@ -110,7 +111,6 @@ var geocoding = function(body, callback) {
     address: body
   }, function(err, response) {
     if (!err) {
-      console.log(response.json.results);
       if (response.json.results.length > 0 && response.json.results[0].types[0] === 'street_address') {
         for (var i = 0; i < response.json.results[0].address_components.length; i++) {
           if (response.json.results[0].address_components[i].types[0] == 'street_number') {
@@ -150,11 +150,11 @@ var geocoding = function(body, callback) {
 
       } else {
        //res.json({ success: false, message: 'You Must provide street number.'});
-       callback({ success: false, message: 'You Must provide street number.'});
+       callback({ success: false, message: greetings[0]});
       }
     } else {
       //res.json({ success: false, message: 'Address is not validate. try again', results: response.json.results });
-      callback({ success: false, message: 'Address is not validate. try again', results: response.json.results });
+      callback({ success: false, message: greetings[1], results: response.json.results });
     }
   });
 }
@@ -240,7 +240,7 @@ app.post('/order', function(req, res) {
                 return;
               }
               setTimeout(function () {
-                console.log('Should i send it? (yes/no)');
+                console.log('Should i send it to ' + result.geocode + ' ?');
                 sendMessage(passengerGlobal.phoneNumber, 'Should i send it? (yes/no)', function(success) {
 
                 });
