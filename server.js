@@ -234,6 +234,8 @@ app.post('/order', function(req, res) {
   var senderNumber = '';
   var messageBody = '';
 
+  console.log(req);
+  
   if (req.body.From) {
     senderNumber = req.body.From;
   }
@@ -250,6 +252,10 @@ app.post('/order', function(req, res) {
       if (positives.indexOf(messageBody.toLowerCase()) > -1) {
           sendMessage(senderNumber, 'Great! the taxi is on the way to you. Driver phone is ' + pendingRides[i].driverId , function(success) {
             // insert pendgin ride to DB
+
+
+            pendingRides.splice(i, 1);
+            /*
             Ride.findOne({ rideId: pendingRides[i].rideId }, function(err, ride) {
               if (err) { throw err; }
               if (!passenger) {
@@ -268,10 +274,11 @@ app.post('/order', function(req, res) {
 
                 });
               } else if (ride) {
-
+                // somehow ride is already exist
               }
               pendingRides.splice(i, 1);
             });
+            */
 
           });
           return;
