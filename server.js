@@ -29,7 +29,7 @@ var googleMapsClient = require('@google/maps').createClient({
 
 var pendingRides = [];
 var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it', '👍', 'alright', 'yes please'];
-var negatives = ['no', 'not this time', 'negative', '👎', 'please dont',];
+var negatives = ['no', 'not this time', 'negative', '👎', 'please dont', 'cancel', 'stop'];
 var greetings = ['Hey there! what is your address?', 'i didn\'t understand that. What is your address?'];
 
 function PendingRide(passengerId, driverId, rideId, passengerLocation) {
@@ -109,7 +109,8 @@ app.post('/location', function(req, res) {
               res.json({ success: false, message: 'I need the location with street and number'});
               return;
             }
-            if (country != 'Ghana') {
+            if (country.length > 0 && country != 'Ghana') {
+              console.log(country);
               res.json({ success: false, message: 'Currently MyTaxi not supported in ' + country});
             } else {
               longitude = response.json.results[0].geometry.location.lng;
@@ -182,6 +183,7 @@ var geocoding = function(body, callback) {
             if (country.length > 0 && country != 'Ghana') {
               //res.json({ success: false, message: 'Currently MyTaxi not supported in ' + country});
               //callback({ success: false, message: 'Sorry, this address is not valid'});
+              console.log(country);
               callback({ success: false, message: 'My Taxi is Currently supports only in Ghana.'});
             } else {
               longitude = response.json.results[0].geometry.location.lng;
