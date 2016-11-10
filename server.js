@@ -81,6 +81,49 @@ app.post('/sms/out', function(req, res) {
   res.json({message: 'done'})
 });
 
+app.post('/location', function(req, res) {
+  var address = req.body.address;
+  if (address.indexOf('accra') === -1) {
+    address = address + ' accra';
+  }
+  console.log(address);
+  googleMapsClient.geocode({
+    address: address
+  }, function(err, response) {
+    if (!err) {
+      console.log(JSON.stringify(response.json.results));
+      if (response.json.results.length > 0) { //&& response.json.results[0].types[0] === 'street_address'
+        for (var i = 0; i < response.json.results[0].address_components.length; i++) {
+          if (response.json.results[0].address_components[i].types[0] == 'street_number') {
+              number = response.json.results[0].address_components[i].long_name;
+          } else if (response.json.results[0].address_components[i].types[0] == 'route') {
+              street = response.json.results[0].address_components[i].long_name;
+          } else if (response.json.results[0].address_components[i].types[0] == 'locality') {
+            city = response.json.results[0].address_components[i].long_name;
+          } else if (response.json.results[0].address_components[i].types[0] == 'country') {
+            country = response.json.results[0].address_components[i].long_name;
+
+            if (country != 'Ghana') {
+              res.json({ success: false, message: 'Currently MyTaxi not supported in ' + country});
+            } else {
+              longitude = response.json.results[0].geometry.location.lng;
+              latitude = response.json.results[0].geometry.location.lat;
+              //res.json({ success: true, message: response.json.results[0].formatted_address, coordinate: [latitude, longitude] });
+              var formatedAddress = response.json.results[0].formatted_address;
+            }
+            break;
+          }
+        }
+      } else {
+       res.json({ success: false, message: 'You Must provide street number.'});
+      }
+    } else {
+      res.json({ success: false, message: 'Address is not validate. try again', results: response.json.results });
+    }
+  });
+  res.json({ success: false, message: 'You Must provide street number.'});
+});
+
 app.get('/arrivalTime', function(req, res) {
   if (!latitude || !longitude) {
     res.json({ success: false, message: 'No origin provided' });
