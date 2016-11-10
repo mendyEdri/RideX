@@ -169,7 +169,8 @@ var geocoding = function(body, callback) {
 
             if (country != 'Ghana') {
               //res.json({ success: false, message: 'Currently MyTaxi not supported in ' + country});
-              callback({ success: false, message: 'Currently MyTaxi not supported in ' + country});
+              //callback({ success: false, message: 'Sorry, this address is not valid'});
+              callback({ success: false, message: greetings[0]});
             } else {
               longitude = response.json.results[0].geometry.location.lng;
               latitude = response.json.results[0].geometry.location.lat;
