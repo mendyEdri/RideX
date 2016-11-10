@@ -241,7 +241,7 @@ app.post('/order', function(req, res) {
               }
               setTimeout(function () {
                 console.log('Should i send it to ' + result.geocode + ' ?');
-                sendMessage(passengerGlobal.phoneNumber, 'Should i send it? (yes/no)', function(success) {
+                sendMessage(passengerGlobal.phoneNumber, 'Should i send it to ' + result.geocode + ' ?', function(success) {
 
                 });
 
@@ -486,9 +486,7 @@ function sendMessage(number, body, callback) {
   	from: "+12406075476",
   	body: body,
   }, function(err, message) {
-  	console.log(message);
     if (err) {
-      console.log(err);
       if (callback) {
         callback(false);
       }
