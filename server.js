@@ -154,6 +154,11 @@ app.get('/arrivalTime', function(req, res) {
   });
 });
 
+app.post('/userLocation', function(req, res) {
+  console.log(req.body.location);
+  res.json({ message: req.body.location });
+});
+
 var geocoding = function(body, callback) {
   var phone = body.phoneNumber;
   var number = '';
@@ -247,13 +252,16 @@ app.post('/order', function(req, res) {
     if (pendingRides[i].passengerId == senderNumber) {
       console.log('pending:' + senderNumber);
       if (positives.indexOf(messageBody.toLowerCase()) > -1) {
-          sendMessage(senderNumber, 'Great! the taxi is on the way to you. Driver phone is ' + pendingRides[i].driverId , function(success) {
+          sendMessage(senderNumber, 'Great! the taxi is on the way to you. Driver phone is ' + pendingRides[i].driverId + '. I Will let you know when he is coming.', function(success) {
             // insert pendgin ride to DB
 
+
+            // check up on arrival, but should notify by driver's location
             setTimeout(function(){
-              sendMessage(senderNumber, 'The taxi should be there any minute now');
-            }, 2 * 60000);
+              sendMessage(senderNumber, 'Your taxi should be there any minute now');
+            }, pendingRides[i].watingTime * 60000);
             pendingRides.splice(i, 1);
+
             /*
             Ride.findOne({ rideId: pendingRides[i].rideId }, function(err, ride) {
               if (err) { throw err; }
