@@ -154,9 +154,43 @@ app.get('/arrivalTime', function(req, res) {
   });
 });
 
+
+function findNear(req) {
+  var limit = req.body.limit || 10;
+  // get the max distance or set it to 8 kilometers
+  var maxDistance = req.body.distance || 8;
+
+  // we need to convert the distance to radians
+  // the raduis of Earth is approximately 6371 kilometers
+  maxDistance /= 6371;
+
+  // get coordinates [ <longitude> , <latitude> ]
+  var coords = [];
+  coords[0] = req.body.longitude;
+  coords[1] = req.body.latitude;
+
+  // find a location
+  Driver.find({
+    loc: {
+      $near: coords,
+      $maxDistance: maxDistance
+    }
+  }).limit(limit).exec(function(err, drivers) {
+    if (err) {
+      return res.json(500, err);
+    }
+    res.json(200, drivers);
+  });
+}
+
+
 app.post('/userLocation', function(req, res) {
   console.log(req.body.location);
-  res.json({ message: req.body.location });
+
+  Driver.findOneAndUpdate({ phoneNumber: req.body.phoneNumber, { $set: { loc: [req.body.location.longitude, req.body.location.latitude] }}}, function(err, driver) {
+    if (err) { throw err; }
+    console.log('updated: ' + driver);
+  });
 });
 
 var geocoding = function(body, callback) {
