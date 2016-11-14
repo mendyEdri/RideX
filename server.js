@@ -187,9 +187,13 @@ function findNear(req) {
 app.post('/userLocation', function(req, res) {
   console.log(req.body.location);
 
-  Driver.findOneAndUpdate({ phoneNumber: req.body.userId }, { $set: { loc: { type: [req.body.location.longitude, req.body.location.latitude] } } }, function(err, driver) {
-    if (err) { throw err; }
+  Driver.findOneAndUpdate({ phoneNumber: req.body.userId }, { $set: { loc: req.body.location } }, function(err, driver) {
+    if (err) {
+      res.json({ message: err});
+      throw err;
+    }
     console.log('updated: ' + driver);
+    res.json({ message: driver});
   });
 });
 
