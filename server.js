@@ -154,8 +154,7 @@ app.get('/arrivalTime', function(req, res) {
   });
 });
 
-
-function findNear(req) {
+app.post('/find', function(req, res) {
   var limit = req.body.limit || 10;
   // get the max distance or set it to 8 kilometers
   var maxDistance = req.body.distance || 8;
@@ -166,34 +165,63 @@ function findNear(req) {
 
   // get coordinates [ <longitude> , <latitude> ]
   var coords = [];
-  coords[0] = req.body.longitude;
-  coords[1] = req.body.latitude;
+  coords[0] = req.body.location[0];
+  coords[1] = req.body.location[1];
 
-  // find a location
-  Driver.find({
-    loc: {
-      $near: coords,
-      $maxDistance: maxDistance
+  var query = Driver.findOne({'geo': {
+      $near: [
+        coords[0],
+        coords[1]
+      ],
+      $maxDistance: 100
     }
-  }).limit(limit).exec(function(err, drivers) {
-    if (err) {
-      return res.json(500, err);
-    }
-    res.json(200, drivers);
   });
-}
+  query.exec(function (err, driver) {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
+    if (!driver) {
+      res.json({ success: false, message: 'driver not found' });
+    } else {
+      console.log('Cant save: Found Driver:' + driver);
+      res.json({ success: true, message: driver});
+   }
+  });
+});
 
-
-app.post('/userLocation', function(req, res) {
+app.post('/driverLocation', function(req, res) {
   console.log(req.body.location);
-
-  Driver.findOneAndUpdate({ phoneNumber: req.body.userId }, { $set: { loc: req.body.location } }, function(err, driver) {
+  Driver.findOne({ phoneNumber: req.body.userId } , function(err, driver) {
     if (err) {
       res.json({ message: err});
       throw err;
     }
-    console.log('updated: ' + driver);
-    res.json({ message: driver});
+
+    var coords = [];
+    coords[0] = req.body.location[0];
+    coords[1] = req.body.location[1];
+
+    driver.geo = coords;
+    driver.save(function (err) {
+      if (err) {
+        res.json({ success: false, message: err });
+        return;
+      }
+      res.json({ success: true, message: driver });
+    });
+
+/////////
+
+    // driver.loc.coordinates = coords;
+    // driver.save(function(err) {
+    //   if (err) {
+    //     res.json({ success: false, message: err });
+    //     return;
+    //   }
+    //   res.json({ success: true, message: driver });
+    // })
+
   });
 });
 
@@ -403,7 +431,8 @@ app.post('/registerDriver', function(req, res) {
         active: false,
         ridesCount: 0,
         imageUrl: '',
-        blocked: false
+        blocked: false,
+        geo: [0, 0]
       });
       newDriver.save(function(err) {
         if (err) throw err;
