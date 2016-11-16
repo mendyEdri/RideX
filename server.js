@@ -168,7 +168,7 @@ app.post('/find', function(req, res) {
   coords[0] = req.body.location[0];
   coords[1] = req.body.location[1];
 
-  var query = Driver.findOne({'geo': {
+  var query = Driver.find({'geo': {
       $near: [
         coords[0],
         coords[1]
@@ -195,7 +195,7 @@ app.post('/driverLocation', function(req, res) {
   Driver.findOne({ phoneNumber: req.body.userId } , function(err, driver) {
     if (err) {
       res.json({ message: err});
-      throw err;
+      return;
     }
 
     var coords = [];
