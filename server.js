@@ -137,13 +137,14 @@ app.post('/location', function(req, res) {
   //res.json({ success: false, message: 'thanks'});
 });
 
-app.get('/arrivalTime', function(req, res) {
-  if (!latitude || !longitude) {
-    res.json({ success: false, message: 'No origin provided' });
+app.post('/arrivalTime', function(req, res) {
+  if (req.body.origin.length < 2 || req.body.destination.length < 2) {
+    res.json({ success: false, message: 'No origin or destination provided' });
+    return;
   }
   googleMapsClient.distanceMatrix({
-    origins: latitude + ',' + longitude,
-    destinations: '5.628346,-0.168984',
+    origins: req.body.origin[0] + ',' + req.body.origin[1],
+    destinations: req.body.destination[0] + ',' + req.body.destination[1],
     mode: 'driving'
   }, function(err, response) {
     if (!err) {
@@ -191,37 +192,28 @@ app.post('/find', function(req, res) {
 });
 
 app.post('/driverLocation', function(req, res) {
-  console.log(req.body.location);
+  console.log(req.body.location[0]);
   Driver.findOne({ phoneNumber: req.body.userId } , function(err, driver) {
     if (err) {
       res.json({ message: err});
       return;
     }
+    if (driver) {
+      var coords = [];
+      coords[0] = req.body.location[0];
+      coords[1] = req.body.location[1];
 
-    var coords = [];
-    coords[0] = req.body.location[0];
-    coords[1] = req.body.location[1];
-
-    driver.geo = coords;
-    driver.save(function (err) {
-      if (err) {
-        res.json({ success: false, message: err });
-        return;
-      }
-      res.json({ success: true, message: driver });
-    });
-
-/////////
-
-    // driver.loc.coordinates = coords;
-    // driver.save(function(err) {
-    //   if (err) {
-    //     res.json({ success: false, message: err });
-    //     return;
-    //   }
-    //   res.json({ success: true, message: driver });
-    // })
-
+      driver.geo = coords;
+      driver.save(function (err) {
+        if (err) {
+          res.json({ success: false, message: err });
+          return;
+        }
+        res.json({ success: true, message: driver });
+      });
+    } else {
+      res.json({ success: false, message: 'Driver not found' });
+    }
   });
 });
 
@@ -422,8 +414,13 @@ app.post('/order', function(req, res) {
 
 // TaxiSMS
 app.post('/registerDriver', function(req, res) {
+  console.log('phone: ' + req.body.phoneNumber);
   Driver.findOne({ phoneNumber: req.body.phoneNumber }, function(err, driver) {
     if (err) { throw err; }
+    if (!req.body.phoneNumber) {
+      res.json({success: false, message: 'Driver Phone number must be provided'});
+      return;
+    }
     if (!driver) {
       var newDriver = new Driver({
         phoneNumber: req.body.phoneNumber,
