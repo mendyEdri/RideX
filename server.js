@@ -6,6 +6,9 @@ var bodyParser  = require('body-parser');
 var app         = express();
 var morgan      = require('morgan');
 var mongoose    = require('mongoose');
+var FCM = require('fcm-push');
+var serverKey = 'AAAAacxj0vM:APA91bGj74iPbIyslE_2lJF6xSLSBap70orqYGNpwSWsBiu3Hn0cwLi2WYv8Ypk8oZEdd9Te54yKG8FVxUM0PvCfwHQ8siMU2hwCgtJX_tBObb0n9ead8nPrg9gf8wmj6x0lKnZR03-5VPcZioH-DVdqzXOpOPNFwg';
+var fcm = new FCM(serverKey);
 
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
@@ -29,7 +32,7 @@ var googleMapsClient = require('@google/maps').createClient({
 });
 
 var pendingRides = [];
-var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it', '👍', 'alright', 'yes please'];
+var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it', '👍', 'alright', 'yes please', 'ok', 'currect', 'thats right'];
 var negatives = ['no', 'not this time', 'negative', '👎', 'please dont', 'cancel', 'stop'];
 var greetings = ['Hey there! what is your address?', 'i didn\'t understand that. What is your address?'];
 
@@ -77,6 +80,31 @@ apiRoutes.use(allowCrossDomain);
 // basic route
 app.get('/', function(req, res) {
   res.json({ message: 'this is home page' });
+});
+
+app.post('/push', function(req, res) {
+  var message = {
+      to: '/topics/foo-bar',
+      "notification": {
+        "title": "hello",
+        "body": "yo",
+        "click_action": "fcm.ACTION.HELLO",
+        "sound": "default"
+    },
+    "data": {
+      "extra":"juice"
+    }
+  };
+
+  fcm.send(message, function(err, response){
+    if (err) {
+        console.log("Something has gone wrong!");
+        res.json({ message: err });
+    } else {
+        console.log("Successfully sent with response: ", response);
+        res.json({ message: response });
+    }
+  });
 });
 
 app.post('/sms/out', function(req, res) {
@@ -149,6 +177,47 @@ app.post('/arrivalTime', function(req, res) {
   }, function(err, response) {
     if (!err) {
       res.json({ success: true, message: response.json });
+      return;
+    }
+    res.json({ success: false, message: err });
+  });
+});
+
+app.post('/geocode', function(req, res) {
+  googleMapsClient.geocode({
+    address: req.body.coordinates[0] + ',' + req.body.coordinates[1],
+  }, function(err, response) {
+    if (err) {
+      console.log('error: ' + err);
+    }
+    res.json({ error: err, message: response.json.results[0].formatted_address});
+  });
+});
+
+app.post('/requestDriver', function(req, res) {
+  if (req.body.origin.length < 2 || req.body.destination.length < 2) {
+    res.json({ success: false, message: 'No origin or destination provided' });
+    return;
+  }
+
+  googleMapsClient.distanceMatrix({
+    origins: req.body.origin[0] + ',' + req.body.origin[1],
+    destinations: req.body.destination[0] + ',' + req.body.destination[1],
+    mode: 'driving'
+  }, function(err, response) {
+    if (!err) {
+      // send request to driver about the ride = address + drive time calculated
+      //all: response.json
+
+      var text = 'There is a ride for you! drive to ' + response.json.destination_addresses + '. It will take ' + response.json.rows[0].elements[0].duration.text + ' to get there 😎';
+      //req.body.driverId
+      sendMessage('+972544987877', text, function(success) {
+        console.log('message sent');
+        res.json({ success: true, message: { destinationAddress: response.json.destination_addresses,
+                                             duration: response.json.rows[0].elements[0].duration.text,
+                                             distance: response.json.rows[0].elements[0].distance.text
+                                           }});
+      });
       return;
     }
     res.json({ success: false, message: err });
@@ -470,44 +539,12 @@ app.post('/registerPassenger', function(req, res) {
   })
 });
 
-
-app.get('/upload', function(req, res) {
-  res.json({ message: 'uploading positions..' });
-  index = 0;
-  //uploadPositions();
+app.post('/validateNumber', function(req, res) {
+  console.log(req.body);
+  sendMessage(req.body.phoneNumber, 'Your Verification Code is ' + req.body.code, function(success) {
+    res.json({ success: success });
+  });
 });
-
-function uploadPositions() {
-  var title = data.source.job[index].title.__cdata;
-  var location = data.source.job[index].city.__cdata + ', ' + data.source.job[index].state.__cdata;
-  var city = data.source.job[index].city.__cdata;
-  var country = data.source.job[index].country.__cdata;
-  var positionNumber = data.source.job[index].referencenumber.__cdata;
-  var description = data.source.job[index].linkedin_description.__cdata
-  var companyName = data.source.job[index].company.__cdata;
-  var companyId = '47033f3d-e807-4669-b537-a5e9992f3d1e'; //'e510559d-13c9-4072-866c-7f3e4126a22e';
-  console.log('positionnumber: ' + positionNumber);
-
-  request.post(
-    'https://talenttribe.me/tt-server/rest/positionCompany/addUpdateOpenPosition',
-    { json: { title: title, location: { address: location, city: city }, positionNumber: positionNumber, description: description,
-              company: {
-                companyName: companyName,
-                companyId: companyId
-              }   }
-    },
-    function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log(body)
-            if (index < data.source.job.length) {
-              console.log('index: ' + index);
-              uploadPositions();
-            }
-            index++;
-        }
-    }
-);
-}
 
 
 // route to show a random message (GET http://localhost:8080/api/)
@@ -661,8 +698,52 @@ var usingItNow = function(callback) {
 
 app.get('/callback', function(req, res) {
   usingItNow(function(data) {
-      console.log('got data: ' + data);
+    console.log('got data: ' + data);
   });
 
   res.json({ message: 'finish' });
 });
+
+
+
+/* TT Upload position
+
+app.get('/upload', function(req, res) {
+  res.json({ message: 'uploading positions..' });
+  index = 0;
+  //uploadPositions();
+});
+
+function uploadPositions() {
+  var title = data.source.job[index].title.__cdata;
+  var location = data.source.job[index].city.__cdata + ', ' + data.source.job[index].state.__cdata;
+  var city = data.source.job[index].city.__cdata;
+  var country = data.source.job[index].country.__cdata;
+  var positionNumber = data.source.job[index].referencenumber.__cdata;
+  var description = data.source.job[index].linkedin_description.__cdata
+  var companyName = data.source.job[index].company.__cdata;
+  var companyId = '47033f3d-e807-4669-b537-a5e9992f3d1e'; //'e510559d-13c9-4072-866c-7f3e4126a22e';
+  console.log('positionnumber: ' + positionNumber);
+
+  request.post(
+    'https://talenttribe.me/tt-server/rest/positionCompany/addUpdateOpenPosition',
+    { json: { title: title, location: { address: location, city: city }, positionNumber: positionNumber, description: description,
+              company: {
+                companyName: companyName,
+                companyId: companyId
+              }   }
+    },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+            if (index < data.source.job.length) {
+              console.log('index: ' + index);
+              uploadPositions();
+            }
+            index++;
+        }
+    }
+);
+}
+
+*/
