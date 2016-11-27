@@ -3,15 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <script src="https://sdk.accountkit.com/en_US/sdk.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
     <script>
   // initialize Account Kit with CSRF protection
   AccountKit_OnInteractive = function(){
+    console.log("{{csrf_guid}}");
+    console.log('init');
     AccountKit.init(
       {
         appId: "769607079858170", 
-        state: "6cb57547-ec6a-b1cf-41fc-7333841184ff", 
+        state: "112233445599", 
         version: "v1.0"
       }
     );

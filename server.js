@@ -42,7 +42,7 @@ const Mustache  = require('mustache');
 const Request  = require('request');
 const Querystring  = require('querystring');
 
-var csrf_guid = Guid.raw();
+var csrf_guid = "112233445599";//Guid.raw();
 
 const api_version = 'v1.0';
 const app_id = '769607079858170';
@@ -103,7 +103,7 @@ function loadLogin() {
 app.get('/facebook', function(request, response){
   var view = {
     appId: app_id,
-    csrf: csrf_guid,
+    csrf:  "112233445599", //csrf_guid
     version: 'v1.0',
   };
 
