@@ -36,7 +36,7 @@ var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it'
 var negatives = ['no', 'not this time', 'negative', '👎', 'please dont', 'cancel', 'stop'];
 var greetings = ['Hey there! what is your address?', 'i didn\'t understand that. What is your address?'];
 
-
+const Guid = require('guid');
 var csrf_guid = Guid.raw();
 const api_version = 'v1.0';
 const app_id = '769607079858170';
@@ -87,7 +87,7 @@ apiRoutes.use(allowCrossDomain);
 // =======================
 // basic route
 app.get('/', function(req, res) {
-  res.json({ message: 'this is home page' });
+  res.json({ message: 'this is home page' + csrf_guid});
 });
 
 function loadLogin() {
