@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <script src="https://sdk.accountkit.com/en_US/sdk.js"></script>
+    <script>
+  // initialize Account Kit with CSRF protection
+  AccountKit_OnInteractive = function(){
+    AccountKit.init(
+      {
+        appId: "769607079858170", 
+        state: "6cb57547-ec6a-b1cf-41fc-7333841184ff", 
+        version: "v1.0"
+      }
+    );
+  };
+
+  // login callback
+  function loginCallback(response) {
+    console.log('callback');
+    console.log(response);
+    if (response.status === "PARTIALLY_AUTHENTICATED") {
+      document.getElementById("code").value = response.code;
+      document.getElementById("csrf_nonce").value = response.state;
+      document.getElementById("my_form").submit();
+    }
+    else if (response.status === "NOT_AUTHENTICATED") {
+      // handle authentication failure
+    }
+    else if (response.status === "BAD_PARAMS") {
+      // handle bad parameters
+    }
+    console.log(response.status);
+  }
+
+  // phone form submission handler
+  function phone_btn_onclick() {
+    var country_code = document.getElementById("country_code").value;
+    var ph_num = document.getElementById("phone_num").value;
+    AccountKit.login('PHONE', 
+      {countryCode: country_code, phoneNumber: ph_num}, // will use default values if this is not specified
+      loginCallback);
+  }
+
+
+  // email form submission handler
+  function email_btn_onclick() {
+    var email_address = document.getElementById("email").value;
+    console.log(email_address);
+    AccountKit.login('EMAIL', {emailAddress: email_address}, loginCallback);
+  }
+
+</script>
+
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tag above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <div id="root">
+    </div>
+
+      Enter country code (e.g. +1):
+      <input type="text" id="country_code" />
+      Enter phone number without spaces (e.g. 444555666):
+      <input type="text" id="phone_num"/>
+      <button onclick="phone_btn_onclick();">Login via SMS</button>
+      Enter email address
+      <input type="text" id="email"/>
+      <button onclick="email_btn_onclick();">Login via Email</button>
+
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start`.
+      To create a production bundle, use `npm run build`.
+    -->
+  </body>
+</html>

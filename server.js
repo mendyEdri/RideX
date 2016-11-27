@@ -93,11 +93,11 @@ apiRoutes.use(allowCrossDomain);
 // =======================
 // basic route
 app.get('/', function(req, res) {
-  res.json({ message: 'this is home page' + csrf_guid});
+  res.json({ message: 'this is home page ' + csrf_guid});
 });
 
 function loadLogin() {
-  return fs.readFileSync('login.html').toString();
+  return fs.readFileSync('public/login.html').toString();
 }
 
 app.get('/facebook', function(request, response){
@@ -112,7 +112,7 @@ app.get('/facebook', function(request, response){
 });
 
 function loadLoginSuccess() {
-  return fs.readFileSync('login_success.html').toString();
+  return fs.readFileSync('public/login_success.html').toString();
 }
 
 app.post('/sendcode', function(request, response){
