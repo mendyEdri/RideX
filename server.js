@@ -101,7 +101,6 @@ function loadLogin() {
 }
 
 app.get('/facebook', function(request, response){
-  console.log('csrf_guid: ' + csrf_guid);
   var view = {
     appId: app_id,
     csrf: csrf_guid,
@@ -109,7 +108,6 @@ app.get('/facebook', function(request, response){
   };
 
   var html = Mustache.to_html(loadLogin(), view);
-  console.log(html);
   response.send(html);
 });
 

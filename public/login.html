@@ -8,12 +8,10 @@
     <script>
   // initialize Account Kit with CSRF protection
   AccountKit_OnInteractive = function(){
-    console.log("{{csrf_guid}}");
-    console.log('init');
     AccountKit.init(
       {
         appId: "769607079858170", 
-        state: "112233445599", 
+        state: "{{csrf_guid}}", 
         version: "v1.0"
       }
     );
