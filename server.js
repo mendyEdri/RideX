@@ -112,7 +112,7 @@ app.get('/facebook', function(request, response){
 });
 
 function loadLoginSuccess() {
-  return fs.readFileSync('dist/login_success.html').toString();
+  return fs.readFileSync('login_success.html').toString();
 }
 
 app.post('/sendcode', function(request, response){
