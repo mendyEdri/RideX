@@ -101,9 +101,10 @@ function loadLogin() {
 }
 
 app.get('/facebook', function(request, response){
+  console.log('csrf_guid: ' + csrf_guid);
   var view = {
     appId: app_id,
-    csrf:  "112233445599", //csrf_guid
+    csrf: csrf_guid
     version: 'v1.0',
   };
 
