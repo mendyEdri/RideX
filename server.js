@@ -43,6 +43,7 @@ const Request  = require('request');
 const Querystring  = require('querystring');
 
 var csrf_guid = Guid.raw();
+
 const api_version = 'v1.0';
 const app_id = '769607079858170';
 const app_secret = 'cdce047d21b27c41c98b478c3d92bc46';
