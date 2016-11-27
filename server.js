@@ -97,7 +97,7 @@ app.get('/', function(req, res) {
 });
 
 function loadLogin() {
-  return fs.readFileSync('dist/login.html').toString();
+  return fs.readFileSync('login.html').toString();
 }
 
 app.get('/facebook', function(request, response){
