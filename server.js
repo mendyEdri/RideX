@@ -104,11 +104,12 @@ app.get('/facebook', function(request, response){
   console.log('csrf_guid: ' + csrf_guid);
   var view = {
     appId: app_id,
-    csrf: csrf_guid
+    csrf: csrf_guid,
     version: 'v1.0',
   };
 
   var html = Mustache.to_html(loadLogin(), view);
+  console.log(html);
   response.send(html);
 });
 
