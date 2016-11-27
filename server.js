@@ -104,7 +104,7 @@ app.get('/facebook', function(request, response){
   var view = {
     appId: app_id,
     csrf: csrf_guid,
-    version: account_kit_api_version,
+    version: 'v1.0',
   };
 
   var html = Mustache.to_html(loadLogin(), view);
