@@ -36,7 +36,12 @@ var positives = ['yes', 'yep', 'sure', 'good', 'great', 'positive', 'just do it'
 var negatives = ['no', 'not this time', 'negative', '👎', 'please dont', 'cancel', 'stop'];
 var greetings = ['Hey there! what is your address?', 'i didn\'t understand that. What is your address?'];
 
+const fs = require('fs');
 const Guid = require('guid');
+const Mustache  = require('mustache');
+const Request  = require('request');
+const Querystring  = require('querystring');
+
 var csrf_guid = Guid.raw();
 const api_version = 'v1.0';
 const app_id = '769607079858170';
