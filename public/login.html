@@ -76,9 +76,18 @@
       alert('token not exist');
       return;
     }
+
     var code = localStorage.getItem("code");
-    console.log(code);
-    AccountKit.login('EMAIL', {emailAddress: email_address}, loginCallback);
+    var http = new XMLHttpRequest();
+    var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + code;
+    http.open("GET", url, true);
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if (http.readyState == 4 && http.status == 200) {
+            console.log(http.responseText);
+        }
+    }
+    http.send(null);
   }
 
 </script>
