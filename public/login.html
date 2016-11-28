@@ -22,9 +22,12 @@
   function loginCallback(response) {
     console.log(JSON.stringify(response));
     if (response.status === "PARTIALLY_AUTHENTICATED") {
+      localStorage.setItem("code", response.code);
+      
       document.getElementById("code").value = response.code;
       document.getElementById("csrf_nonce").value = response.state;
       document.getElementById("my_form").submit();
+      console.log('');
     }
     else if (response.status === "NOT_AUTHENTICATED") {
       // handle authentication failure
@@ -48,6 +51,16 @@
   function email_btn_onclick() {
     var email_address = document.getElementById("email").value;
     console.log(email_address);
+    AccountKit.login('EMAIL', {emailAddress: email_address}, loginCallback);
+  }
+
+  function let_me_in_onclick() {
+    if (!localStorage.getItem("code")) {
+      alert('token not exist');
+      return;
+    }
+    var code = localStorage.getItem("code");
+    console.log(code);
     AccountKit.login('EMAIL', {emailAddress: email_address}, loginCallback);
   }
 
@@ -77,6 +90,10 @@
       Enter email address
       <input type="text" id="email"/>
       <button onclick="email_btn_onclick();">Login via Email</button>
+
+      <div>
+        <button onclick="let_me_in_onclick();">Let Me In</button>
+      </div>
 
     <!--
       This HTML file is a template.

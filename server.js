@@ -157,22 +157,6 @@ app.post('/sendcode', function(request, response){
   }
 });
 
-app.get('/me', function(req, res) {
-  // get account details at /me endpoint
-  var me_endpoint_url = me_endpoint_base_url + '?access_token=' + respBody.access_token;
-  Request.get({url: me_endpoint_url, json:true }, function(err, resp, respBody) {
-    // send login_success.html
-    if (respBody.phone) {
-      view.phone_num = respBody.phone.number;
-    } else if (respBody.email) {
-      view.email_addr = respBody.email.address;
-    }
-    var html = Mustache.to_html(loadLoginSuccess(), view);
-    response.send(html);
-  });
-});
-});
-
 
 app.post('/push', function(req, res) {
   var message = {
