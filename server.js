@@ -130,6 +130,7 @@ app.post('/sendcode', function(request, response){
     // exchange tokens
     var token_exchange_url = token_exchange_base_url + '?' + Querystring.stringify(params);
     Request.get({url: token_exchange_url, json: true}, function(err, resp, respBody) {
+      console.log('responseBody: ' + respBody);
       var view = {
         user_access_token: respBody.access_token,
         expires_at: respBody.expires_at,
