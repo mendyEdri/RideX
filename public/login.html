@@ -29,7 +29,7 @@
       document.getElementById("csrf_nonce").value = response.state;
       document.getElementById("my_form").submit();
 
-      getLongLivedToken(response.code, response.state);
+      this.getLongLivedToken(response.code, response.state);
     }
     else if (response.status === "NOT_AUTHENTICATED") {
       // handle authentication failure
@@ -40,6 +40,7 @@
   }
 
   function getLongLivedToken(code, csrf) {
+    console.log('getLongLivedToken');
     var http = new XMLHttpRequest();
     var url = "https://mendy-edri-server.herokuapp.com/sendcode";
     http.open("POST", url, true);
@@ -48,6 +49,7 @@
 
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
+            console.log(http.responseText);
             alert(http.responseText);
         }
     }
