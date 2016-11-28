@@ -45,8 +45,8 @@
     http.setRequestHeader("Content-type", "application/json");
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
-            console.log(http.responseText.user_access_token);
-            localStorage.setItem("code", http.responseText.user_access_token);
+            console.log(http.responseText);
+            localStorage.setItem("code", http.responseText);
             alert(http.responseText.user_access_token);
         }
     }
