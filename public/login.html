@@ -76,11 +76,6 @@
       alert('token not exist');
       return;
     }
-
-    function logout() {
-      localStorage.removeItem("code");
-    }
-
     var code = localStorage.getItem("code");
     var http = new XMLHttpRequest();
     var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + code;
@@ -92,6 +87,11 @@
         }
     }
     http.send(null);
+  }
+
+
+  function logout_onclick() {
+    localStorage.removeItem("code");
   }
 
 </script>
@@ -126,7 +126,7 @@
       </div>
 
       <div>
-        <button onclick="logout();">logout</button>
+        <button onclick="logout_onclick();">logout</button>
       </div>
 
     <!--
