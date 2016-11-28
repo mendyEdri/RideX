@@ -39,6 +39,7 @@ var greetings = ['Hey there! what is your address?', 'i didn\'t understand that.
 const fs = require('fs');
 const Guid = require('guid');
 const Mustache  = require('mustache');
+const Request  = require('request');
 const Querystring  = require('querystring');
 
 var csrf_guid = "112233445599";//Guid.raw();
