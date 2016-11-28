@@ -9,11 +9,10 @@
     //var request = require('request');
   // initialize Account Kit with CSRF protection
   AccountKit_OnInteractive = function(){
-    console.log({{csrf}});
     AccountKit.init(
       {
-        appId: "769607079858170",
-        state: "112233445599",
+        appId: {{FACEBOOK_APP_ID}},
+        state: {{csrf}},
         version: "v1.0"
       }
     );
