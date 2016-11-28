@@ -45,14 +45,13 @@
     http.open("POST", url, true);
     //Send the proper header information along with the request
     http.setRequestHeader("Content-type", "application/json");
-
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
             console.log(http.responseText);
             alert(http.responseText);
         }
     }
-    xmlhttp.send(JSON.stringify({ code:code, csrf_nonce: csrf}));
+    http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
   }
 
   // phone form submission handler
