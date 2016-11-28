@@ -93,7 +93,7 @@ apiRoutes.use(allowCrossDomain);
 // =======================
 // basic route
 app.get('/', function(req, res) {
-  res.json({ message: 'this is home page ' + csrf_guid});
+  res.json({ message: 'this is home page '});
 });
 
 function loadLogin() {
