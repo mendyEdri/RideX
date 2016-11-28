@@ -147,7 +147,8 @@ app.post('/sendcode', function(request, response){
           view.email_addr = respBody.email.address;
         }
         var html = Mustache.to_html(loadLoginSuccess(), view);
-        response.send(html);
+        //response.send(html);
+        response.json({result: view});
       });
     });
   }
