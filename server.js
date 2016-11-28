@@ -39,7 +39,6 @@ var greetings = ['Hey there! what is your address?', 'i didn\'t understand that.
 const fs = require('fs');
 const Guid = require('guid');
 const Mustache  = require('mustache');
-const Request  = require('request');
 const Querystring  = require('querystring');
 
 var csrf_guid = "112233445599";//Guid.raw();
@@ -130,7 +129,7 @@ app.post('/sendcode', function(request, response){
     // exchange tokens
     var token_exchange_url = token_exchange_base_url + '?' + Querystring.stringify(params);
     Request.get({url: token_exchange_url, json: true}, function(err, resp, respBody) {
-      console.log(respBody);
+      console.log(respBody.expires_at);
       var view = {
         user_access_token: respBody.access_token,
         expires_at: respBody.expires_at,

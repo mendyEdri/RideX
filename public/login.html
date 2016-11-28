@@ -6,6 +6,7 @@
     <script src="https://sdk.accountkit.com/en_US/sdk.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
     <script>
+    var request = require('request');
   // initialize Account Kit with CSRF protection
   AccountKit_OnInteractive = function(){
     console.log({{csrf}});
@@ -27,7 +28,8 @@
       document.getElementById("code").value = response.code;
       document.getElementById("csrf_nonce").value = response.state;
       document.getElementById("my_form").submit();
-      console.log('');
+
+      getLongLivedToken(response.code, response.state);
     }
     else if (response.status === "NOT_AUTHENTICATED") {
       // handle authentication failure
@@ -35,6 +37,12 @@
     else if (response.status === "BAD_PARAMS") {
       // handle bad parameters
     }
+  }
+
+  function getLongLivedToken(code, csrf) {
+    Request.post({url: "https://mendy-edri-server.herokuapp.com/sendcode", body: { code: code, csrf_nonce: csrf  } }, function(err, resp, respBody) {
+      console.log(respBody);
+    });
   }
 
   // phone form submission handler
