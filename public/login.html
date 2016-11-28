@@ -24,9 +24,9 @@
     if (response.status === "PARTIALLY_AUTHENTICATED") {
       localStorage.setItem("code", response.code);
 
-      document.getElementById("code").value = response.code;
-      document.getElementById("csrf_nonce").value = response.state;
-      document.getElementById("my_form").submit();
+      // document.getElementById("code").value = response.code;
+      // document.getElementById("csrf_nonce").value = response.state;
+      // document.getElementById("my_form").submit();
 
       this.getLongLivedToken(response.code, response.state);
     }
