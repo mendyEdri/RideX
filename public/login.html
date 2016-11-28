@@ -54,16 +54,6 @@
     http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
   }
 
-  // phone form submission handler
-  function phone_btn_onclick() {
-    var country_code = document.getElementById("country_code").value;
-    var ph_num = document.getElementById("phone_num").value;
-    AccountKit.login('PHONE',
-      {countryCode: country_code, phoneNumber: ph_num}, // will use default values if this is not specified
-      loginCallback);
-  }
-
-
   // email form submission handler
   function email_btn_onclick() {
     var email_address = document.getElementById("email").value;
@@ -112,11 +102,6 @@
     <div id="root">
     </div>
 
-      Enter country code (e.g. +1):
-      <input type="text" id="country_code" />
-      Enter phone number without spaces (e.g. 444555666):
-      <input type="text" id="phone_num"/>
-      <button onclick="phone_btn_onclick();">Login via SMS</button>
       Enter email address
       <input type="text" id="email"/>
       <button onclick="email_btn_onclick();">Login via Email</button>
