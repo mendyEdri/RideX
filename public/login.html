@@ -22,8 +22,6 @@
   function loginCallback(response) {
     console.log(JSON.stringify(response));
     if (response.status === "PARTIALLY_AUTHENTICATED") {
-      localStorage.setItem("code", response.code);
-
       // document.getElementById("code").value = response.code;
       // document.getElementById("csrf_nonce").value = response.state;
       // document.getElementById("my_form").submit();
@@ -48,6 +46,7 @@
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
             console.log(http.responseText);
+            localStorage.setItem("code", http.responseText.user_access_token);
             alert(http.responseText);
         }
     }
