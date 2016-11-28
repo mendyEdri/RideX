@@ -11,8 +11,8 @@
     console.log({{csrf}});
     AccountKit.init(
       {
-        appId: "769607079858170", 
-        state: "112233445599", 
+        appId: "769607079858170",
+        state: "112233445599",
         version: "v1.0"
       }
     );
@@ -20,7 +20,7 @@
 
   // login callback
   function loginCallback(response) {
-    console.log(JSON.stringify(response));
+    console.log(response);
     if (response.status === "PARTIALLY_AUTHENTICATED") {
       document.getElementById("code").value = response.code;
       document.getElementById("csrf_nonce").value = response.state;
@@ -38,7 +38,7 @@
   function phone_btn_onclick() {
     var country_code = document.getElementById("country_code").value;
     var ph_num = document.getElementById("phone_num").value;
-    AccountKit.login('PHONE', 
+    AccountKit.login('PHONE',
       {countryCode: country_code, phoneNumber: ph_num}, // will use default values if this is not specified
       loginCallback);
   }
