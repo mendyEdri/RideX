@@ -427,7 +427,6 @@ var geocoding = function(body, callback) {
             break;
           }
         }
-
       } else {
        //res.json({ success: false, message: 'You Must provide street number.'});
        callback({ success: false, message: greetings[0]});
@@ -690,6 +689,13 @@ app.post('/login', function(req, res) {
       }
     }
   })
+});
+
+app.get('/geo', function(req, res) {
+  var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' + req.query.input + '&types=geocode&key=AIzaSyCnZTzRUtTO13I9uIpYl8Yz4qtKRinhv2o';
+  Request.get({url: url, json: true }, function(err, resp, respBody) {
+    response.json(respBody);
+  });
 });
 
 // route middleware to verify a token
