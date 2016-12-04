@@ -640,6 +640,16 @@ app.post('/validateNumber', function(req, res) {
   });
 });
 
+app.post('/geocodePlaceId', function(req, res) {
+  googleMapsClient.geocode({
+    placeId: req.body.placeId
+  }, function(err, response) {
+    if (err) {
+      console.log('error: ' + err);
+    }
+    res.json({ error: err, message: response.json.results[0].formatted_address});
+  });
+});
 
 // route to show a random message (GET http://localhost:8080/api/)
 apiRoutes.get('/api', function(req, res) {
