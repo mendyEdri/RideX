@@ -303,6 +303,22 @@ app.post('/requestDriver', function(req, res) {
   });
 });
 
+app.post('/finall', function(req, res) {
+  var query = Driver.find();
+  query.exec(function (err, driver) {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
+    if (!driver) {
+      res.json({ success: false, message: 'driver not found' });
+    } else {
+      console.log('Cant save: Found Driver:' + driver);
+      res.json({ success: true, message: driver});
+   }
+  });
+});
+
 app.post('/find', function(req, res) {
   var limit = req.body.limit || 10;
   // get the max distance or set it to 8 kilometers
