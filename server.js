@@ -695,11 +695,11 @@ app.get('/geo', function(req, res) {
   var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' + req.query.input + '&types=geocode&key=AIzaSyCnZTzRUtTO13I9uIpYl8Yz4qtKRinhv2o';
   Request.get({url: url, json: true }, function(err, response, body) {
     if (err) {
-      response.json({ message: err });
+      res.json({ message: err });
     } else if (body) {
-      response.json({ message: body });
+      res.json({ message: body });
     } else {
-      response.json({ message: respBody });
+      res.json({ message: respBody });
     }
   });
 });
