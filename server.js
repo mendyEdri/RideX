@@ -39,7 +39,7 @@ var greetings = ['Hey there! what is your address?', 'i didn\'t understand that.
 const fs = require('fs');
 const Guid = require('guid');
 const Mustache  = require('mustache');
-const Request  = require('request');
+const Request = require('request');
 const Querystring  = require('querystring');
 
 var csrf_guid = "112233445599";//Guid.raw();
@@ -693,8 +693,14 @@ app.post('/login', function(req, res) {
 
 app.get('/geo', function(req, res) {
   var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' + req.query.input + '&types=geocode&key=AIzaSyCnZTzRUtTO13I9uIpYl8Yz4qtKRinhv2o';
-  Request.get({url: url, json: true }, function(err, resp, respBody) {
-    response.json(respBody);
+  Request.get({url: url, json: true }, function(err, response, body) {
+    if (err) {
+      response.json({ message: err });
+    } else if (body) {
+      response.json({ message: body });
+    } else {
+      response.json({ message: respBody });
+    }
   });
 });
 
