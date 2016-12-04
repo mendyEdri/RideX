@@ -695,13 +695,7 @@ app.post('/login', function(req, res) {
 app.get('/geo', function(req, res) {
   var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' + req.query.input + '&types=geocode&key=AIzaSyCnZTzRUtTO13I9uIpYl8Yz4qtKRinhv2o';
   var res = syncRequest('GET', url);
-  if (err) {
-    res.json({ message: err });
-  } else if (body) {
-    res.json({ message: body });
-  } else {
-    res.json({ message: respBody });
-  }
+  res.json({ message: res });
 /*
   request.get({url: url, json: true }, function(err, response, body) {
     if (err) {
