@@ -303,7 +303,7 @@ app.post('/requestDriver', function(req, res) {
   });
 });
 
-app.post('/finall', function(req, res) {
+app.post('/findall', function(req, res) {
   var query = Driver.find();
   query.exec(function (err, driver) {
     if (err) {
