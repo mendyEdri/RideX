@@ -18,6 +18,7 @@ var Passenger = require('./app/models/passenger'); // get our mongoose model
 var Ride = require('./app/models/ride'); // get our mongoose model
 
 var request = require('request');
+var syncRequest = require('sync-request');
 var data = require('./dropbox.json');
 var index = 0;
 
@@ -693,7 +694,16 @@ app.post('/login', function(req, res) {
 
 app.get('/geo', function(req, res) {
   var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' + req.query.input + '&types=geocode&key=AIzaSyCnZTzRUtTO13I9uIpYl8Yz4qtKRinhv2o';
-  Request.get({url: url, json: true }, function(err, response, body) {
+  var res = request('GET', url);
+  if (err) {
+    res.json({ message: err });
+  } else if (body) {
+    res.json({ message: body });
+  } else {
+    res.json({ message: respBody });
+  }
+/*
+  request.get({url: url, json: true }, function(err, response, body) {
     if (err) {
       res.json({ message: err });
     } else if (body) {
@@ -701,7 +711,7 @@ app.get('/geo', function(req, res) {
     } else {
       res.json({ message: respBody });
     }
-  });
+  }); */
 });
 
 // route middleware to verify a token
