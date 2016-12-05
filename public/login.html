@@ -40,7 +40,7 @@
     console.log('getLongLivedToken');
     var http = new XMLHttpRequest();
     //var url = "https://mendy-edri-server.herokuapp.com/sendcode";
-    var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode";
+    var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
     http.open("POST", url, true);
     //Send the proper header information along with the request
     http.setRequestHeader("Content-type", "application/json");
@@ -52,7 +52,8 @@
             alert(jsonResponse.user_access_token);
         }
     }
-    http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
+    //http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
+    http.send(null);
   }
 
   // email form submission handler
