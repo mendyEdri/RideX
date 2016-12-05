@@ -43,7 +43,7 @@
     var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
     http.open("GET", url, true);
     //Send the proper header information along with the request
-    http.setRequestHeader("Content-type", "application/json");
+    //http.setRequestHeader("Content-type", "application/json");
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
             var jsonResponse = JSON.parse(http.responseText);
