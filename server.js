@@ -18,7 +18,6 @@ var Passenger = require('./app/models/passenger'); // get our mongoose model
 var Ride = require('./app/models/ride'); // get our mongoose model
 
 var request = require('request');
-var syncRequest = require('sync-request');
 var data = require('./dropbox.json');
 var index = 0;
 
@@ -101,10 +100,14 @@ function loadLogin() {
   return fs.readFileSync('public/login.html').toString();
 }
 
+function loadLoginSuccess() {
+  return fs.readFileSync('public/login_success.html').toString();
+}
+
 app.get('/facebook', function(request, response){
   var view = {
-    appId: app_id,
-    csrf: csrf_guid,
+    appId: app_id, //769607079858170
+    csrf: csrf_guid, // just a number
     version: 'v1.0',
   };
 
@@ -112,16 +115,13 @@ app.get('/facebook', function(request, response){
   response.send(html);
 });
 
-function loadLoginSuccess() {
-  return fs.readFileSync('public/login_success.html').toString();
-}
-
 app.post('/sendcode', function(request, response){
   console.log('code: ' + request.body.code);
 
   // CSRF check
   if (request.body.csrf_nonce === csrf_guid) {
     var app_access_token = ['AA', app_id, app_secret].join('|');
+    console.log(app_access_token);
     var params = {
       grant_type: 'authorization_code',
       code: request.body.code,
@@ -130,6 +130,7 @@ app.post('/sendcode', function(request, response){
 
     // exchange tokens
     var token_exchange_url = token_exchange_base_url + '?' + Querystring.stringify(params);
+    console.log(token_exchange_url);
     Request.get({url: token_exchange_url, json: true}, function(err, resp, respBody) {
       console.log(respBody.expires_at);
       var view = {
