@@ -38,6 +38,8 @@
 
   function getLongLivedToken(code, csrf) {
     console.log('getLongLivedToken');
+    console.log('short code:');
+    console.log(code);
     var http = new XMLHttpRequest();
     //var url = "https://mendy-edri-server.herokuapp.com/sendcode";
     var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
@@ -53,7 +55,7 @@
         }
     }
     //http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
-    http.send(null);
+    //http.send(null);
   }
 
   // email form submission handler
