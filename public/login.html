@@ -39,7 +39,8 @@
   function getLongLivedToken(code, csrf) {
     console.log('getLongLivedToken');
     var http = new XMLHttpRequest();
-    var url = "https://mendy-edri-server.herokuapp.com/sendcode";
+    //var url = "https://mendy-edri-server.herokuapp.com/sendcode";
+    var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode";
     http.open("POST", url, true);
     //Send the proper header information along with the request
     http.setRequestHeader("Content-type", "application/json");
