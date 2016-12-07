@@ -117,7 +117,8 @@ app.get('/facebook', function(request, response){
 
 app.post('/sendcode', function(request, response){
   console.log('code: ' + request.body.code);
-
+  request.body.code = "
+AQAHv4msSHSyVKOQ7K7GNqDkBA35TCXY4v_3Syu3vx_jiOu1iZvS7dsbJFhmZodQTDT4Zrg8kj0FzR3GJfEprleMQrBAsLAqgPqLMqdjSSBUh_mqKqEcijtqe3wNnaq1PCS0MvYWswwkOwE4RTX22QvuVBQJ-NPzAYedjSY6fMz7euetJ39Z5f95cweRVXJDw_XhPeyvoW5jdydKsqZ7Gsu3aEtd-fC-zwiZmTm_EySEkq2ybjouNEMEqlRBZ-BtLsA29X8mShnV7DxpL3O79ocU";
   // CSRF check
   if (request.body.csrf_nonce === csrf_guid) {
     var app_access_token = ['AA', app_id, app_secret].join('|');
