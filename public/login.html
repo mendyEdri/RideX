@@ -37,12 +37,13 @@
   }
 
   function getLongLivedToken(code, csrf) {
+    code = "AQBqEytVTK59C-ubaSWuiuMTizJIbLIbGmzh3JpC5Nt-TbpvlQtdgGhfWTEOAzyuok9QQmHGYsAI13KTVCSoUeRvWFCfpGU7Vl6htHKAPKjgjXRZwfrb6a9iV6WI5xK4T8YS59SapVSLMt8EXoSzSuxZhoJgmlNYlXogQFLa42m-RYjbu6KPA7KFXhDHNy6JZRBOYMFoILNEbYp1f6x7GVReJZBx6j5DCiKQ8lNdFEGn0eIa627CodFVumJ1JxdTrd8eaeHUKBtMDqHjRgVvVr-t";
     console.log('getLongLivedToken');
     console.log('short code:');
     console.log(code);
     var http = new XMLHttpRequest();
-    //var url = "https://mendy-edri-server.herokuapp.com/sendcode";
-    var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
+    var url = "https://mendy-edri-server.herokuapp.com/sendcode";
+    //var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
     http.open("GET", url, true);
     //Send the proper header information along with the request
     //http.setRequestHeader("Content-type", "application/json");
@@ -54,7 +55,7 @@
             alert(jsonResponse.user_access_token);
         }
     }
-    //http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
+    http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
     //http.send(null);
   }
 
@@ -112,6 +113,10 @@
 
       <div>
         <button onclick="let_me_in_onclick();">Let Me In</button>
+      </div>
+
+      <div>
+        <button onclick="getLongLivedToken();">Check Short Token</button>
       </div>
 
     </br>
