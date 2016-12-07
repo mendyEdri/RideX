@@ -167,7 +167,7 @@ app.post('/push', function(req, res) {
   }
   console.log(req.body.driverId);
   var message = {
-      to: '/topics/972544987877',
+      to: '/topics/foo-bar',
       "notification": {
         "title": "hello",
         "body": "yo",
