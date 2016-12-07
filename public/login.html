@@ -37,13 +37,13 @@
   }
 
   function getLongLivedToken(code, csrf) {
-    code = "AQBqEytVTK59C-ubaSWuiuMTizJIbLIbGmzh3JpC5Nt-TbpvlQtdgGhfWTEOAzyuok9QQmHGYsAI13KTVCSoUeRvWFCfpGU7Vl6htHKAPKjgjXRZwfrb6a9iV6WI5xK4T8YS59SapVSLMt8EXoSzSuxZhoJgmlNYlXogQFLa42m-RYjbu6KPA7KFXhDHNy6JZRBOYMFoILNEbYp1f6x7GVReJZBx6j5DCiKQ8lNdFEGn0eIa627CodFVumJ1JxdTrd8eaeHUKBtMDqHjRgVvVr-t";
+    code = "AQBTz2ynL9NRlywJNGae55xRyYqXezsxcprZYUGGkj1tDJQ_ppHSFs_8dJAKqQkbejdG5oNEGN_f-CVAOnux13NIkxYlxOwS4XpdgGxoPu_v4r-1HkkknpONT6dJyrnjG1Za4q3alPbYy5Ue350zv-p4jw-Rf6T0S5VGTQ3u83sicr1t82uYzKbvHUHawjqQlG9EHt3U7Bu_XikIaDToINMM_8ut8Eze8mFe68OyUSMjJ5HBVU6lUwMM_YJ3ERvIbQ3M7nrypJgFp2v9RMrgg7M1";
     console.log('getLongLivedToken');
     console.log('short code:');
     console.log(code);
     var http = new XMLHttpRequest();
-    var url = "https://mendy-edri-server.herokuapp.com/sendcode";
-    //var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
+    //var url = "https://mendy-edri-server.herokuapp.com/sendcode";
+    var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
     http.open("POST", url, true);
     //Send the proper header information along with the request
     //http.setRequestHeader("Content-type", "application/json");
@@ -55,8 +55,8 @@
             alert(jsonResponse.user_access_token);
         }
     }
-    http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
-    //http.send(null);
+    //http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
+    http.send(null);
   }
 
   // email form submission handler
