@@ -49,7 +49,7 @@
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
             console.log(http);
-            var jsonResponse = JSON.parse(http.responseText);
+            var jsonResponse = http.responseText;
             console.log(jsonResponse.user_access_token);
             localStorage.setItem("code", jsonResponse.user_access_token);
             alert(jsonResponse.user_access_token);
