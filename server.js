@@ -162,8 +162,11 @@ app.post('/sendcode', function(request, response){
 
 
 app.post('/push', function(req, res) {
+  if (req.body.driverId.indexOf('+') > -1) {
+    req.body.driverId = req.body.driverId.replace('+', '');
+  }
   var message = {
-      to: '/topics/foo-bar',
+      to: '/topics/' + req.body.driverId,
       "notification": {
         "title": "hello",
         "body": "yo",
