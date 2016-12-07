@@ -165,6 +165,7 @@ app.post('/push', function(req, res) {
   if (req.body.driverId.indexOf('+') > -1) {
     req.body.driverId = req.body.driverId.replace('+', '');
   }
+  console.log(req.body.driverId);
   var message = {
       to: '/topics/' + req.body.driverId,
       "notification": {
