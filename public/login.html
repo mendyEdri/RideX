@@ -37,7 +37,7 @@
   }
 
   function getLongLivedToken(code, csrf) {
-    code = "AQBTz2ynL9NRlywJNGae55xRyYqXezsxcprZYUGGkj1tDJQ_ppHSFs_8dJAKqQkbejdG5oNEGN_f-CVAOnux13NIkxYlxOwS4XpdgGxoPu_v4r-1HkkknpONT6dJyrnjG1Za4q3alPbYy5Ue350zv-p4jw-Rf6T0S5VGTQ3u83sicr1t82uYzKbvHUHawjqQlG9EHt3U7Bu_XikIaDToINMM_8ut8Eze8mFe68OyUSMjJ5HBVU6lUwMM_YJ3ERvIbQ3M7nrypJgFp2v9RMrgg7M1";
+    //code = "AQBTz2ynL9NRlywJNGae55xRyYqXezsxcprZYUGGkj1tDJQ_ppHSFs_8dJAKqQkbejdG5oNEGN_f-CVAOnux13NIkxYlxOwS4XpdgGxoPu_v4r-1HkkknpONT6dJyrnjG1Za4q3alPbYy5Ue350zv-p4jw-Rf6T0S5VGTQ3u83sicr1t82uYzKbvHUHawjqQlG9EHt3U7Bu_XikIaDToINMM_8ut8Eze8mFe68OyUSMjJ5HBVU6lUwMM_YJ3ERvIbQ3M7nrypJgFp2v9RMrgg7M1";
     console.log('getLongLivedToken');
     console.log('short code:');
     console.log(code);
@@ -46,7 +46,8 @@
     //var url = "https://dev.talenttribe.me/tt-server/rest/user/getFacebookCode/" + code;
     http.open("POST", url, true);
     //Send the proper header information along with the request
-    //http.setRequestHeader("Content-type", "application/json");
+
+    http.setRequestHeader("Content-type", "application/json");
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
             var jsonResponse = JSON.parse(http.responseText);
@@ -55,7 +56,7 @@
             alert(jsonResponse.user_access_token);
         }
     }
-    http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
+    http.send(JSON.stringify({ code: "AQBTz2ynL9NRlywJNGae55xRyYqXezsxcprZYUGGkj1tDJQ_ppHSFs_8dJAKqQkbejdG5oNEGN_f-CVAOnux13NIkxYlxOwS4XpdgGxoPu_v4r-1HkkknpONT6dJyrnjG1Za4q3alPbYy5Ue350zv-p4jw-Rf6T0S5VGTQ3u83sicr1t82uYzKbvHUHawjqQlG9EHt3U7Bu_XikIaDToINMM_8ut8Eze8mFe68OyUSMjJ5HBVU6lUwMM_YJ3ERvIbQ3M7nrypJgFp2v9RMrgg7M1", csrf_nonce: csrf}));
     //http.send(null);
   }
 
