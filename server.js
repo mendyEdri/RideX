@@ -181,7 +181,8 @@ app.post('/driver/order', function(req, res) {
           "sound": "default"
       },
       "data": {
-        "extra":"juice"
+        "extra":"juice",
+        "body": response.json.results[0].formatted_address,
       }
     };
 
