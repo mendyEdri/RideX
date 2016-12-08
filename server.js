@@ -633,8 +633,21 @@ app.post('/order', function(req, res) {
   })
 });
 
+app.post('/driver/ready', function(req, res) {
+  if (!req.body.driverId) {
+    res.json({ success: false, message: "driver id is mandatory" });
+  }
+  Driver.findOneAndUpdate({ phoneNumber: req.body.phoneNumber }, { active: req.body.ready } function(err, driver) {
+    if (err) {
+      res.json({ success: false, message: "internal server error"});
+    }
+    if (!driver) {
+      res.json({ success: false, message: "Driver not found" });
+    }
+    res.json({ success: true, message: driver });
+  });
+});
 
-// TaxiSMS
 app.post('/driver/register', function(req, res) {
   console.log('phone: ' + req.body.phoneNumber);
   Driver.findOne({ phoneNumber: req.body.phoneNumber }, function(err, driver) {
