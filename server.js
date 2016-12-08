@@ -168,8 +168,8 @@ app.post('/push', function(req, res) {
   var message = {
       to: '/topics/' + req.body.driverId,
       "notification": {
-        "title": "hello",
-        "body": "yo",
+        "title": "New Ride!",
+        "body": req.body.userLocation,
         "click_action": "fcm.ACTION.HELLO",
         "sound": "default"
     },
@@ -320,6 +320,10 @@ app.post('/findall', function(req, res) {
       res.json({ success: true, message: driver});
    }
   });
+});
+
+app.post('/orderTaxi', function(req, res) {
+
 });
 
 app.post('/find', function(req, res) {
