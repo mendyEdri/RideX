@@ -168,6 +168,22 @@ app.post('/driver/order', function(req, res) {
     }
     //res.json({ error: err, message: response.json.results[0].formatted_address});
 
+    var newRide = new Ride({
+      rideId: String,
+      location: String,
+      passengerId: String,
+      driverId: String,
+      orderTime: Date,
+      watingTime: Date,
+      startingDate: Date,
+      canceled: Boolean
+    });
+    newPassenger.save(function(err) {
+      if (err) throw err;
+        passengerGlobal = passenger;
+    });
+
+
     if (req.body.driverId.indexOf('+') > -1) {
       req.body.driverId = req.body.driverId.replace('+', '');
     }
@@ -181,7 +197,6 @@ app.post('/driver/order', function(req, res) {
           "sound": "default"
       },
       "data": {
-        "extra":"juice",
         "body": response.json.results[0].formatted_address,
       }
     };
@@ -311,6 +326,7 @@ app.post('/geocode', function(req, res) {
     if (err) {
       console.log('error: ' + err);
     }
+    console.log(response.json.results);
     res.json({ error: err, message: response.json.results[0].formatted_address});
   });
 });
