@@ -160,7 +160,7 @@ app.post('/sendcode', function(request, response){
 });
 
 app.post('/driver/updateLocation', function(req, res) {
-  console.log(req.body.coordinates);
+  console.log(req.body);
   Driver.findOne({ phoneNumber: req.body.driverId } , function(err, driver) {
     if (err) {
       res.json({ message: err});
