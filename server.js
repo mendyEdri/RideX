@@ -635,7 +635,7 @@ app.post('/order', function(req, res) {
 
 
 // TaxiSMS
-app.post('/registerDriver', function(req, res) {
+app.post('/driver/register', function(req, res) {
   console.log('phone: ' + req.body.phoneNumber);
   Driver.findOne({ phoneNumber: req.body.phoneNumber }, function(err, driver) {
     if (err) { throw err; }
