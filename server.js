@@ -424,7 +424,8 @@ app.post('/find', function(req, res) {
         coords[1]
       ],
       $maxDistance: 100
-    }
+    },
+    { active: true }
   });
   query.exec(function (err, driver) {
     if (err) {
