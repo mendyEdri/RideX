@@ -637,7 +637,7 @@ app.post('/driver/ready', function(req, res) {
   if (!req.body.driverId) {
     res.json({ success: false, message: "driver id is mandatory" });
   }
-  Driver.findOneAndUpdate({ phoneNumber: req.body.phoneNumber }, { active: req.body.ready } function(err, driver) {
+  Driver.findOneAndUpdate({ phoneNumber: req.body.phoneNumber }, { active: req.body.ready }, function(err, driver) {
     if (err) {
       res.json({ success: false, message: "internal server error"});
     }
