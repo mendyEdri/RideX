@@ -418,14 +418,7 @@ app.post('/find', function(req, res) {
   coords[0] = req.body.location[0];
   coords[1] = req.body.location[1];
 
-  var query = Driver.where({'geo': {
-      $near: [
-        coords[0],
-        coords[1]
-      ],
-      $maxDistance: 100
-    },
-  }).where('active' === true);
+  var query = Driver.find('active' {$ne: true});
   query.exec(function (err, driver) {
     if (err) {
       console.log(err);
