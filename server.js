@@ -326,8 +326,7 @@ app.post('/geocode', function(req, res) {
     if (err) {
       console.log('error: ' + err);
     }
-    console.log(response.json.results);
-    res.json({ error: err, message: response.json.results[0].formatted_address});
+    res.json({ error: err, message: response.json.results});
   });
 });
 
