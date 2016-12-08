@@ -159,6 +159,44 @@ app.post('/sendcode', function(request, response){
   }
 });
 
+app.post('/driver/order', function(req, res) {
+  googleMapsClient.geocode({
+    address: req.body.userLocation[0] + ',' + req.body.userLocation[1],
+  }, function(err, response) {
+    if (err) {
+      console.log('error: ' + err);
+    }
+    //res.json({ error: err, message: response.json.results[0].formatted_address});
+
+    if (req.body.driverId.indexOf('+') > -1) {
+      req.body.driverId = req.body.driverId.replace('+', '');
+    }
+    console.log(req.body.driverId);
+    var message = {
+        to: '/topics/' + req.body.driverId,
+        "notification": {
+          "title": "New Ride!",
+          "body": response.json.results[0].formatted_address,
+          "click_action": "fcm.ACTION.HELLO",
+          "sound": "default"
+      },
+      "data": {
+        "extra":"juice"
+      }
+    };
+
+    fcm.send(message, function(err, response){
+      if (err) {
+          console.log("Something has gone wrong!");
+          res.json({ message: err });
+      } else {
+          console.log("Successfully sent with response: ", response);
+          res.json({ message: response });
+      }
+    });
+
+  });
+});
 
 app.post('/push', function(req, res) {
   if (req.body.driverId.indexOf('+') > -1) {
