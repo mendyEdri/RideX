@@ -159,6 +159,32 @@ app.post('/sendcode', function(request, response){
   }
 });
 
+app.post('/driver/updateLocation', function(req, res) {
+  console.log(req.body.location[0]);
+  Driver.findOne({ phoneNumber: req.body.driverId } , function(err, driver) {
+    if (err) {
+      res.json({ message: err});
+      return;
+    }
+    if (driver) {
+      var coords = [];
+      coords[0] = req.body.coordinates[0];
+      coords[1] = req.body.coordinates[1];
+
+      driver.geo = coords;
+      driver.save(function (err) {
+        if (err) {
+          res.json({ success: false, message: err });
+          return;
+        }
+        res.json({ success: true, message: driver });
+      });
+    } else {
+      res.json({ success: false, message: 'Driver not found' });
+    }
+  });
+});
+
 app.post('/driver/order', function(req, res) {
   googleMapsClient.geocode({
     address: req.body.userLocation[0] + ',' + req.body.userLocation[1],
@@ -169,48 +195,46 @@ app.post('/driver/order', function(req, res) {
     //res.json({ error: err, message: response.json.results[0].formatted_address});
 
     var newRide = new Ride({
-      rideId: String,
-      location: String,
-      passengerId: String,
-      driverId: String,
-      orderTime: Date,
-      watingTime: Date,
-      startingDate: Date,
-      canceled: Boolean
+      rideId: this.generateRideId(),
+      location: response.json.results[0].formatted_address,
+      passengerId: req.body.passengerId,
+      driverId: req.body.driverId,
+      orderTime: new Date(),
+      canceled: false
     });
-    newPassenger.save(function(err) {
-      if (err) throw err;
-        passengerGlobal = passenger;
-    });
-
-
-    if (req.body.driverId.indexOf('+') > -1) {
-      req.body.driverId = req.body.driverId.replace('+', '');
-    }
-    console.log(req.body.driverId);
-    var message = {
-        to: '/topics/' + req.body.driverId,
-        "notification": {
-          "title": "New Ride!",
-          "body": response.json.results[0].formatted_address,
-          "click_action": "fcm.ACTION.HELLO",
-          "sound": "default"
-      },
-      "data": {
-        "body": response.json.results[0].formatted_address,
-      }
-    };
-
-    fcm.send(message, function(err, response){
+    newRide.save(function(err) {
       if (err) {
-          console.log("Something has gone wrong!");
-          res.json({ message: err });
-      } else {
-          console.log("Successfully sent with response: ", response);
-          res.json({ message: response });
-      }
-    });
+        res.json({ error: err });
+        return;
+      };
 
+      if (req.body.driverId.indexOf('+') > -1) {
+        req.body.driverId = req.body.driverId.replace('+', '');
+      }
+      console.log(req.body.driverId);
+      var message = {
+          to: '/topics/' + req.body.driverId,
+          "notification": {
+            "title": "New Ride!",
+            "body": response.json.results[0].formatted_address,
+            "click_action": "fcm.ACTION.HELLO",
+            "sound": "default"
+        },
+        "data": {
+          "body": response.json.results[0].formatted_address,
+        }
+      };
+
+      fcm.send(message, function(err, response){
+        if (err) {
+            console.log("Something has gone wrong!");
+            res.json({ message: err });
+        } else {
+            console.log("Successfully sent with response: ", response);
+            res.json({ message: response });
+        }
+      });
+    });
   });
 });
 
@@ -326,7 +350,7 @@ app.post('/geocode', function(req, res) {
     if (err) {
       console.log('error: ' + err);
     }
-    res.json({ error: err, message: response.json.results});
+    res.json({ error: err, message: response.json.results[0].formatted_address});
   });
 });
 
@@ -413,32 +437,6 @@ app.post('/find', function(req, res) {
       console.log('Cant save: Found Driver:' + driver);
       res.json({ success: true, message: driver});
    }
-  });
-});
-
-app.post('/driverLocation', function(req, res) {
-  console.log(req.body.location[0]);
-  Driver.findOne({ phoneNumber: req.body.userId } , function(err, driver) {
-    if (err) {
-      res.json({ message: err});
-      return;
-    }
-    if (driver) {
-      var coords = [];
-      coords[0] = req.body.location[0];
-      coords[1] = req.body.location[1];
-
-      driver.geo = coords;
-      driver.save(function (err) {
-        if (err) {
-          res.json({ success: false, message: err });
-          return;
-        }
-        res.json({ success: true, message: driver });
-      });
-    } else {
-      res.json({ success: false, message: 'Driver not found' });
-    }
   });
 });
 
