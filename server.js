@@ -421,7 +421,7 @@ app.post('/driver/findActive', function(req, res) {
       ],
       $maxDistance: 100
     },
-  }).where({ "active": true });
+  }).where({ "active": true }).where({"freeForRide" : true});
   query.exec(function (err, driver) {
     if (err) {
       console.log(err);
@@ -675,6 +675,7 @@ app.post('/driver/register', function(req, res) {
         active: false,
         ridesCount: 0,
         imageUrl: '',
+        freeForRide: false,
         blocked: false,
         geo: [0, 0]
       });
