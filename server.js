@@ -400,11 +400,7 @@ app.post('/findall', function(req, res) {
   });
 });
 
-app.post('/orderTaxi', function(req, res) {
-
-});
-
-app.post('/find', function(req, res) {
+app.post('/driver/findActive', function(req, res) {
   var limit = req.body.limit || 10;
   // get the max distance or set it to 8 kilometers
   var maxDistance = req.body.distance || 8;
@@ -418,7 +414,14 @@ app.post('/find', function(req, res) {
   coords[0] = req.body.location[0];
   coords[1] = req.body.location[1];
 
-  var query = Driver.find('active' {$ne: true});
+  var query = Driver.find({'geo': {
+      $near: [
+        coords[0],
+        coords[1]
+      ],
+      $maxDistance: 100
+    },
+  }).where({ "active": true });
   query.exec(function (err, driver) {
     if (err) {
       console.log(err);
@@ -430,6 +433,22 @@ app.post('/find', function(req, res) {
       console.log('Cant save: Found Driver:' + driver);
       res.json({ success: true, message: driver});
    }
+  });
+});
+
+app.post('/driver/getDriverById', function(req, res) {
+  if (!req.body.driverId) {
+    req.json({ success: false, message: 'driverId must be provided' });
+    return;
+  }
+  Driver.findOne({ phoneNumber: req.body.driverId }, function(err, driver) {
+    if (err) {
+      res.json({ success: false, message: "internal server error"});
+    }
+    if (!driver) {
+      res.json({ success: false, message: "Driver not found" });
+    }
+    res.json({ success: true, message: driver });
   });
 });
 
@@ -623,7 +642,7 @@ app.post('/order', function(req, res) {
       sendMessage(passengerGlobal.phoneNumber, 'Please try again');
       res.json({ success: false, message: 'Please try again.'});
     }
-  })
+  });
 });
 
 app.post('/driver/ready', function(req, res) {
