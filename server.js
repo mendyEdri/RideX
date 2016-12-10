@@ -419,7 +419,7 @@ app.post('/driver/findFreeDriver', function(req, res) {
         coords[0],
         coords[1]
       ],
-      $maxDistance: 100
+      $maxDistance: 5/111.2
     },
   }).where({ "freeForRide" : true }).where({ "blocked": false });
   query.exec(function (err, driver) {
