@@ -400,7 +400,7 @@ app.post('/findall', function(req, res) {
   });
 });
 
-app.post('/driver/findActive', function(req, res) {
+app.post('/driver/findFreeDriver', function(req, res) {
   var limit = req.body.limit || 10;
   // get the max distance or set it to 8 kilometers
   var maxDistance = req.body.distance || 8;
@@ -421,7 +421,7 @@ app.post('/driver/findActive', function(req, res) {
       ],
       $maxDistance: 100
     },
-  }).where({ "active": true }).where({"freeForRide" : true});
+  }).where({ "active": true }).where({ "freeForRide" : true }).where({ "blocked": false });
   query.exec(function (err, driver) {
     if (err) {
       console.log(err);
@@ -645,11 +645,11 @@ app.post('/order', function(req, res) {
   });
 });
 
-app.post('/driver/ready', function(req, res) {
+app.post('/driver/updateState', function(req, res) {
   if (!req.body.driverId) {
     res.json({ success: false, message: "driver id is mandatory" });
   }
-  Driver.findOneAndUpdate({ phoneNumber: req.body.driverId }, { active: req.body.active }, function(err, driver) {
+  Driver.findOneAndUpdate({ phoneNumber: req.body.driverId }, { freeForRide: req.body.freeForRide }, function(err, driver) {
     if (err) {
       res.json({ success: false, message: "internal server error"});
     }
