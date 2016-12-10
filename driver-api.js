@@ -37,7 +37,7 @@ module.exports = (function() {
     //     res.json({'message': 'now server use extended file'});
     // });
 
-    app.post('/updateLocation', function(req, res) {
+    router.post('/updateLocation', function(req, res) {
       console.log(req.body);
       Driver.findOne({ phoneNumber: req.body.driverId } , function(err, driver) {
         if (err) {
@@ -63,7 +63,7 @@ module.exports = (function() {
       });
     });
 
-    app.post('/order', function(req, res) {
+    router.post('/order', function(req, res) {
       googleMapsClient.geocode({
         address: req.body.userLocation[0] + ',' + req.body.userLocation[1],
       }, function(err, response) {
@@ -116,7 +116,7 @@ module.exports = (function() {
       });
     });
 
-    app.post('/findFreeDriver', function(req, res) {
+    router.post('/findFreeDriver', function(req, res) {
       var limit = req.body.limit || 10;
       // get the max distance or set it to 8 kilometers
       var maxDistance = req.body.distance || 8;
@@ -152,7 +152,7 @@ module.exports = (function() {
       });
     });
 
-    app.post('/getDriverById', function(req, res) {
+    router.post('/getDriverById', function(req, res) {
       if (!req.body.driverId) {
         req.json({ success: false, message: 'driverId must be provided' });
         return;
@@ -168,7 +168,7 @@ module.exports = (function() {
       });
     });
 
-    app.post('/updateState', function(req, res) {
+    router.post('/updateState', function(req, res) {
       if (!req.body.driverId) {
         res.json({ success: false, message: "driver id is mandatory" });
       }
@@ -183,7 +183,7 @@ module.exports = (function() {
       });
     });
 
-    app.post('/register', function(req, res) {
+    router.post('/register', function(req, res) {
       console.log('phone: ' + req.body.phoneNumber);
       Driver.findOne({ phoneNumber: req.body.phoneNumber }, function(err, driver) {
         if (err) { throw err; }
