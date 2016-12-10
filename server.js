@@ -421,7 +421,7 @@ app.post('/driver/findFreeDriver', function(req, res) {
       ],
       $maxDistance: 100
     },
-  }).where({ "active": true }).where({ "freeForRide" : true }).where({ "blocked": false });
+  }).where({ "freeForRide" : true }).where({ "blocked": false });
   query.exec(function (err, driver) {
     if (err) {
       console.log(err);
