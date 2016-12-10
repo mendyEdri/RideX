@@ -16,6 +16,7 @@ var User   = require('./app/models/user'); // get our mongoose model
 var Driver = require('./app/models/driver'); // get our mongoose model
 var Passenger = require('./app/models/passenger'); // get our mongoose model
 var Ride = require('./app/models/ride'); // get our mongoose model
+var DriverApi = require('./driver-api.js');
 
 var request = require('request');
 var data = require('./dropbox.json');
@@ -81,6 +82,8 @@ var allowCrossDomain = function(req, res, next) {
     next();
 }
 app.use(allowCrossDomain);
+
+app.use('/api/driver', DriverApi);
 
 
 // API ROUTES -------------------
@@ -159,84 +162,6 @@ app.post('/sendcode', function(request, response){
   }
 });
 
-app.post('/driver/updateLocation', function(req, res) {
-  console.log(req.body);
-  Driver.findOne({ phoneNumber: req.body.driverId } , function(err, driver) {
-    if (err) {
-      res.json({ message: err});
-      return;
-    }
-    if (driver) {
-      var coords = [];
-      coords[0] = req.body.coordinates[0];
-      coords[1] = req.body.coordinates[1];
-
-      driver.geo = coords;
-      driver.save(function (err) {
-        if (err) {
-          res.json({ success: false, message: err });
-          return;
-        }
-        res.json({ success: true, message: driver });
-      });
-    } else {
-      res.json({ success: false, message: 'Driver not found' });
-    }
-  });
-});
-
-app.post('/driver/order', function(req, res) {
-  googleMapsClient.geocode({
-    address: req.body.userLocation[0] + ',' + req.body.userLocation[1],
-  }, function(err, response) {
-    if (err) {
-      console.log('error: ' + err);
-    }
-    //res.json({ error: err, message: response.json.results[0].formatted_address});
-
-    var newRide = new Ride({
-      rideId: this.generateRideId(),
-      location: response.json.results[0].formatted_address,
-      passengerId: req.body.passengerId,
-      driverId: req.body.driverId,
-      orderTime: new Date(),
-      canceled: false
-    });
-    newRide.save(function(err) {
-      if (err) {
-        res.json({ error: err });
-        return;
-      };
-
-      if (req.body.driverId.indexOf('+') > -1) {
-        req.body.driverId = req.body.driverId.replace('+', '');
-      }
-      console.log(req.body.driverId);
-      var message = {
-          to: '/topics/' + req.body.driverId,
-          "notification": {
-            "title": "New Ride!",
-            "body": response.json.results[0].formatted_address,
-            "click_action": "fcm.ACTION.HELLO",
-            "sound": "default"
-        },
-        "data": {
-          "body": response.json.results[0].formatted_address,
-        }
-      };
-
-      fcm.send(message, function(err, response){
-        if (err) {
-            console.log("Something has gone wrong!");
-            res.json({ message: err });
-        } else {
-            console.log("Successfully sent with response: ", response);
-            res.json({ message: response });
-        }
-      });
-    });
-  });
-});
 
 app.post('/push', function(req, res) {
   if (req.body.driverId.indexOf('+') > -1) {
@@ -400,57 +325,6 @@ app.post('/findall', function(req, res) {
   });
 });
 
-app.post('/driver/findFreeDriver', function(req, res) {
-  var limit = req.body.limit || 10;
-  // get the max distance or set it to 8 kilometers
-  var maxDistance = req.body.distance || 8;
-
-  // we need to convert the distance to radians
-  // the raduis of Earth is approximately 6371 kilometers
-  maxDistance /= 6371;
-
-  // get coordinates [ <longitude> , <latitude> ]
-  var coords = [];
-  coords[0] = req.body.location[0];
-  coords[1] = req.body.location[1];
-
-  var query = Driver.find({'geo': {
-      $near: [
-        coords[0],
-        coords[1]
-      ],
-      $maxDistance: 5/111.2
-    },
-  }).where({ "freeForRide" : true }).where({ "blocked": false });
-  query.exec(function (err, driver) {
-    if (err) {
-      console.log(err);
-      throw err;
-    }
-    if (!driver) {
-      res.json({ success: false, message: 'driver not found' });
-    } else {
-      console.log('Cant save: Found Driver:' + driver);
-      res.json({ success: true, message: driver});
-   }
-  });
-});
-
-app.post('/driver/getDriverById', function(req, res) {
-  if (!req.body.driverId) {
-    req.json({ success: false, message: 'driverId must be provided' });
-    return;
-  }
-  Driver.findOne({ phoneNumber: req.body.driverId }, function(err, driver) {
-    if (err) {
-      res.json({ success: false, message: "internal server error"});
-    }
-    if (!driver) {
-      res.json({ success: false, message: "Driver not found" });
-    }
-    res.json({ success: true, message: driver });
-  });
-});
 
 var geocoding = function(body, callback) {
   var phone = body.phoneNumber;
@@ -645,54 +519,6 @@ app.post('/order', function(req, res) {
   });
 });
 
-app.post('/driver/updateState', function(req, res) {
-  if (!req.body.driverId) {
-    res.json({ success: false, message: "driver id is mandatory" });
-  }
-  Driver.findOneAndUpdate({ phoneNumber: req.body.driverId }, { freeForRide: req.body.freeForRide }, function(err, driver) {
-    if (err) {
-      res.json({ success: false, message: "internal server error"});
-    }
-    if (!driver) {
-      res.json({ success: false, message: "Driver not found" });
-    }
-    res.json({ success: true, message: driver });
-  });
-});
-
-app.post('/driver/register', function(req, res) {
-  console.log('phone: ' + req.body.phoneNumber);
-  Driver.findOne({ phoneNumber: req.body.phoneNumber }, function(err, driver) {
-    if (err) { throw err; }
-    if (!req.body.phoneNumber) {
-      res.json({success: false, message: 'Driver Phone number must be provided'});
-      return;
-    }
-    if (!driver) {
-      var newDriver = new Driver({
-        phoneNumber: req.body.phoneNumber,
-        startDate: new Date(),
-        active: false,
-        ridesCount: 0,
-        imageUrl: '',
-        freeForRide: false,
-        blocked: false,
-        geo: [0, 0]
-      });
-      newDriver.save(function(err) {
-        if (err) throw err;
-        console.log('User saved successfully');
-        res.json({
-          success: true,
-          message: 'Welcome New Driver!',
-          userId: newDriver._id,
-        });
-      });
-    } else if (driver) {
-      res.json({success: false, message: 'Driver already exist'});
-    }
-  })
-});
 
 app.post('/registerPassenger', function(req, res) {
   Passenger.findOne({ phoneNumber: req.body.phoneNumber }, function(err, passenger) {
@@ -847,7 +673,7 @@ apiRoutes.get('/validate', function(req, res) {
 });
 
 // apply the routes to our application with the prefix /api
-app.use('/api', apiRoutes);
+//app.use('/api', apiRoutes);
 
 // API ROUTES -------------------
 // we'll get to these in a second
