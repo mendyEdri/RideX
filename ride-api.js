@@ -49,26 +49,26 @@ module.exports = (function() {
             if (err) {
               console.log('error: ' + err);
             }
-            res.json({ error: err, message: response.json.results});
-          });
-          return;
-          var newRide = new Ride({
-            userId: req.body.userId,
-            orderTime: new Date(),
-            locationString: req.body.locationString,
-            pending: true,
-          });
-          newRide.save(function(err) {
-            if (err) {
-              res.json({ success: false, message: 'Error saving ride. please try again' });
-              return;
-            };
-            console.log('Ride saved successfully');
-            res.json({
-              success: true,
-              message: 'Ride has been added',
-              rideId: newRide._id,
-              ride: newRide
+
+            var newRide = new Ride({
+              userId: req.body.userId,
+              orderTime: new Date(),
+              locationString: req.body.locationString,
+              geo: [response.json.results[0].geometry.location.lat, response.json.results[0].geometry.location.lng],
+              pending: true,
+            });
+            newRide.save(function(err) {
+              if (err) {
+                res.json({ success: false, message: 'Error saving ride. please try again' });
+                return;
+              };
+              console.log('Ride saved successfully');
+              res.json({
+                success: true,
+                message: 'Ride has been added',
+                rideId: newRide._id,
+                ride: newRide
+              });
             });
           });
         } else if (ride) {
@@ -94,7 +94,7 @@ module.exports = (function() {
 
     app.post('/sendRideToDriver', function(req, res) {
       // driverId,
-      //rideId
+      // rideId
       // location coordinate
       // location string
     });
