@@ -98,7 +98,7 @@ module.exports = (function() {
       });
     });
 
-    function sendPush(driverId, stringLocation, rideId, callback) {
+    function sendPush(driverId, driverGeo, stringLocation, rideId, callback) {
       if (driverId.indexOf('+') > -1) {
         driverId = driverId.replace('+', '');
       }
