@@ -73,7 +73,7 @@
     }
     var code = localStorage.getItem("code");
     var http = new XMLHttpRequest();
-    var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + code;
+    var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + 'EMAWfeW1isHfZBTZB2Ut6qu4YG0okSfrLU58R021rOPNVordDEE73BwEz8baVZBJ95mWrrWTnfkybTNJyKY4CNjVysJ510BjPP8Q8QHXO39byCyXzhlOjhzhWmb1EnSMqMCMCGDwoZASuWTRvIEp1kAt0tHZCKKrGYZD'; //code;
     http.open("GET", url, true);
 
     http.onreadystatechange = function() {//Call a function when the state changes.
