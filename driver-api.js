@@ -32,11 +32,6 @@ module.exports = (function() {
       key: 'AIzaSyDMV69WkmHWjQM9KZ7Ugo293B0mZ_4UrhA'
     });
 
-
-    // router.get('/', function(req, res) {
-    //     res.json({'message': 'now server use extended file'});
-    // });
-
     router.post('/updateLocation', function(req, res) {
       console.log(req.body);
       Driver.findOne({ phoneNumber: req.body.driverId } , function(err, driver) {
@@ -215,6 +210,22 @@ module.exports = (function() {
           res.json({success: false, message: 'Driver already exist'});
         }
       })
+    });
+
+    app.post('/findall', function(req, res) {
+      var query = Driver.find();
+      query.exec(function (err, driver) {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        if (!driver) {
+          res.json({ success: false, message: 'driver not found' });
+        } else {
+          console.log('Cant save: Found Driver:' + driver);
+          res.json({ success: true, message: driver});
+       }
+      });
     });
 
     return router;

@@ -10,5 +10,8 @@ module.exports = mongoose.model('Ride', new Schema({
     orderTime: Date,
     watingTime: Date,
     startingDate: Date,
+    pending: Boolean,
+    taken: Boolean,
+    done: Boolean,
     canceled: Boolean
 }));

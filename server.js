@@ -17,6 +17,7 @@ var Driver = require('./app/models/driver'); // get our mongoose model
 var Passenger = require('./app/models/passenger'); // get our mongoose model
 var Ride = require('./app/models/ride'); // get our mongoose model
 var DriverApi = require('./driver-api.js');
+var RideApi = require('./ride-api.js');
 
 var request = require('request');
 var data = require('./dropbox.json');
@@ -84,6 +85,7 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 app.use('/api/driver', DriverApi);
+app.use('/api/ride', RideApi);
 
 
 // API ROUTES -------------------
@@ -308,23 +310,6 @@ app.post('/requestDriver', function(req, res) {
     res.json({ success: false, message: err });
   });
 });
-
-app.post('/findall', function(req, res) {
-  var query = Driver.find();
-  query.exec(function (err, driver) {
-    if (err) {
-      console.log(err);
-      throw err;
-    }
-    if (!driver) {
-      res.json({ success: false, message: 'driver not found' });
-    } else {
-      console.log('Cant save: Found Driver:' + driver);
-      res.json({ success: true, message: driver});
-   }
-  });
-});
-
 
 var geocoding = function(body, callback) {
   var phone = body.phoneNumber;
