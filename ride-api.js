@@ -111,7 +111,8 @@ module.exports = (function() {
             "sound": "default"
         },
         "data": {
-          "rideId": rideId
+          "rideId": rideId,
+          "location": stringLocation
         }
       };
 
