@@ -31,8 +31,8 @@ module.exports = (function() {
       key: 'AIzaSyDMV69WkmHWjQM9KZ7Ugo293B0mZ_4UrhA'
     });
 
-    app.get('/', function(req, res) {
-      res.json({ message: 'ride api'});
+    app.post('/requestRide', function(req, res) {
+      //
     });
 
     app.post('/getAllPendingRides', function(req, res) {
