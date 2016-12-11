@@ -44,7 +44,7 @@ const Mustache  = require('mustache');
 const Request = require('request');
 const Querystring  = require('querystring');
 
-var csrf_guid = "112233445599";//Guid.raw();
+var csrf_guid = "11223344599";//Guid.raw();
 
 const api_version = 'v1.0';
 const app_id = '769607079858170';
