@@ -77,6 +77,14 @@ module.exports = (function() {
       })
     });
 
+    app.post('/sendRideToDriver', function(req, res) {
+      // driverId,
+      // rideId
+      // location coordinate
+      // location string
+      res.json({ success: true });
+    });
+
     app.post('/getAllPendingRides', function(req, res) {
       var query = Ride.find().where({ 'pending': true });
       query.exec(function (err, ride) {
@@ -90,13 +98,6 @@ module.exports = (function() {
           res.json({ success: true, message: ride});
        }
       });
-    });
-
-    app.post('/sendRideToDriver', function(req, res) {
-      // driverId,
-      // rideId
-      // location coordinate
-      // location string
     });
 
     return app;
