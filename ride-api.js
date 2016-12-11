@@ -45,7 +45,8 @@ module.exports = (function() {
           var newRide = new Ride({
             userId: req.body.userId,
             orderTime: new Date(),
-            locationString: req.body.locationString
+            locationString: req.body.locationString,
+            pending: true,
           });
           newRide.save(function(err) {
             if (err) {
@@ -55,12 +56,12 @@ module.exports = (function() {
             console.log('Ride saved successfully');
             res.json({
               success: true,
-              message: 'Ride has added',
+              message: 'Ride has been added',
               rideId: newRide._id,
             });
           });
         } else if (ride) {
-          res.json({success: false, message: 'cannot override and existing ride'});
+          res.json({ success: false, message: 'cannot override and existing ride' });
         }
       })
     });
@@ -73,9 +74,8 @@ module.exports = (function() {
           res.json({ success: false, error: err});
         }
         if (!ride) {
-          res.json({ success: false, message: 'driver not found' });
+          res.json({ success: false, message: 'ride not found' });
         } else {
-          console.log('Cant save: Found Driver:' + ride);
           res.json({ success: true, message: ride});
        }
       });
