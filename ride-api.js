@@ -42,6 +42,7 @@ module.exports = (function() {
           return;
         }
         if (!ride) {
+          // TODO get geo coordinate from google
           var newRide = new Ride({
             userId: req.body.userId,
             orderTime: new Date(),
@@ -58,6 +59,7 @@ module.exports = (function() {
               success: true,
               message: 'Ride has been added',
               rideId: newRide._id,
+              ride: newRide
             });
           });
         } else if (ride) {
@@ -79,6 +81,13 @@ module.exports = (function() {
           res.json({ success: true, message: ride});
        }
       });
+    });
+
+    app.post('/sendRideToDriver', function(req, res) {
+      // driverId,
+      //rideId
+      // location coordinate
+      // location string
     });
 
     return app;
