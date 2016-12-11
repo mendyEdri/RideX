@@ -13,7 +13,6 @@ module.exports = mongoose.model('Ride', new Schema({
     driverId: String,
     orderTime: Date,
     watingTime: Date,
-    startingDate: Date,
     pending: Boolean,
     taken: Boolean,
     done: Boolean,

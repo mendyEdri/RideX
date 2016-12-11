@@ -32,7 +32,37 @@ module.exports = (function() {
     });
 
     app.post('/requestRide', function(req, res) {
-      //
+      Ride.findOne({ userId: req.body.userId }, function(err, ride) {
+        if (err) {
+          res.json({ success: false, message: 'User Aleardy has an active ride' });
+          return;
+        }
+        if (!req.body.userId) {
+          res.json({success: false, message: 'User Phone number must be provided'});
+          return;
+        }
+        if (!ride) {
+          var newRide = new Ride({
+            userId: req.body.userId,
+            orderTime: new Date(),
+            locationString: req.body.locationString
+          });
+          newRide.save(function(err) {
+            if (err) {
+              res.json({ success: false, message: 'Error saving ride. please try again' });
+              return;
+            };
+            console.log('Ride saved successfully');
+            res.json({
+              success: true,
+              message: 'Ride has added',
+              rideId: newRide._id,
+            });
+          });
+        } else if (ride) {
+          res.json({success: false, message: 'cannot override and existing ride'});
+        }
+      })
     });
 
     app.post('/getAllPendingRides', function(req, res) {

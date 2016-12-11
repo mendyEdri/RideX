@@ -209,7 +209,7 @@ module.exports = (function() {
         } else if (driver) {
           res.json({success: false, message: 'Driver already exist'});
         }
-      })
+      });
     });
 
     app.post('/findall', function(req, res) {
