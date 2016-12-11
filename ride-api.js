@@ -78,11 +78,9 @@ module.exports = (function() {
     });
 
     app.post('/sendRideToDriver', function(req, res) {
-      // driverId,
-      // rideId
-      // location coordinate
-      // location string
-      res.json({ success: true });
+      sendPush(req.body.driverId, req.body.stringLocation, req.body.rideId, function(success) {
+        res.json({ success: success });
+      });
     });
 
     app.post('/getAllPendingRides', function(req, res) {
@@ -99,6 +97,34 @@ module.exports = (function() {
        }
       });
     });
+
+    function sendPush(driverId, stringLocation, rideId, callback) {
+      if (driverId.indexOf('+') > -1) {
+        driverId = driverId.replace('+', '');
+      }
+      var message = {
+          to: '/topics/' + driverId,
+          "notification": {
+            "title": "New Ride!",
+            "body": stringLocation,
+            "click_action": "fcm.ACTION.HELLO",
+            "sound": "default"
+        },
+        "data": {
+          "rideId": rideId
+        }
+      };
+
+      fcm.send(message, function(err, response){
+        if (err) {
+            console.log("Something has gone wrong!");
+            callback(false);
+        } else {
+            console.log("Successfully sent with response: ", response);
+            callback(true);
+        }
+      });
+    }
 
     return app;
 })();
