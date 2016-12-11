@@ -42,7 +42,7 @@ module.exports = (function() {
           console.log(err);
           res.json({ success: false, error: err});
         }
-        if (!driver) {
+        if (!ride) {
           res.json({ success: false, message: 'driver not found' });
         } else {
           console.log('Cant save: Found Driver:' + ride);
