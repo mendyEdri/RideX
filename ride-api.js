@@ -43,6 +43,15 @@ module.exports = (function() {
         }
         if (!ride) {
           // TODO get geo coordinate from google
+          googleMapsClient.geocode({
+            address: req.body.locationString,
+          }, function(err, response) {
+            if (err) {
+              console.log('error: ' + err);
+            }
+            res.json({ error: err, message: response.json.results});
+          });
+          return;
           var newRide = new Ride({
             userId: req.body.userId,
             orderTime: new Date(),
