@@ -78,7 +78,7 @@ module.exports = (function() {
     });
 
     app.post('/sendRideToDriver', function(req, res) {
-      sendPush(req.body.driverId, req.body.locationString, req.body.rideId, function(success) {
+      sendPush(req.body.driverId, req.body.driverGeo, req.body.locationString, req.body.rideId, function(success) {
         res.json({ success: success });
       });
     });
