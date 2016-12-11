@@ -40,7 +40,7 @@ module.exports = (function() {
       query.exec(function (err, ride) {
         if (err) {
           console.log(err);
-          throw err;
+          res.json({ success: false, error: err});
         }
         if (!driver) {
           res.json({ success: false, message: 'driver not found' });
