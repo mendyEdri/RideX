@@ -1,9 +1,8 @@
 module.exports = (function() {
     'use strict';
     var express     = require('express');
-    var router = require('express').Router();
+    var app = require('express').Router();
     var bodyParser  = require('body-parser');
-    var app         = express();
     var morgan      = require('morgan');
     var mongoose    = require('mongoose');
     var FCM = require('fcm-push');
@@ -52,5 +51,5 @@ module.exports = (function() {
       });
     });
 
-    return router;
+    return app;
 })();
