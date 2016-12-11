@@ -32,6 +32,10 @@ module.exports = (function() {
       key: 'AIzaSyDMV69WkmHWjQM9KZ7Ugo293B0mZ_4UrhA'
     });
 
+    app.get('/', function(req, res) {
+      res.json({ message: 'ride api'});
+    });
+
     app.post('/getAllPendingRides', function(req, res) {
       var query = Ride.find().where({ 'pending': true });
       query.exec(function (err, ride) {
