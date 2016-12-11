@@ -87,24 +87,9 @@ module.exports = (function() {
           res.json({ success: false, message: err });
           return;
         }
-        sendPush(req.body.driverId, req.body.locationString, response.json.rows[0].elements[0].duration.text,  response.json.rows[0].elements[0].distance.text, response, req.body.rideId, function(success) {
+        sendPush(req.body.driverId, req.body.locationString, response.json.rows[0].elements[0].duration.text,  response.json.rows[0].elements[0].distance.text, req.body.rideId, function(success) {
           res.json({ success: success });
         });
-      });
-    });
-
-    app.post('/getAllPendingRides', function(req, res) {
-      var query = Ride.find().where({ 'pending': true });
-      query.exec(function (err, ride) {
-        if (err) {
-          console.log(err);
-          res.json({ success: false, error: err});
-        }
-        if (!ride) {
-          res.json({ success: false, message: 'ride not found' });
-        } else {
-          res.json({ success: true, message: ride});
-       }
       });
     });
 
@@ -124,7 +109,7 @@ module.exports = (function() {
           "rideId": rideId,
           "location": stringLocation,
           "duration": duration,
-          "distance": distance 
+          "distance": distance
         }
       };
 
@@ -138,6 +123,21 @@ module.exports = (function() {
         }
       });
     }
+
+    app.post('/getAllPendingRides', function(req, res) {
+      var query = Ride.find().where({ 'pending': true });
+      query.exec(function (err, ride) {
+        if (err) {
+          console.log(err);
+          res.json({ success: false, error: err});
+        }
+        if (!ride) {
+          res.json({ success: false, message: 'ride not found' });
+        } else {
+          res.json({ success: true, message: ride});
+       }
+      });
+    });
 
     return app;
 })();
