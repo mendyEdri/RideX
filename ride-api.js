@@ -78,8 +78,18 @@ module.exports = (function() {
     });
 
     app.post('/sendRideToDriver', function(req, res) {
-      sendPush(req.body.driverId, req.body.driverGeo, req.body.locationString, req.body.rideId, function(success) {
-        res.json({ success: success });
+      googleMapsClient.distanceMatrix({
+        origins: req.body.driverGeo[0] + ',' + req.body.driverGeo[1],
+        destinations: req.body.geo[0] + ',' + req.body.geo[1],
+        mode: 'driving'
+      }, function(err, response) {
+        if (err) {
+          res.json({ success: false, message: err });
+          return;
+        }
+        sendPush(req.body.driverId, req.body.locationString, response.json.rows[0].elements[0].duration.text,  response.json.rows[0].elements[0].distance.text, response, req.body.rideId, function(success) {
+          res.json({ success: success });
+        });
       });
     });
 
@@ -98,7 +108,7 @@ module.exports = (function() {
       });
     });
 
-    function sendPush(driverId, driverGeo, stringLocation, rideId, callback) {
+    function sendPush(driverId, stringLocation, duration, distance, rideId, callback) {
       if (driverId.indexOf('+') > -1) {
         driverId = driverId.replace('+', '');
       }
@@ -112,7 +122,9 @@ module.exports = (function() {
         },
         "data": {
           "rideId": rideId,
-          "location": stringLocation
+          "location": stringLocation,
+          "duration": duration,
+          "distance": distance 
         }
       };
 
