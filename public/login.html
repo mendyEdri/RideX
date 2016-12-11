@@ -73,7 +73,7 @@
     }
     var code = localStorage.getItem("code");
     var http = new XMLHttpRequest();
-    var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + 'EMAWfeW1isHfZBTZB2Ut6qu4YG0okSfrLU58R021rOPNVordDEE73BwEz8baVZBJ95mWrrWTnfkybTNJyKY4CNjVysJ510BjPP8Q8QHXO39byCyXzhlOjhzhWmb1EnSMqMCMCGDwoZASuWTRvIEp1kAt0tHZCKKrGYZD'; //code;
+    var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + document.getElementById("token").value; //code;
     http.open("GET", url, true);
 
     http.onreadystatechange = function() {//Call a function when the state changes.
@@ -112,11 +112,12 @@
       <button onclick="email_btn_onclick();">Signup via Email</button>
 
       <div>
-        <button onclick="let_me_in_onclick();">Let Me In</button>
+        <input type="text" id="token"/>
+        <button onclick="let_me_in_onclick();">Check Long Lived Token</button>
       </div>
 
       <div>
-        <button onclick="getLongLivedToken();">Check Short Token</button>
+        <!-- <button onclick="getLongLivedToken();">Check Short Token</button> -->
       </div>
 
     </br>
