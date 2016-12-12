@@ -1,5 +1,5 @@
-
 import _ from "lodash"
+
 import React, { Component } from 'react';
 import { Input, Button } from 'react-materialize';
 import Geoautocomplete from './geo-autocomplete';
@@ -16,35 +16,38 @@ import {
 } from "react-google-maps";
 
 class App extends Component {
-  "use strict";
-  state = {
-    markers: [{
-      position: {
-        lat: 25.0112183,
-        lng: 121.52067570000001,
-      },
-      key: `Accra`,
-      defaultAnimation: 2,
-      showLocationGeoList: false,
-      yourLocationValue: '',
-      requestRideValue: '',
-      requestRideResult: '',
+	constructor(props) {
+		super(props);
 
-      findDriverValue: '',
-      findDriverResult: '',
+		this.state = {
+			markers: [{
+				position: {
+					lat: 25.0112183,
+					lng: 121.52067570000001,
+				},
+				key: `Accra`,
+				defaultAnimation: 2,
+				showLocationGeoList: false,
+				yourLocationValue: '',
+				requestRideValue: '',
+				requestRideResult: '',
 
-      openRideValue: '',
-      openRideResult: '',
-      driverId: '',
-    }],
-  };
+				findDriverValue: '',
+				findDriverResult: '',
 
-  handleMapLoad = this.handleMapLoad.bind(this);
-  handleMapClick = this.handleMapClick.bind(this);
-  handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
-  updateRequestRideChanges = this.updateRequestRideChanges.bind(this);
-  updateFindDriverChanges = this.updateFindDriverChanges.bind(this);
-  updateOpenRideChanges = this.updateOpenRideChanges.bind(this);
+				openRideValue: '',
+				openRideResult: '',
+				driverId: '',
+			}],
+		};
+
+		// handleMapLoad = this.handleMapLoad.bind(this);
+	  // handleMapClick = this.handleMapClick.bind(this);
+	  // handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
+	  // updateRequestRideChanges = this.updateRequestRideChanges.bind(this);
+	  // updateFindDriverChanges = this.updateFindDriverChanges.bind(this);
+	  // updateOpenRideChanges = this.updateOpenRideChanges.bind(this);
+	}
 
   handleMapLoad(map) {
     this._mapComponent = map;

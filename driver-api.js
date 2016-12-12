@@ -1,7 +1,7 @@
 module.exports = (function() {
     'use strict';
     var express     = require('express');
-    var router = require('express').Router();
+    //var router = require('express').Router();
     var bodyParser  = require('body-parser');
     var app         = express();
     var morgan      = require('morgan');
@@ -32,7 +32,7 @@ module.exports = (function() {
       key: 'AIzaSyDMV69WkmHWjQM9KZ7Ugo293B0mZ_4UrhA'
     });
 
-    router.post('/updateLocation', function(req, res) {
+    app.post('/updateLocation', function(req, res) {
       console.log(req.body);
       Driver.findOne({ phoneNumber: req.body.driverId } , function(err, driver) {
         if (err) {
@@ -58,7 +58,7 @@ module.exports = (function() {
       });
     });
 
-    router.post('/order', function(req, res) {
+    app.post('/order', function(req, res) {
       googleMapsClient.geocode({
         address: req.body.userLocation[0] + ',' + req.body.userLocation[1],
       }, function(err, response) {
@@ -111,7 +111,7 @@ module.exports = (function() {
       });
     });
 
-    router.post('/findFreeDriver', function(req, res) {
+    app.post('/findFreeDriver', function(req, res) {
       var limit = req.body.limit || 10;
       // get the max distance or set it to 8 kilometers
       var maxDistance = req.body.distance || 8;
@@ -146,7 +146,7 @@ module.exports = (function() {
       });
     });
 
-    router.post('/getDriverById', function(req, res) {
+    app.post('/getDriverById', function(req, res) {
       if (!req.body.driverId) {
         req.json({ success: false, message: 'driverId must be provided' });
         return;
@@ -162,7 +162,7 @@ module.exports = (function() {
       });
     });
 
-    router.post('/updateState', function(req, res) {
+    app.post('/updateState', function(req, res) {
       if (!req.body.driverId) {
         res.json({ success: false, message: "driver id is mandatory" });
       }
@@ -177,7 +177,7 @@ module.exports = (function() {
       });
     });
 
-    router.post('/register', function(req, res) {
+    app.post('/register', function(req, res) {
       console.log('phone: ' + req.body.phoneNumber);
       Driver.findOne({ phoneNumber: req.body.phoneNumber }, function(err, driver) {
         if (err) { throw err; }
@@ -227,5 +227,5 @@ module.exports = (function() {
       });
     });
 
-    return router;
+    return app;
 })();

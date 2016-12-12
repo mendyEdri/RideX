@@ -1,6 +1,7 @@
 // =======================
 // get the packages we need ============
 // =======================
+
 var express     = require('express');
 var bodyParser  = require('body-parser');
 var app         = express();
@@ -9,6 +10,8 @@ var mongoose    = require('mongoose');
 var FCM = require('fcm-push');
 var serverKey = 'AAAAacxj0vM:APA91bGj74iPbIyslE_2lJF6xSLSBap70orqYGNpwSWsBiu3Hn0cwLi2WYv8Ypk8oZEdd9Te54yKG8FVxUM0PvCfwHQ8siMU2hwCgtJX_tBObb0n9ead8nPrg9gf8wmj6x0lKnZR03-5VPcZioH-DVdqzXOpOPNFwg';
 var fcm = new FCM(serverKey);
+var path = require('path');
+var cookieParser = require('cookie-parser');
 
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
@@ -20,6 +23,8 @@ var DriverApi = require('./driver-api.js');
 var RideApi = require('./ride-api.js');
 
 var request = require('request');
+var routes = require('./routes/index');
+var users = require('./routes/users');
 var data = require('./dropbox.json');
 var index = 0;
 
@@ -75,7 +80,27 @@ app.use(bodyParser.json());
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 app.use(express.static('public'));
-//app.use(express.static('client/public'));
+
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hjs');
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', routes);
+app.use('/users', users);
+
+
+// =======================
+// routes ================
+// =======================
+// basic route
+// app.get('/', function(req, res) {
+//   res.json({ message: 'this is home page '});
+// });
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -91,16 +116,8 @@ app.use('/api/ride', RideApi);
 
 // API ROUTES -------------------
 // get an instance of the router for api routes
-var apiRoutes = express.Router();
-apiRoutes.use(allowCrossDomain);
-
-// =======================
-// routes ================
-// =======================
-// basic route
-app.get('/', function(req, res) {
-  res.json({ message: 'this is home page '});
-});
+// var apiRoutes = express.Router();
+// apiRoutes.use(allowCrossDomain);
 
 function loadLogin() {
   return fs.readFileSync('public/login.html').toString();
@@ -549,9 +566,9 @@ app.post('/geocodePlaceId', function(req, res) {
 });
 
 // route to show a random message (GET http://localhost:8080/api/)
-apiRoutes.get('/api', function(req, res) {
-  res.json({ message: 'Welcome to the coolest API on earth!' });
-});
+// apiRoutes.get('/api', function(req, res) {
+//   res.json({ message: 'Welcome to the coolest API on earth!' });
+// });
 
 app.post('/signup', function(req, res) {
   // create a sample users
@@ -629,6 +646,8 @@ app.get('/geo', function(req, res) {
 });
 
 // route middleware to verify a token
+
+/*
 apiRoutes.use(function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     console.log('validate: ' + JSON.stringify(token));
@@ -660,6 +679,7 @@ apiRoutes.get('/validate', function(req, res) {
 
 // apply the routes to our application with the prefix /api
 //app.use('/api', apiRoutes);
+*/
 
 // API ROUTES -------------------
 // we'll get to these in a second

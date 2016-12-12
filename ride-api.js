@@ -1,7 +1,7 @@
 module.exports = (function() {
     'use strict';
     var express     = require('express');
-    var app = require('express').Router();
+    var app         = express();
     var bodyParser  = require('body-parser');
     var morgan      = require('morgan');
     var mongoose    = require('mongoose');
