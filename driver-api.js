@@ -141,7 +141,6 @@ module.exports = (function() {
         if (!driver) {
           res.json({ success: false, message: 'driver not found' });
         } else {
-          console.log('Cant save: Found Driver:' + driver);
           res.json({ success: true, message: driver});
        }
       });
