@@ -75,6 +75,7 @@ app.use(bodyParser.json());
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 app.use(express.static('public'));
+app.use(express.static('client'));
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
