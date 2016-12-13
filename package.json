@@ -41,18 +41,17 @@
     "path": "^0.12.7",
     "querystring": "^0.2.0",
     "react": "^15.4.1",
-    "react-bootstrap": "^0.30.6",
+    "react-addons-shallow-compare": "^15.4.1",
+    "react-bootstrap": "^0.30.7",
+    "react-cartographer": "^0.4.2",
+    "react-google-maps": "^6.0.1",
+    "react-materialize": "^0.17.6",
     "react-router": "^3.0.0",
     "request": "^2.79.0",
     "socket.io": "^1.5.1",
     "sync-request": "^3.0.1",
     "twilio": "^2.11.0",
-    "webpack": "^1.14.0",
-    "react-google-maps": "^6.0.1",
-    "react-materialize": "^0.17.6",
-    "react-addons-shallow-compare": "^15.4.1",
-    "react-bootstrap": "^0.30.7",
-    "react-cartographer": "^0.4.2"
+    "webpack": "^1.14.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -63,9 +62,12 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-preset-stage-2": "^6.18.0",
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "jest": "^17.0.3",
     "nodemon": "^1.11.0",
     "react": "^15.4.1",
-    "react-test-renderer": "^15.4.1"
+    "react-test-renderer": "^15.4.1",
+    "style-loader": "^0.13.1"
   }
 }

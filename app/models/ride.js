@@ -16,5 +16,6 @@ module.exports = mongoose.model('Ride', new Schema({
     pending: Boolean,
     taken: Boolean,
     done: Boolean,
+    ignoredDriversId: [],
     canceled: Boolean
 }));

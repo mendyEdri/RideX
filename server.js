@@ -25,7 +25,6 @@ var RideApi = require('./ride-api.js');
 var request = require('request');
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var data = require('./dropbox.json');
 var index = 0;
 
 var accountSid = 'AC2cbcc9d2a2a26af287dd08f68131f4ec';
@@ -645,8 +644,8 @@ app.get('/geo', function(req, res) {
   });
 });
 
-// route middleware to verify a token
 
+// route middleware to verify a token
 /*
 apiRoutes.use(function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];

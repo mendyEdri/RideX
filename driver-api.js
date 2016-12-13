@@ -19,7 +19,6 @@ module.exports = (function() {
     var DriverApi = require('./driver-api.js');
 
     var request = require('request');
-    var data = require('./dropbox.json');
     var index = 0;
 
     var accountSid = 'AC2cbcc9d2a2a26af287dd08f68131f4ec';
