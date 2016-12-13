@@ -21644,12 +21644,12 @@
 	      }]
 	    };
 	
-	    // handleMapLoad = this.handleMapLoad.bind(this);
-	    // handleMapClick = this.handleMapClick.bind(this);
-	    // handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
-	    // updateRequestRideChanges = this.updateRequestRideChanges.bind(this);
-	    // updateFindDriverChanges = this.updateFindDriverChanges.bind(this);
-	    // updateOpenRideChanges = this.updateOpenRideChanges.bind(this);
+	    _this.handleMapLoad = _this.handleMapLoad.bind(_this);
+	    _this.handleMapClick = _this.handleMapClick.bind(_this);
+	    _this.handleMarkerRightClick = _this.handleMarkerRightClick.bind(_this);
+	    _this.updateRequestRideChanges = _this.updateRequestRideChanges.bind(_this);
+	    _this.updateFindDriverChanges = _this.updateFindDriverChanges.bind(_this);
+	    _this.updateOpenRideChanges = _this.updateOpenRideChanges.bind(_this);
 	    return _this;
 	  }
 	
@@ -43164,10 +43164,11 @@
 	
 	
 	// module
-	exports.push([module.id, "App {\n  display: flex;\n  flex: 1;\n  width: 10%;\n  height: 10%;\n  flex-direction: column;\n}\n\n.App__MapContainer___E-edr {\n  flex: 1;\n  margin: 0;\n  background-color: #224;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n.App__MapElement___8drEp  {\n  flex: 1;\n  margin: 0;\n  background-color: #222;\n  width: 100%;\n  height: 100%;\n}\n\nhtml, body {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\n\n.App__AutoCompleteRow___1rlTw {\n   height: 10px;\n   padding: 0,\n}\n\n.App__AutoCompleteRow___1rlTw:hover {\n    background-color: #F0EDED;\n}\n\n.App__autocompleteTable___dMVM5 {\n  width: 100%;\n  display:block;\n}\n\ntbody {\n    height: 200px;\n    display: inline-block;\n    width: 100%;\n    overflow: scroll;\n    background-color: #F9F9F9;\n}\n\n.App__RowContainer___3PS9J {\n  background-color: #F9F9F9;\n  position: absolute;\n  margin-top: 44px;\n  width: 30%;\n  min-width: 300px;\n  margin-left: 30px;\n  align-items: center;\n  justify-content: center;\n}\n\n.App__TableBody___2OYo6 {\n  margin-top: 20px;\n  background-color: #F9F9F9;\n  width: 90%;\n  margin-left: 5%;\n}\n\n.App__request___1jna7 {\n  width: 50%;\n  margin-left: 25%;\n  margin-bottom: 20px;\n}\n\n.App__test___2HWRH {\n  margin: 20px;\n}\n\n@keyframes App__App-logo-spin___1R5gY {\n  from { transform: rotate(0deg); }\n  to { transform: rotate(360deg); }\n}\n", ""]);
+	exports.push([module.id, ".App__App___16_p3 {\n  display: flex;\n  flex: 1;\n  width: 100%;\n  height: 100%;\n  flex-direction: column;\n}\n\n.App__MapContainer___E-edr {\n  flex: 1;\n  margin: 0;\n  background-color: #224;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n.App__MapElement___8drEp  {\n  flex: 1;\n  margin: 0;\n  background-color: #222;\n  width: 100%;\n  height: 100%;\n}\n\nhtml, body {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\n\n.App__AutoCompleteRow___1rlTw {\n   height: 10px;\n   padding: 0,\n}\n\n.App__AutoCompleteRow___1rlTw:hover {\n    background-color: #F0EDED;\n}\n\n.App__autocompleteTable___dMVM5 {\n  width: 100%;\n  display:block;\n}\n\ntbody {\n    height: 200px;\n    display: inline-block;\n    width: 100%;\n    overflow: scroll;\n    background-color: #F9F9F9;\n}\n\n.App__RowContainer___3PS9J {\n  background-color: #F9F9F9;\n  position: absolute;\n  margin-top: 44px;\n  width: 30%;\n  min-width: 300px;\n  margin-left: 30px;\n  align-items: center;\n  justify-content: center;\n}\n\n.App__TableBody___2OYo6 {\n  margin-top: 20px;\n  background-color: #F9F9F9;\n  width: 90%;\n  margin-left: 5%;\n}\n\n.App__request___1jna7 {\n  width: 50%;\n  margin-left: 25%;\n  margin-bottom: 20px;\n}\n\n.App__test___2HWRH {\n  margin: 20px;\n}\n\n@keyframes App__App-logo-spin___1R5gY {\n  from { transform: rotate(0deg); }\n  to { transform: rotate(360deg); }\n}\n", ""]);
 	
 	// exports
 	exports.locals = {
+		"App": "App__App___16_p3",
 		"MapContainer": "App__MapContainer___E-edr",
 		"MapElement": "App__MapElement___8drEp",
 		"AutoCompleteRow": "App__AutoCompleteRow___1rlTw",

@@ -41,12 +41,12 @@ class App extends Component {
 			}],
 		};
 
-		// handleMapLoad = this.handleMapLoad.bind(this);
-	  // handleMapClick = this.handleMapClick.bind(this);
-	  // handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
-	  // updateRequestRideChanges = this.updateRequestRideChanges.bind(this);
-	  // updateFindDriverChanges = this.updateFindDriverChanges.bind(this);
-	  // updateOpenRideChanges = this.updateOpenRideChanges.bind(this);
+		this.handleMapLoad = this.handleMapLoad.bind(this);
+	  this.handleMapClick = this.handleMapClick.bind(this);
+	  this.handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
+	  this.updateRequestRideChanges = this.updateRequestRideChanges.bind(this);
+	  this.updateFindDriverChanges = this.updateFindDriverChanges.bind(this);
+	  this.updateOpenRideChanges = this.updateOpenRideChanges.bind(this);
 	}
 
   handleMapLoad(map) {
