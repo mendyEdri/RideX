@@ -49,9 +49,9 @@
     http.onreadystatechange = function() {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
             console.log(http);
-            var gotToken = JSON.stringify(http.response.user_access_token);
+            var gotToken = http.response;
             console.log(gotToken);
-            localStorage.setItem("code", gotToken);
+            //localStorage.setItem("code", gotToken);
             alert(gotToken);
         }
     }
