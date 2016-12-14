@@ -127,10 +127,10 @@ class App extends Component {
     return (
       <GettingStartedGoogleMap
           containerElement={
-            <div className="MapContainer"/>
+            <div style={MapContainer}/>
           }
           mapElement={
-            <div className="MapElement"/>
+            <div style={MapElement}/>
           }
           onMapLoad={this.handleMapLoad}
           onMapClick={this.handleMapClick}
@@ -179,6 +179,65 @@ class App extends Component {
     );
   }
 
+	getFlowViews() {
+		return (
+			<div className="app">
+				<div className="test">
+					<h5>Request Ride</h5>
+					<Input onChange={this.updateRequestRideChanges} />
+					<Button onClick={() => {
+							console.log('onClick ' + this.state.requestRideValue);
+							RequestApi('0526850487', this.state.requestRideValue).then((data) => {
+								console.log(JSON.stringify(data.result.ride));
+								this.setState({ requestRideResult: data.result.ride});
+							});
+					}}>Request Ride</Button>
+				<p>{ JSON.stringify(this.state.requestRideResult) }</p>
+				</div>
+
+				<br />
+
+				<div className="test">
+					<h5>Find Available Driver</h5>
+					<Input onChange={this.updateFindDriverChanges} />
+					<Button onClick={() => {
+							console.log('onClick ' + this.state.findDriverValue);
+							var splitArray = this.state.findDriverValue.split(',');
+							FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
+								if (data.result.success == false || data.result.message.length == 0) {
+									console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+									alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+									return;
+								}
+								console.log(data.result.message[0].phoneNumber);
+								this.setState({ findDriverResult: data.result.message[0]});
+							});
+					}}>Find Driver</Button>
+				<p>{ JSON.stringify(this.state.findDriverResult) }</p>
+				</div>
+
+				<br />
+
+				<div className="test">
+					<h5>Send Ride to Driver</h5>
+					<Button onClick={() => {
+							//(driverId, driverGeo, rideId, userGeo, locationString)
+							console.log(this.state.findDriverResult.phoneNumber);
+							SendRideApi(this.state.findDriverResult.phoneNumber,
+													this.state.findDriverResult.geo,
+													this.state.requestRideResult.rideId,
+													this.state.requestRideResult.geo,
+													this.state.requestRideResult.locationString).then((data) => {
+								console.log(JSON.stringify(data));
+								// this.setState({ rideSentResult: JSON.stringify(data) });
+							});
+					}}>Send Ride</Button>
+				<p>{ this.state.rideSentResult }</p>
+				</div>
+			</div>
+		);
+	}
+
   updateRequestRideChanges(e) {
     this.setState({ requestRideValue: e.target.value });
   }
@@ -192,65 +251,47 @@ class App extends Component {
   }
 
   render() {
-    // { this.getMapView() }
-    // { this.getInputsContainer() }
+		//{ this.getMapView() }
+		//{ this.getInputsContainer() }
     return (
-      <div className="App">
-        <div className="test">
-          <h5>Request Ride</h5>
-          <Input onChange={this.updateRequestRideChanges} />
-          <Button onClick={() => {
-              console.log('onClick ' + this.state.requestRideValue);
-              RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-                console.log(JSON.stringify(data.result.ride));
-                this.setState({ requestRideResult: data.result.ride});
-              });
-          }}>Request Ride</Button>
-        <p>{ JSON.stringify(this.state.requestRideResult) }</p>
-        </div>
-
-        <br />
-
-        <div className="test">
-          <h5>Find Available Driver</h5>
-          <Input onChange={this.updateFindDriverChanges} />
-          <Button onClick={() => {
-              console.log('onClick ' + this.state.findDriverValue);
-              var splitArray = this.state.findDriverValue.split(',');
-              FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
-                if (data.result.success == false) {
-                  return;
-                }
-                console.log(data.result.message[0].phoneNumber);
-                this.setState({ findDriverResult: data.result.message[0]});
-              });
-          }}>Find Driver</Button>
-        <p>{ JSON.stringify(this.state.findDriverResult) }</p>
-        </div>
-
-        <br />
-
-        <div className="test">
-          <h5>Send Ride to Driver</h5>
-          <Button onClick={() => {
-              //(driverId, driverGeo, rideId, userGeo, locationString)
-              console.log(this.state.findDriverResult.phoneNumber);
-              SendRideApi(this.state.findDriverResult.phoneNumber,
-                          this.state.findDriverResult.geo,
-                          this.state.requestRideResult.rideId,
-                          this.state.requestRideResult.geo,
-                          this.state.requestRideResult.locationString).then((data) => {
-                console.log(JSON.stringify(data));
-                // this.setState({ rideSentResult: JSON.stringify(data) });
-              });
-          }}>Send Ride</Button>
-        <p>{ this.state.rideSentResult }</p>
-        </div>
+      <div style={AppStyle}>
+				{ this.getMapView() }
       </div>
     );
   }
 }
 
+const AppStyle = {
+	fontSize: 40,
+	backgroundColor: '#F9F9F9',
+	flex: 1,
+	flexDirection: 'column',
+	alignSelf: 'center',
+	justifyContent: 'center',
+	alignItems: 'center',
+};
+
+const MapContainer = {
+  flex: 1,
+  margin: 0,
+  backgroundColor: '#224',
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
+}
+
+const MapElement = {
+  flex: 1,
+  margin: 0,
+  backgroundColor: '#222',
+	position: 'absolute',
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
+}
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
   <GoogleMap
@@ -267,5 +308,6 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     ))}
   </GoogleMap>
 ));
+
 
 export default App;

@@ -73,7 +73,7 @@
     }
     var code = localStorage.getItem("code");
     var http = new XMLHttpRequest();
-    var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + document.getElementById("token").value; //code;
+    var url = "https://graph.accountkit.com/v1.1/me/?access_token=" + code;
     http.open("GET", url, true);
 
     http.onreadystatechange = function() {//Call a function when the state changes.
