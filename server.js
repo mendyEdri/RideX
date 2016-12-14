@@ -138,7 +138,8 @@ app.get('/facebook', function(request, response){
 });
 
 app.post('/sendcode', function(request, response){
-  console.log('code: ' + request);
+  console.log('code:');
+  console.log(request);
   // CSRF check
   if (request.body.csrf_nonce === csrf_guid) {
     var app_access_token = ['AA', app_id, app_secret].join('|');
