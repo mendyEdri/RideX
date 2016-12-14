@@ -68,8 +68,8 @@
 
   function let_me_in_onclick() {
     if (!localStorage.getItem("code")) {
-      // alert('token not exist');
-      // return;
+      alert('token not exist');
+      return;
     }
     var code = localStorage.getItem("code");
     var http = new XMLHttpRequest();
