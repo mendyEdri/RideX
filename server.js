@@ -126,6 +126,14 @@ function loadLoginSuccess() {
   return fs.readFileSync('public/login_success.html').toString();
 }
 
+app.get('/location', function(req, res) {
+  var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=NYC&types=(cities)&key=AIzaSyBlq_UDHSigb8FzsXXqIZIFcPc-8fKDlvo';
+  Request.get({url: url, json: true}, function(err, resp, respBody) {
+      res.json({ message: respBody });
+  });
+  //res.json({ message: 'respBody' });
+});
+
 app.get('/facebook', function(request, response){
   var view = {
     appId: app_id, //769607079858170
