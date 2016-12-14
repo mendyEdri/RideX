@@ -102,7 +102,7 @@ app.use('/users', users);
 // });
 
 var allowCrossDomain = function(req, res, next) {
-    //res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
@@ -127,11 +127,8 @@ function loadLoginSuccess() {
 }
 
 app.get('/location', function(req, res) {
-  var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=NYC&types=(cities)&key=AIzaSyBlq_UDHSigb8FzsXXqIZIFcPc-8fKDlvo';
-  Request.get({url: url, json: true}, function(err, resp, respBody) {
-      res.json({ message: respBody });
-  });
-  //res.json({ message: 'respBody' });
+  var html = Mustache.to_html(loadLogin(), null);
+  res.send(html);
 });
 
 app.get('/facebook', function(request, response){

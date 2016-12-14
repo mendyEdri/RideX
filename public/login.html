@@ -18,6 +18,25 @@
     );
   };
 
+
+  function getLocation() {
+    var http = new XMLHttpRequest();
+    var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=NYC&types=(cities)&key=AIzaSyBlq_UDHSigb8FzsXXqIZIFcPc-8fKDlvo';
+    http.open("GET", url, true);
+
+    //http.setRequestHeader("Content-type", "application/json");
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if (http.readyState == 4 && http.status == 200) {
+            console.log(http);
+            var gotToken = JSON.parse(http.response);
+            console.log(gotToken);
+        }
+    }
+    //http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
+    http.send(null);
+  }
+
+
   // login callback
   function loginCallback(response) {
     console.log(JSON.stringify(response));
@@ -105,6 +124,9 @@
   </head>
   <body>
     <div id="root">
+      <div>
+        <button onclick="getLocation();">Location</button>
+      </div>
     </div>
 
       Enter email address
