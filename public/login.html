@@ -51,7 +51,7 @@
             console.log(http);
             var jsonResponse = http.responseText;
             console.log(jsonResponse);
-            localStorage.setItem("code", jsonResponse);
+            localStorage.setItem("code", jsonResponse.user_access_token);
             alert(jsonResponse);
         }
     }
