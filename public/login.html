@@ -50,9 +50,9 @@
         if (http.readyState == 4 && http.status == 200) {
             console.log(http);
             var jsonResponse = http.responseText;
-            console.log(jsonResponse);
+            console.log(jsonResponse.user_access_token);
             localStorage.setItem("code", jsonResponse.user_access_token);
-            alert(jsonResponse);
+            alert(jsonResponse.user_access_token);
         }
     }
     http.send(JSON.stringify({ code: code, csrf_nonce: csrf}));
