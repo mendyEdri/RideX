@@ -291,8 +291,8 @@ class App extends Component {
 
 		console.log('this.state.findDriverResult: ');
 		console.log(JSON.stringify(this.state.findDriverResult[index].geo));
-		ArrivalTime(JSON.stringify(this.state.findDriverResult[index].geo), destination).then((data) => {
-			console.log(JSON.stringify(data.message));
+		ArrivalTime(this.state.findDriverResult[index].geo, destination).then((data) => {
+			console.log(JSON.stringify(data));
 			index = index+1;
 			this.getDestination(destination, index);
 		});

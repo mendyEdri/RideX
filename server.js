@@ -275,7 +275,11 @@ app.post('/location', function(req, res) {
 });
 
 app.post('/api/arrivalTime', function(req, res) {
-  console.log(req.body);
+  console.log('Origin: 0 ' + req.body.origin[0]);
+  console.log('Origin: 1 ' + req.body.origin[1]);
+
+  console.log('destination: 0 ' + req.body.destination[0]);
+  console.log('destination: 1 ' + req.body.destination[1]);
   if (req.body.origin.length < 2 || req.body.destination.length < 2) {
     res.json({ success: false, message: 'No origin or destination provided' });
     return;

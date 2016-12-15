@@ -21975,8 +21975,8 @@
 	
 				console.log('this.state.findDriverResult: ');
 				console.log(JSON.stringify(this.state.findDriverResult[index].geo));
-				(0, _calculateDistanceApi2.default)(JSON.stringify(this.state.findDriverResult[index].geo), destination).then(function (data) {
-					console.log(JSON.stringify(data.message));
+				(0, _calculateDistanceApi2.default)(this.state.findDriverResult[index].geo, destination).then(function (data) {
+					console.log(JSON.stringify(data));
 					index = index + 1;
 					_this7.getDestination(destination, index);
 				});
