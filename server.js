@@ -286,6 +286,7 @@ app.post('/api/arrivalTime', function(req, res) {
     mode: 'driving'
   }, function(err, response) {
     if (!err) {
+      console.log(response.json);
       res.json({ success: true, message: response.json });
       return;
     }
