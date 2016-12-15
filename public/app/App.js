@@ -10,10 +10,6 @@ import GetAllDrivers from '../api/get-all-drivers-api';
 
 import './App.css';
 
-var googleMapsClient = require('@google/maps').createClient({
-	key: 'AIzaSyDMV69WkmHWjQM9KZ7Ugo293B0mZ_4UrhA'
-});
-
 import {
   withGoogleMap,
   GoogleMap,
