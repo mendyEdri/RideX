@@ -1,4 +1,4 @@
-module.exports = function(geo) {
+module.exports = function(origin, destination) {
   return fetch('https://mendy-edri-server.herokuapp.com/api/arrivalTime', {
     method: 'POST',
     headers: {
@@ -6,7 +6,8 @@ module.exports = function(geo) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-	    location: geo
+	    origin: origin,
+      destination: destination
     })
   })
   .then((response) => response.json())

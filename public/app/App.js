@@ -7,6 +7,7 @@ import RequestApi from '../api/request-ride';
 import FindDriverApi from '../api/find-driver-api';
 import SendRideApi from '../api/send-ride-api';
 import GetAllDrivers from '../api/get-all-drivers-api';
+import ArrivalTime from '../api/calculate-distance-api';
 
 import './App.css';
 
@@ -283,6 +284,20 @@ class App extends Component {
 		);
 	}
 
+	getDestination(destination, index) {
+		if (index >= this.state.findDriverResult.length) {
+				return;
+		}
+
+		console.log('this.state.findDriverResult: ');
+		console.log(JSON.stringify(this.state.findDriverResult[index].geo));
+		ArrivalTime(JSON.stringify(this.state.findDriverResult[index].geo), destination).then((data) => {
+			console.log(JSON.stringify(data.message));
+			index = index+1;
+			this.getDestination(destination, index);
+		});
+	}
+
 	centerBox() {
 		return (<div style={centerBox}>
 							<div style={leftBox}>{ this.resultList() }</div>
@@ -297,6 +312,7 @@ class App extends Component {
 												console.log(JSON.stringify(data.result.ride));
 												if (data.result.ride.geo.length == 2) {
 													// TODO SPINNER
+													var destination = data.result.ride.geo;
 													FindDriverApi([data.result.ride.geo[0], data.result.ride.geo[1]]).then((data) => {
 														if (data.result.success == false || data.result.message.length == 0) {
 															console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
@@ -305,24 +321,9 @@ class App extends Component {
 														}
 														this.setState({ findDriverResult: data.result.message});
 
-
-														googleMapsClient.distanceMatrix({
-											        origins: data.result.message[0].geo[0] + ',' + data.result.message[0].geo[0],
-											        destinations: '31.987792,34.880262',
-											        mode: 'driving'
-											      }, function(err, response) {
-											        if (err) {
-
-											          return;
-											        }
-											        	console.log(response);
-											      });
-
-
-
-
-
-													});
+														// TODO API
+														this.getDestination(destination, 0);
+												});
 
 												}
 												this.setState({ requestRideResult: data.result.ride});

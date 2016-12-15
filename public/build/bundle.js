@@ -21604,6 +21604,10 @@
 	
 	var _getAllDriversApi2 = _interopRequireDefault(_getAllDriversApi);
 	
+	var _calculateDistanceApi = __webpack_require__(649);
+	
+	var _calculateDistanceApi2 = _interopRequireDefault(_calculateDistanceApi);
+	
 	__webpack_require__(232);
 	
 	var _reactGoogleMaps = __webpack_require__(234);
@@ -21961,9 +21965,26 @@
 				);
 			}
 		}, {
+			key: 'getDestination',
+			value: function getDestination(destination, index) {
+				var _this7 = this;
+	
+				if (index >= this.state.findDriverResult.length) {
+					return;
+				}
+	
+				console.log('this.state.findDriverResult: ');
+				console.log(JSON.stringify(this.state.findDriverResult[index].geo));
+				(0, _calculateDistanceApi2.default)(JSON.stringify(this.state.findDriverResult[index].geo), destination).then(function (data) {
+					console.log(JSON.stringify(data.message));
+					index = index + 1;
+					_this7.getDestination(destination, index);
+				});
+			}
+		}, {
 			key: 'centerBox',
 			value: function centerBox() {
-				var _this7 = this;
+				var _this8 = this;
 	
 				return _react2.default.createElement(
 					'div',
@@ -21988,33 +22009,25 @@
 							_react2.default.createElement(
 								_reactMaterialize.Button,
 								{ style: searchContainerButtons, onClick: function onClick() {
-										console.log('onClick ' + _this7.state.requestRideValue);
-										(0, _requestRide2.default)('0526850487', _this7.state.requestRideValue).then(function (data) {
+										console.log('onClick ' + _this8.state.requestRideValue);
+										(0, _requestRide2.default)('0526850487', _this8.state.requestRideValue).then(function (data) {
 											console.log(JSON.stringify(data.result.ride));
 											if (data.result.ride.geo.length == 2) {
 												// TODO SPINNER
+												var destination = data.result.ride.geo;
 												(0, _findDriverApi2.default)([data.result.ride.geo[0], data.result.ride.geo[1]]).then(function (data) {
 													if (data.result.success == false || data.result.message.length == 0) {
 														console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 														alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 														return;
 													}
-													_this7.setState({ findDriverResult: data.result.message });
+													_this8.setState({ findDriverResult: data.result.message });
 	
-													googleMapsClient.distanceMatrix({
-														origins: data.result.message[0].geo[0] + ',' + data.result.message[0].geo[0],
-														destinations: '31.987792,34.880262',
-														mode: 'driving'
-													}, function (err, response) {
-														if (err) {
-	
-															return;
-														}
-														console.log(response);
-													});
+													// TODO API
+													_this8.getDestination(destination, 0);
 												});
 											}
-											_this7.setState({ requestRideResult: data.result.ride });
+											_this8.setState({ requestRideResult: data.result.ride });
 										});
 									} },
 								'Request Ride'
@@ -54812,6 +54825,143 @@
 	      'Content-Type': 'application/json'
 	    },
 	    body: JSON.stringify({})
+	  }).then(function (response) {
+	    return response.json();
+	  }).then(function (json) {
+	    return {
+	      result: json
+	    };
+	  }).catch(function (error) {
+	    return {
+	      error: error
+	    };
+	  });
+	};
+
+/***/ },
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */,
+/* 575 */,
+/* 576 */,
+/* 577 */,
+/* 578 */,
+/* 579 */,
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */,
+/* 584 */,
+/* 585 */,
+/* 586 */,
+/* 587 */,
+/* 588 */,
+/* 589 */,
+/* 590 */,
+/* 591 */,
+/* 592 */,
+/* 593 */,
+/* 594 */,
+/* 595 */,
+/* 596 */,
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */,
+/* 604 */,
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */,
+/* 611 */,
+/* 612 */,
+/* 613 */,
+/* 614 */,
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */,
+/* 620 */,
+/* 621 */,
+/* 622 */,
+/* 623 */,
+/* 624 */,
+/* 625 */,
+/* 626 */,
+/* 627 */,
+/* 628 */,
+/* 629 */,
+/* 630 */,
+/* 631 */,
+/* 632 */,
+/* 633 */,
+/* 634 */,
+/* 635 */,
+/* 636 */,
+/* 637 */,
+/* 638 */,
+/* 639 */,
+/* 640 */,
+/* 641 */,
+/* 642 */,
+/* 643 */,
+/* 644 */,
+/* 645 */,
+/* 646 */,
+/* 647 */,
+/* 648 */,
+/* 649 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function (origin, destination) {
+	  return fetch('https://mendy-edri-server.herokuapp.com/api/arrivalTime', {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({
+	      origin: origin,
+	      destination: destination
+	    })
 	  }).then(function (response) {
 	    return response.json();
 	  }).then(function (json) {
