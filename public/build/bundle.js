@@ -22018,7 +22018,11 @@
 								{ style: searchContainerButtons, onClick: function onClick() {
 										console.log('onClick ' + _this8.state.requestRideValue);
 										(0, _requestRide2.default)('0526850487', _this8.state.requestRideValue).then(function (data) {
-											console.log(JSON.stringify(data.result.ride));
+											console.log(JSON.stringify(data));
+											if (!data.result.ride) {
+												console.log('location not found');
+												return;
+											}
 											if (data.result.ride.geo.length == 2) {
 												// TODO SPINNER
 												var destination = data.result.ride.geo;

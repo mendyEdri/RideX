@@ -316,7 +316,11 @@ class App extends Component {
 									<Button style={searchContainerButtons} onClick={() => {
 											console.log('onClick ' + this.state.requestRideValue);
 											RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-												console.log(JSON.stringify(data.result.ride));
+												console.log(JSON.stringify(data));
+												if (!data.result.ride) {
+													console.log('location not found');
+													return;
+												}
 												if (data.result.ride.geo.length == 2) {
 													// TODO SPINNER
 													var destination = data.result.ride.geo;
