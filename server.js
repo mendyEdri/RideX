@@ -89,7 +89,10 @@ app.set('view engine', 'hjs');
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+app.use('/', function(req, res) {
+  res.json({ message: 'api server' });
+});
+app.use('/mytaxi', routes);
 app.use('/users', users);
 
 

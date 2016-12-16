@@ -21649,7 +21649,8 @@
 	
 				openRideValue: '',
 				openRideResult: '',
-				driverId: ''
+				driverId: '',
+				drivers: []
 			};
 	
 			_this.handleMapLoad = _this.handleMapLoad.bind(_this);
@@ -21976,7 +21977,13 @@
 				console.log('this.state.findDriverResult: ');
 				console.log(JSON.stringify(this.state.findDriverResult[index].geo));
 				(0, _calculateDistanceApi2.default)(this.state.findDriverResult[index].geo, destination).then(function (data) {
-					console.log(JSON.stringify(data));
+					console.log(JSON.stringify(data.result.success));
+					if (data.result.success == true) {
+						var temp = _this7.state.drivers;
+						temp.push(data.result.message);
+						console.log(JSON.stringify(data.result.message));
+						_this7.setState({ drivers: temp });
+					}
 					index = index + 1;
 					_this7.getDestination(destination, index);
 				});
@@ -22060,6 +22067,38 @@
 								'div',
 								{ style: titleLabel },
 								this.state.findDriverResult[i].phoneNumber
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								'Driver Location:'
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								this.state.drivers.length > 0 ? this.state.drivers[i].origin_addresses : "Fetching.."
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								'Passenger Location:'
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								this.state.drivers.length > 0 ? this.state.drivers[i].destination_addresses : ""
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								'ETA: ',
+								this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : ""
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								'Distance: ',
+								this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : ""
 							)
 						),
 						_react2.default.createElement(
@@ -22183,11 +22222,12 @@
 	
 	var cardTop = {
 		display: 'flex',
-		flex: 1,
+		flex: 5,
 		backgroundColor: 'white',
 		width: '100%',
 		justifyContent: 'center',
-		alignItems: 'flex-start'
+		alignItems: 'center',
+		flexDirection: 'column'
 	};
 	
 	var cardBottom = {

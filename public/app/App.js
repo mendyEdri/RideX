@@ -41,6 +41,7 @@ class App extends Component {
 			openRideValue: '',
 			openRideResult: '',
 			driverId: '',
+			drivers: [],
 		};
 
 		this.handleMapLoad = this.handleMapLoad.bind(this);
@@ -292,7 +293,13 @@ class App extends Component {
 		console.log('this.state.findDriverResult: ');
 		console.log(JSON.stringify(this.state.findDriverResult[index].geo));
 		ArrivalTime(this.state.findDriverResult[index].geo, destination).then((data) => {
-			console.log(JSON.stringify(data));
+			console.log(JSON.stringify(data.result.success));
+			if (data.result.success == true) {
+				var temp = this.state.drivers;
+				temp.push(data.result.message);
+				console.log(JSON.stringify(data.result.message));
+				this.setState({ drivers: temp });
+			}
 			index = index+1;
 			this.getDestination(destination, index);
 		});
@@ -347,6 +354,24 @@ class App extends Component {
 					<div style={cardTop}>
 						<div style={titleLabel}>
 							{ this.state.findDriverResult[i].phoneNumber }
+						</div>
+						<div>
+							Driver Location:
+						</div>
+						<div>
+							{ this.state.drivers.length > 0 ? this.state.drivers[i].origin_addresses : "Fetching.." }
+						</div>
+						<div>
+							Passenger Location:
+						</div>
+						<div>
+							{ this.state.drivers.length > 0 ? this.state.drivers[i].destination_addresses : "" }
+						</div>
+						<div>
+							ETA: { this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : "" }
+						</div>
+						<div>
+							Distance: { this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : "" }
 						</div>
 					</div>
 					<div style={cardBottom}>
@@ -463,11 +488,12 @@ const row = {
 
 const cardTop = {
 	display: 'flex',
-	flex: 1,
+	flex: 5,
 	backgroundColor: 'white',
 	width: '100%',
 	justifyContent: 'center',
-	alignItems: 'flex-start',
+	alignItems: 'center',
+	flexDirection: 'column',
 };
 
 const cardBottom = {
