@@ -293,7 +293,7 @@ class App extends Component {
 		console.log('this.state.findDriverResult: ');
 		console.log(JSON.stringify(this.state.findDriverResult[index].geo));
 		ArrivalTime(this.state.findDriverResult[index].geo, destination).then((data) => {
-			console.log(JSON.stringify(data.result.success));
+			console.log(JSON.stringify(data.result));
 			if (data.result.success == true) {
 				var temp = this.state.drivers;
 				temp.push(data.result.message);
@@ -358,6 +358,8 @@ class App extends Component {
 					<div style={cardTop}>
 						<div style={titleLabel}>
 							{ this.state.findDriverResult[i].phoneNumber }
+						</div>
+						<div style={line}>
 						</div>
 						<div>
 							Driver Location:
@@ -493,9 +495,9 @@ const row = {
 const cardTop = {
 	display: 'flex',
 	flex: 5,
-	backgroundColor: 'white',
+	backgroundColor: 'blue',
 	width: '100%',
-	justifyContent: 'center',
+	justifyContent: 'flex-start',
 	alignItems: 'center',
 	flexDirection: 'column',
 };
@@ -503,7 +505,7 @@ const cardTop = {
 const cardBottom = {
 	display: 'flex',
 	flex: 1,
-	backgroundColor: 'white',
+	backgroundColor: 'red',
 	width: '100%',
 	justifyContent: 'center',
 	alignItems: 'flex-end',
@@ -511,13 +513,14 @@ const cardBottom = {
 
 const titleLabel = {
 	margin: 10,
-	fontSize: 24,
+	fontSize: 18,
+	fontWeight: '600',
 };
 
 const line = {
-	width: 200,
-	height: 3,
-	backgroundColor: 'red',
+	width: '80%',
+	height: 1,
+	backgroundColor: 'gray',
 };
 
 const rowButton = {

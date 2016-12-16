@@ -98,13 +98,14 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
-app.use('/api/driver', DriverApi);
-app.use('/api/ride', RideApi);
-
 app.use('/mytaxi', routes);
 app.use('/users', users);
 
-app.use('/', function(req, res) {
+
+app.use('/api/driver', DriverApi);
+app.use('/api/ride', RideApi);
+
+app.get('/', function(req, res) {
   res.json({ message: 'api server' });
 });
 
@@ -281,11 +282,8 @@ app.post('/location', function(req, res) {
 });
 
 app.post('/api/arrivalTime', function(req, res) {
-  console.log('Origin: 0 ' + req.body.origin[0]);
-  console.log('Origin: 1 ' + req.body.origin[1]);
-
-  console.log('destination: 0 ' + req.body.destination[0]);
-  console.log('destination: 1 ' + req.body.destination[1]);
+  console.log(req.body);
+  //console.log('destination: 1 ' + req.body);
   if (req.body.origin.length < 2 || req.body.destination.length < 2) {
     res.json({ success: false, message: 'No origin or destination provided' });
     return;

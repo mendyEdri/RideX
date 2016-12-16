@@ -21977,7 +21977,7 @@
 				console.log('this.state.findDriverResult: ');
 				console.log(JSON.stringify(this.state.findDriverResult[index].geo));
 				(0, _calculateDistanceApi2.default)(this.state.findDriverResult[index].geo, destination).then(function (data) {
-					console.log(JSON.stringify(data.result.success));
+					console.log(JSON.stringify(data.result));
 					if (data.result.success == true) {
 						var temp = _this7.state.drivers;
 						temp.push(data.result.message);
@@ -22072,6 +22072,7 @@
 								{ style: titleLabel },
 								this.state.findDriverResult[i].phoneNumber
 							),
+							_react2.default.createElement('div', { style: line }),
 							_react2.default.createElement(
 								'div',
 								null,
@@ -22227,9 +22228,9 @@
 	var cardTop = {
 		display: 'flex',
 		flex: 5,
-		backgroundColor: 'white',
+		backgroundColor: 'blue',
 		width: '100%',
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		alignItems: 'center',
 		flexDirection: 'column'
 	};
@@ -22237,7 +22238,7 @@
 	var cardBottom = {
 		display: 'flex',
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: 'red',
 		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'flex-end'
@@ -22245,13 +22246,14 @@
 	
 	var titleLabel = {
 		margin: 10,
-		fontSize: 24
+		fontSize: 18,
+		fontWeight: '600'
 	};
 	
 	var line = {
-		width: 200,
-		height: 3,
-		backgroundColor: 'red'
+		width: '80%',
+		height: 1,
+		backgroundColor: 'gray'
 	};
 	
 	var rowButton = {
