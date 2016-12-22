@@ -193,18 +193,15 @@ class App extends Component {
 		if (String(e.target.value).length >= 2) {
 			if (request) {
 				request = null;
-				console.log('killing request');
 			}
 			request =	AutocompletePlacesApi(String(e.target.value)).then((data) => {
-					//console.log('results count: ' + data);
-					console.log('results count: ' + data.result.message.predictions.length);
 	        this.setState({ autoCompleteResults: data.result.message.predictions}, () => {
 	              this.setState({ showLocationGeoList: true });
 	        });
 			});
 		} else if (event.target.value && event.target.value.length === 0) {
         this.setState({ autoCompleteResults: [] }, () => {
-              this.setState({ showLocationGeoList: false });
+          this.setState({ showLocationGeoList: false });
 				});
     }
   }
@@ -234,14 +231,11 @@ class App extends Component {
 				return;
 		}
 
-		console.log('this.state.findDriverResult: ');
-		console.log(JSON.stringify(this.state.findDriverResult[index].geo));
 		ArrivalTime(this.state.findDriverResult[index].geo, destination).then((data) => {
 			console.log(JSON.stringify(data.result));
 			if (data.result.success == true) {
 				var temp = this.state.drivers;
 				temp.push(data.result.message);
-				console.log(JSON.stringify(data.result.message));
 				this.setState({ drivers: temp });
 			}
 			index = index+1;
@@ -278,13 +272,12 @@ class App extends Component {
 										style={input} placeholder={this.state.placeholder} onChange={this.updateRequestRideChanges} />
 									{ this.state.showLocationGeoList ? this.getGeolist() : null }
 									<Button style={searchContainerButtons} onClick={() => {
-											console.log('onClick ' + this.state.requestRideValue);
 											RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-												console.log(JSON.stringify(data));
 												if (!data.result.ride) {
 													console.log('location not found');
 													return;
 												}
+												this.setState({ requestRideResult: data.result.ride });
 												if (data.result.ride.geo.length == 2) {
 													// TODO SPINNER
 													var destination = data.result.ride.geo;
@@ -299,13 +292,21 @@ class App extends Component {
 														this.getDestination(destination, 0);
 												});
 												}
-												this.setState({ requestRideResult: data.result.ride});
 											});
 									}}>Request Ride</Button>
-								<div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult.geo) }</div>
 								</div>
 							</div>
 		</div>);
+	}
+
+	handleSendDriverClick(index) {
+		SendRideApi(this.state.findDriverResult[index].phoneNumber,
+								this.state.findDriverResult[index].geo,
+								this.state.requestRideResult.rideId,
+								this.state.requestRideResult.geo,
+								this.state.requestRideResult.locationString).then((data) => {
+			// this.setState({ rideSentResult: JSON.stringify(data) });
+		});
 	}
 
 	resultList() {
@@ -313,8 +314,7 @@ class App extends Component {
 			return;
 		}
 		var temp = [];
-		for (var i = 0; i < this.state.findDriverResult.length; i++) {
-			console.log(JSON.stringify(this.state.findDriverResult[i].phoneNumber));
+		this.state.findDriverResult.map((driver, i) => {
 			temp.push(
 				<div style={row}>
 					<div style={cardTop}>
@@ -326,40 +326,35 @@ class App extends Component {
 						<div style={driverCardTitle}>
 							Driver Location:
 						</div>
-						<div>
+						<div style={driverCardDescription}>
 							{ this.state.drivers.length > 0 ? this.state.drivers[i].origin_addresses : "Fetching.." }
 						</div>
 						<div style={driverCardTitle}>
 							Passenger Location:
 						</div>
-						<div>
+						<div style={driverCardDescription}>
 							{ this.state.drivers.length > 0 ? this.state.drivers[i].destination_addresses : "" }
 						</div>
-						<div style={driverCardTitle}>
-							ETA: <span style={driverCardDescription}>{ this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : "" }</span>
-						</div>
-						<div style={driverCardTitle}>
-							Distance: <span style={driverCardDescription}>{ this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : "" }</span>
-						</div>
-					</div>
 					<div style={cardBottom}>
-						<Button onClick={() => {
-								console.log(this.state.findDriverResult);
-							// SendRideApi(this.state.findDriverResult[i].phoneNumber,
-							// 						this.state.findDriverResult[i].geo,
-							// 						this.state.requestRideResult.rideId,
-							// 						this.state.requestRideResult.geo,
-							// 						this.state.requestRideResult.locationString).then((data) => {
-							// 	console.log(JSON.stringify(data));
-							// 	// this.setState({ rideSentResult: JSON.stringify(data) });
-							// });
-							}} key={i} style={rowButton}>
+						<div style={grayDetails}>
+							<div style={buttomDriverCard}>
+								 <div style={buttomDriverCardTitle}>{ this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : "" }</div>
+								 <div style={buttomDriverCardDescription}>ETA</div>
+							</div>
+							<span style={{height: 22, width: 0.7, backgroundColor: '#959595'}}/>
+							<div style={buttomDriverCard}>
+								<div style={buttomDriverCardTitle}>{ this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : "" }</div>
+								<div style={buttomDriverCardDescription}>Distance</div>
+							</div>
+							</div>
+						</div>
+						<Button onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
 							Order
 						</Button>
 					</div>
 				</div>
 			);
-		}
+		});
 		return temp;
 	}
 
@@ -486,6 +481,17 @@ const cardBottom = {
 	alignItems: 'flex-end',
 };
 
+const grayDetails = {
+	display: 'flex',
+	width: '100%',
+	height: '64px',
+	flexDirection: 'row',
+	backgroundColor: '#F9F9F9',
+	marginBottom: '0',
+	alignItems: 'center',
+	justifyContent: 'center',
+};
+
 const titleLabel = {
 	margin: 10,
 	fontSize: 18,
@@ -495,11 +501,14 @@ const titleLabel = {
 const line = {
 	width: '80%',
 	height: 1,
-	backgroundColor: 'gray',
+	backgroundColor: '#959595',
 };
 
 const rowButton = {
-	marginBottom: 10,
+	marginBottom: 0,
+	width: '100%',
+	height: '44px',
+	borderRadius: 0,
 };
 
 const autocompleteTable = {
@@ -518,12 +527,33 @@ const AutoCompleteRow = {
 };
 
 const driverCardTitle = {
-	fontWeight: '500',
 	marginTop: '10px',
+	color: '#959595',
 };
 
 const driverCardDescription = {
-	fontSize: '24px',
+	fontWeight: '500',
+	fontSize: '20px',
+
+};
+
+const buttomDriverCardTitle = {
+	fontWeight: '500',
+	fontSize: '20px',
+	textAlign: 'center',
+};
+
+const buttomDriverCardDescription = {
+	fontSize: '14px',
+	fontWeight: '100',
+	textAlign: 'center',
+
+};
+
+const buttomDriverCard = {
+	alignItems: 'center',
+	justifyContent: 'center',
+	flex: 1,
 };
 
 const MapContainer = {
@@ -602,65 +632,61 @@ export default App;
 
 
 
- /*
 
- getFlowViews() {
-	 return (
-		 <div style={searchContainer}>
-			 <div style={box}>
-				 <h5 style={title}>Request Ride</h5>
-				 <Input onChange={this.updateRequestRideChanges} />
-				 <Button style={searchContainerButtons} onClick={() => {
-						 console.log('onClick ' + this.state.requestRideValue);
-						 RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-							 console.log(JSON.stringify(data.result.ride));
-							 this.setState({ requestRideResult: data.result.ride});
-						 });
-				 }}>Next</Button>
-			 <div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult) }</div>
-			 </div>
-
-			 <br />
-
-			 <div style={box}>
-				 <h5 style={title}>Find Available Driver</h5>
-				 <Input onChange={this.updateFindDriverChanges} />
-				 <Button style={searchContainerButtons} onClick={() => {
-						 console.log('onClick ' + this.state.findDriverValue);
-						 var splitArray = this.state.findDriverValue.split(',');
-						 FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
-							 if (data.result.success == false || data.result.message.length == 0) {
-								 console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-								 alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-								 return;
-							 }
-							 console.log(data.result.message[0].phoneNumber);
-							 this.setState({ findDriverResult: data.result.message[0]});
-						 });
-				 }}>Find Driver</Button>
-			 <div style={responseTempText}>{ JSON.stringify(this.state.findDriverResult) }</div>
-			 </div>
-
-			 <br />
-
-			 <div style={box}>
-				 <h5 style={title}>Send Ride to Driver</h5>
-				 <Button style={searchContainerButtons} onClick={() => {
-						 //(driverId, driverGeo, rideId, userGeo, locationString)
-						 SendRideApi(this.state.findDriverResult.phoneNumber,
-												 this.state.findDriverResult.geo,
-												 this.state.requestRideResult.rideId,
-												 this.state.requestRideResult.geo,
-												 this.state.requestRideResult.locationString).then((data) => {
-							 console.log(JSON.stringify(data));
-							 // this.setState({ rideSentResult: JSON.stringify(data) });
-						 });
-				 }}>Send Ride</Button>
-			 <div style={responseTempText}>{ this.state.rideSentResult }</div>
-			 </div>
-		 </div>
-	 );
- }
-
-
- */
+ // getFlowViews() {
+ //  return (
+ // 	 <div style={searchContainer}>
+ // 		 <div style={box}>
+ // 			 <h5 style={title}>Request Ride</h5>
+ // 			 <Input onChange={this.updateRequestRideChanges} />
+ // 			 <Button style={searchContainerButtons} onClick={() => {
+ // 					 console.log('onClick ' + this.state.requestRideValue);
+ // 					 RequestApi('0526850487', this.state.requestRideValue).then((data) => {
+ // 						 console.log(JSON.stringify(data.result.ride));
+ // 						 this.setState({ requestRideResult: data.result.ride});
+ // 					 });
+ // 			 }}>Next</Button>
+ // 		 <div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult) }</div>
+ // 		 </div>
+ //
+ // 		 <br />
+ //
+ // 		 <div style={box}>
+ // 			 <h5 style={title}>Find Available Driver</h5>
+ // 			 <Input onChange={this.updateFindDriverChanges} />
+ // 			 <Button style={searchContainerButtons} onClick={() => {
+ // 					 console.log('onClick ' + this.state.findDriverValue);
+ // 					 var splitArray = this.state.findDriverValue.split(',');
+ // 					 FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
+ // 						 if (data.result.success == false || data.result.message.length == 0) {
+ // 							 console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+ // 							 alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+ // 							 return;
+ // 						 }
+ // 						 console.log(data.result.message);
+ // 						 this.setState({ findDriverResult: data.result.message});
+ // 					 });
+ // 			 }}>Find Driver</Button>
+ // 		 <div style={responseTempText}>{ JSON.stringify(this.state.findDriverResult) }</div>
+ // 		 </div>
+ //
+ // 		 <br />
+ //
+ // 		 <div style={box}>
+ // 			 <h5 style={title}>Send Ride to Driver</h5>
+ // 			 <Button style={searchContainerButtons} onClick={() => {
+ // 					 //(driverId, driverGeo, rideId, userGeo, locationString)
+ // 					 SendRideApi(this.state.findDriverResult.phoneNumber,
+ // 											 this.state.findDriverResult.geo,
+ // 											 this.state.requestRideResult.rideId,
+ // 											 this.state.requestRideResult.geo,
+ // 											 this.state.requestRideResult.locationString).then((data) => {
+ // 						 console.log(JSON.stringify(data));
+ // 						 // this.setState({ rideSentResult: JSON.stringify(data) });
+ // 					 });
+ // 			 }}>Send Ride</Button>
+ // 		 <div style={responseTempText}>{ this.state.rideSentResult }</div>
+ // 		 </div>
+ // 	 </div>
+ //  );
+ // }

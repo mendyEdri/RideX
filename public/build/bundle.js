@@ -21820,11 +21820,8 @@
 				if (String(e.target.value).length >= 2) {
 					if (request) {
 						request = null;
-						console.log('killing request');
 					}
 					request = (0, _locationAutocompleteApi2.default)(String(e.target.value)).then(function (data) {
-						//console.log('results count: ' + data);
-						console.log('results count: ' + data.result.message.predictions.length);
 						_this5.setState({ autoCompleteResults: data.result.message.predictions }, function () {
 							_this5.setState({ showLocationGeoList: true });
 						});
@@ -21872,14 +21869,11 @@
 					return;
 				}
 	
-				console.log('this.state.findDriverResult: ');
-				console.log(JSON.stringify(this.state.findDriverResult[index].geo));
 				(0, _calculateDistanceApi2.default)(this.state.findDriverResult[index].geo, destination).then(function (data) {
 					console.log(JSON.stringify(data.result));
 					if (data.result.success == true) {
 						var temp = _this6.state.drivers;
 						temp.push(data.result.message);
-						console.log(JSON.stringify(data.result.message));
 						_this6.setState({ drivers: temp });
 					}
 					index = index + 1;
@@ -21936,13 +21930,12 @@
 							_react2.default.createElement(
 								_reactMaterialize.Button,
 								{ style: searchContainerButtons, onClick: function onClick() {
-										console.log('onClick ' + _this7.state.requestRideValue);
 										(0, _requestRide2.default)('0526850487', _this7.state.requestRideValue).then(function (data) {
-											console.log(JSON.stringify(data));
 											if (!data.result.ride) {
 												console.log('location not found');
 												return;
 											}
+											_this7.setState({ requestRideResult: data.result.ride });
 											if (data.result.ride.geo.length == 2) {
 												// TODO SPINNER
 												var destination = data.result.ride.geo;
@@ -21957,19 +21950,20 @@
 													_this7.getDestination(destination, 0);
 												});
 											}
-											_this7.setState({ requestRideResult: data.result.ride });
 										});
 									} },
 								'Request Ride'
-							),
-							_react2.default.createElement(
-								'div',
-								{ style: responseTempText },
-								JSON.stringify(this.state.requestRideResult.geo)
 							)
 						)
 					)
 				);
+			}
+		}, {
+			key: 'handleSendDriverClick',
+			value: function handleSendDriverClick(index) {
+				(0, _sendRideApi2.default)(this.state.findDriverResult[index].phoneNumber, this.state.findDriverResult[index].geo, this.state.requestRideResult.rideId, this.state.requestRideResult.geo, this.state.requestRideResult.locationString).then(function (data) {
+					// this.setState({ rideSentResult: JSON.stringify(data) });
+				});
 			}
 		}, {
 			key: 'resultList',
@@ -21980,8 +21974,7 @@
 					return;
 				}
 				var temp = [];
-				for (var i = 0; i < this.state.findDriverResult.length; i++) {
-					console.log(JSON.stringify(this.state.findDriverResult[i].phoneNumber));
+				this.state.findDriverResult.map(function (driver, i) {
 					temp.push(_react2.default.createElement(
 						'div',
 						{ style: row },
@@ -21991,7 +21984,7 @@
 							_react2.default.createElement(
 								'div',
 								{ style: titleLabel },
-								this.state.findDriverResult[i].phoneNumber
+								_this8.state.findDriverResult[i].phoneNumber
 							),
 							_react2.default.createElement('div', { style: line }),
 							_react2.default.createElement(
@@ -22001,8 +21994,8 @@
 							),
 							_react2.default.createElement(
 								'div',
-								null,
-								this.state.drivers.length > 0 ? this.state.drivers[i].origin_addresses : "Fetching.."
+								{ style: driverCardDescription },
+								_this8.state.drivers.length > 0 ? _this8.state.drivers[i].origin_addresses : "Fetching.."
 							),
 							_react2.default.createElement(
 								'div',
@@ -22011,51 +22004,56 @@
 							),
 							_react2.default.createElement(
 								'div',
-								null,
-								this.state.drivers.length > 0 ? this.state.drivers[i].destination_addresses : ""
+								{ style: driverCardDescription },
+								_this8.state.drivers.length > 0 ? _this8.state.drivers[i].destination_addresses : ""
 							),
 							_react2.default.createElement(
 								'div',
-								{ style: driverCardTitle },
-								'ETA: ',
+								{ style: cardBottom },
 								_react2.default.createElement(
-									'span',
-									{ style: driverCardDescription },
-									this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : ""
+									'div',
+									{ style: grayDetails },
+									_react2.default.createElement(
+										'div',
+										{ style: buttomDriverCard },
+										_react2.default.createElement(
+											'div',
+											{ style: buttomDriverCardTitle },
+											_this8.state.drivers.length > 0 ? _this8.state.drivers[i].rows[0].elements[0].duration.text : ""
+										),
+										_react2.default.createElement(
+											'div',
+											{ style: buttomDriverCardDescription },
+											'ETA'
+										)
+									),
+									_react2.default.createElement('span', { style: { height: 22, width: 0.7, backgroundColor: '#959595' } }),
+									_react2.default.createElement(
+										'div',
+										{ style: buttomDriverCard },
+										_react2.default.createElement(
+											'div',
+											{ style: buttomDriverCardTitle },
+											_this8.state.drivers.length > 0 ? _this8.state.drivers[i].rows[0].elements[0].distance.text : ""
+										),
+										_react2.default.createElement(
+											'div',
+											{ style: buttomDriverCardDescription },
+											'Distance'
+										)
+									)
 								)
 							),
-							_react2.default.createElement(
-								'div',
-								{ style: driverCardTitle },
-								'Distance: ',
-								_react2.default.createElement(
-									'span',
-									{ style: driverCardDescription },
-									this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : ""
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ style: cardBottom },
 							_react2.default.createElement(
 								_reactMaterialize.Button,
-								{ onClick: function onClick() {
-										console.log(_this8.state.findDriverResult);
-										// SendRideApi(this.state.findDriverResult[i].phoneNumber,
-										// 						this.state.findDriverResult[i].geo,
-										// 						this.state.requestRideResult.rideId,
-										// 						this.state.requestRideResult.geo,
-										// 						this.state.requestRideResult.locationString).then((data) => {
-										// 	console.log(JSON.stringify(data));
-										// 	// this.setState({ rideSentResult: JSON.stringify(data) });
-										// });
+								{ onClick: function onClick(event) {
+										return _this8.handleSendDriverClick(i);
 									}, key: i, style: rowButton },
 								'Order'
 							)
 						)
 					));
-				}
+				});
 				return temp;
 			}
 		}, {
@@ -22186,6 +22184,17 @@
 		alignItems: 'flex-end'
 	};
 	
+	var grayDetails = {
+		display: 'flex',
+		width: '100%',
+		height: '64px',
+		flexDirection: 'row',
+		backgroundColor: '#F9F9F9',
+		marginBottom: '0',
+		alignItems: 'center',
+		justifyContent: 'center'
+	};
+	
 	var titleLabel = {
 		margin: 10,
 		fontSize: 18,
@@ -22195,11 +22204,14 @@
 	var line = {
 		width: '80%',
 		height: 1,
-		backgroundColor: 'gray'
+		backgroundColor: '#959595'
 	};
 	
 	var rowButton = {
-		marginBottom: 10
+		marginBottom: 0,
+		width: '100%',
+		height: '44px',
+		borderRadius: 0
 	};
 	
 	var autocompleteTable = {
@@ -22218,12 +22230,33 @@
 	};
 	
 	var driverCardTitle = {
-		fontWeight: '500',
-		marginTop: '10px'
+		marginTop: '10px',
+		color: '#959595'
 	};
 	
 	var driverCardDescription = {
-		fontSize: '24px'
+		fontWeight: '500',
+		fontSize: '20px'
+	
+	};
+	
+	var buttomDriverCardTitle = {
+		fontWeight: '500',
+		fontSize: '20px',
+		textAlign: 'center'
+	};
+	
+	var buttomDriverCardDescription = {
+		fontSize: '14px',
+		fontWeight: '100',
+		textAlign: 'center'
+	
+	};
+	
+	var buttomDriverCard = {
+		alignItems: 'center',
+		justifyContent: 'center',
+		flex: 1
 	};
 	
 	var MapContainer = {
@@ -22302,62 +22335,63 @@
 	
 	exports.default = App;
 	
-	/*
-	 getFlowViews() {
-	 return (
-		 <div style={searchContainer}>
-			 <div style={box}>
-				 <h5 style={title}>Request Ride</h5>
-				 <Input onChange={this.updateRequestRideChanges} />
-				 <Button style={searchContainerButtons} onClick={() => {
-						 console.log('onClick ' + this.state.requestRideValue);
-						 RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-							 console.log(JSON.stringify(data.result.ride));
-							 this.setState({ requestRideResult: data.result.ride});
-						 });
-				 }}>Next</Button>
-			 <div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult) }</div>
-			 </div>
-				 <br />
-				 <div style={box}>
-				 <h5 style={title}>Find Available Driver</h5>
-				 <Input onChange={this.updateFindDriverChanges} />
-				 <Button style={searchContainerButtons} onClick={() => {
-						 console.log('onClick ' + this.state.findDriverValue);
-						 var splitArray = this.state.findDriverValue.split(',');
-						 FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
-							 if (data.result.success == false || data.result.message.length == 0) {
-								 console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-								 alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-								 return;
-							 }
-							 console.log(data.result.message[0].phoneNumber);
-							 this.setState({ findDriverResult: data.result.message[0]});
-						 });
-				 }}>Find Driver</Button>
-			 <div style={responseTempText}>{ JSON.stringify(this.state.findDriverResult) }</div>
-			 </div>
-				 <br />
-				 <div style={box}>
-				 <h5 style={title}>Send Ride to Driver</h5>
-				 <Button style={searchContainerButtons} onClick={() => {
-						 //(driverId, driverGeo, rideId, userGeo, locationString)
-						 SendRideApi(this.state.findDriverResult.phoneNumber,
-												 this.state.findDriverResult.geo,
-												 this.state.requestRideResult.rideId,
-												 this.state.requestRideResult.geo,
-												 this.state.requestRideResult.locationString).then((data) => {
-							 console.log(JSON.stringify(data));
-							 // this.setState({ rideSentResult: JSON.stringify(data) });
-						 });
-				 }}>Send Ride</Button>
-			 <div style={responseTempText}>{ this.state.rideSentResult }</div>
-			 </div>
-		 </div>
-	 );
-	}
-
-	*/
+	// getFlowViews() {
+	//  return (
+	// 	 <div style={searchContainer}>
+	// 		 <div style={box}>
+	// 			 <h5 style={title}>Request Ride</h5>
+	// 			 <Input onChange={this.updateRequestRideChanges} />
+	// 			 <Button style={searchContainerButtons} onClick={() => {
+	// 					 console.log('onClick ' + this.state.requestRideValue);
+	// 					 RequestApi('0526850487', this.state.requestRideValue).then((data) => {
+	// 						 console.log(JSON.stringify(data.result.ride));
+	// 						 this.setState({ requestRideResult: data.result.ride});
+	// 					 });
+	// 			 }}>Next</Button>
+	// 		 <div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult) }</div>
+	// 		 </div>
+	//
+	// 		 <br />
+	//
+	// 		 <div style={box}>
+	// 			 <h5 style={title}>Find Available Driver</h5>
+	// 			 <Input onChange={this.updateFindDriverChanges} />
+	// 			 <Button style={searchContainerButtons} onClick={() => {
+	// 					 console.log('onClick ' + this.state.findDriverValue);
+	// 					 var splitArray = this.state.findDriverValue.split(',');
+	// 					 FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
+	// 						 if (data.result.success == false || data.result.message.length == 0) {
+	// 							 console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+	// 							 alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+	// 							 return;
+	// 						 }
+	// 						 console.log(data.result.message);
+	// 						 this.setState({ findDriverResult: data.result.message});
+	// 					 });
+	// 			 }}>Find Driver</Button>
+	// 		 <div style={responseTempText}>{ JSON.stringify(this.state.findDriverResult) }</div>
+	// 		 </div>
+	//
+	// 		 <br />
+	//
+	// 		 <div style={box}>
+	// 			 <h5 style={title}>Send Ride to Driver</h5>
+	// 			 <Button style={searchContainerButtons} onClick={() => {
+	// 					 //(driverId, driverGeo, rideId, userGeo, locationString)
+	// 					 SendRideApi(this.state.findDriverResult.phoneNumber,
+	// 											 this.state.findDriverResult.geo,
+	// 											 this.state.requestRideResult.rideId,
+	// 											 this.state.requestRideResult.geo,
+	// 											 this.state.requestRideResult.locationString).then((data) => {
+	// 						 console.log(JSON.stringify(data));
+	// 						 // this.setState({ rideSentResult: JSON.stringify(data) });
+	// 					 });
+	// 			 }}>Send Ride</Button>
+	// 		 <div style={responseTempText}>{ this.state.rideSentResult }</div>
+	// 		 </div>
+	// 	 </div>
+	//  );
+	// }
 
 /***/ },
 /* 180 */
