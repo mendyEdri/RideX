@@ -1,15 +1,18 @@
 import _ from "lodash"
 
 import React, { Component } from 'react';
-import { Input, Button } from 'react-materialize';
-import Geoautocomplete from './geo-autocomplete';
+import { Button } from 'react-materialize';
+import Geoautocomplete from '../api/geo-autocomplete';
 import RequestApi from '../api/request-ride';
 import FindDriverApi from '../api/find-driver-api';
 import SendRideApi from '../api/send-ride-api';
 import GetAllDrivers from '../api/get-all-drivers-api';
 import ArrivalTime from '../api/calculate-distance-api';
+import AutocompletePlacesApi from '../api/location-autocomplete-api';
 
 import './App.css';
+
+var request;
 
 import {
   withGoogleMap,
@@ -31,13 +34,12 @@ class App extends Component {
 				defaultAnimation: 2,
 			}],
 			showLocationGeoList: false,
-			yourLocationValue: '',
 			requestRideValue: '',
 			requestRideResult: '',
 
 			findDriverValue: '',
 			findDriverResult: [],
-
+			placeholder: 'Where to?',
 			openRideValue: '',
 			openRideResult: '',
 			driverId: '',
@@ -50,6 +52,7 @@ class App extends Component {
 	  this.updateRequestRideChanges = this.updateRequestRideChanges.bind(this);
 	  this.updateFindDriverChanges = this.updateFindDriverChanges.bind(this);
 	  this.updateOpenRideChanges = this.updateOpenRideChanges.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
   handleMapLoad(map) {
@@ -118,33 +121,50 @@ class App extends Component {
     });
   }
 
-  handleClick(e) {
-     console.log(JSON.stringify(e));
-     this.setState({ autoCompleteResults: [], yourLocationValue: e.description }, () => {
-        this.setState({ showLocationGeoList: false });
+
+  handleClick(i) {
+		console.log(this.state.autoCompleteResults[i].description);
+     this.setState({ requestRideValue: this.state.autoCompleteResults[i].description }, () => {
+        this.setState({ showLocationGeoList: false, autoCompleteResults: [] });
         //drop a pin and zoom in
       });
   }
 
   getListItem() {
-    var index = 0;
-    var data = this.state.autoCompleteResults.map((result) => {
-      index++;
+    var data = this.state.autoCompleteResults.map((result, index) => {
       return (
-        <tr key={index} onClick={()=>this.handleClick(result)}>
-          <td className="AutoCompleteRow">{result.description}</td>
-        </tr>
+        <li style={AutoCompleteRow}
+					key={index}
+					onClick={(event) => this.handleClick(index)}
+					onMouseEnter={() => {
+						//this.setState({activeItem: index})
+						//console.log('onMouseEnter');
+					}}
+					onMouseDown={(e) => {
+						//e.preventDefault()
+						//console.log('onMouseDown');
+					}}
+					onTouchStart={() => {
+						//this.onTouchStart(index)
+						//console.log('onTouchStart');
+					}}
+					onTouchMove={() => {
+						//this.onTouchMove()
+						//console.log('onTouchMove');
+					}}
+					onTouchEnd={() => {
+						//this.onTouchEnd(suggestion)
+						//console.log('onTouchEnd');
+					}}> { result.description } </li>
       );
     });
     return data;
   }
 
   getGeolist() {
-    return (<table className="autocompleteTable">
-              <tbody className="tbody">
-                { this.getListItem() }
-              </tbody>
-            </table>);
+    return (<ul style={autocompleteTable}>
+								{ this.getListItem() }
+						</ul>);
   }
 
   getMapView() {
@@ -164,105 +184,29 @@ class App extends Component {
     );
   }
 
-  getInputsContainer() {
-    return (
-      <div className="RowContainer">
-        <div className="TableBody">
-          <Input placeholder="Your Location" value={this.state.yourLocationValue} label="Taxi From" onChange={(event) => {
-            if (!event.target.value) {
-              this.setState({ autoCompleteResults: [], yourLocationValue: '' }, () => {
-                this.setState({ showLocationGeoList: false });
-              });
-              return;
-            }
-            this.setState({ yourLocationValue: event.target.value }, () => {
-              if (this.state.yourLocationValue.length > 2) {
-                Geoautocomplete(this.state.yourLocationValue)
-                .then((response) => {
-                  console.log('results count: ' + response.result.message.predictions.length);
-                  this.setState({ autoCompleteResults: response.result.message.predictions}, () => {
-                    this.setState({ showLocationGeoList: true });
-                  });
-                });
-              } else if (event.target.value.length === 0) {
-                this.setState({ autoCompleteResults: [], yourLocationValue: '' }, () => {
-                  this.setState({ showLocationGeoList: false });
-                });
-              }
-            });
-            }} />
-        { this.state.showLocationGeoList ? this.getGeolist() : null }
-        </div>
-        <div className="TableBody">
-          <Input placeholder="Destination" label="Ride To" />
-        </div>
-        <div>
-          <Button className="request" waves='light'>Request Taxi</Button>
-        </div>
-      </div>
-    );
+	handleKeyDown (event) {
+  	console.log('key down');
   }
-
-	getFlowViews() {
-		return (
-			<div style={searchContainer}>
-				<div style={box}>
-					<h5 style={title}>Request Ride</h5>
-					<Input onChange={this.updateRequestRideChanges} />
-					<Button style={searchContainerButtons} onClick={() => {
-							console.log('onClick ' + this.state.requestRideValue);
-							RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-								console.log(JSON.stringify(data.result.ride));
-								this.setState({ requestRideResult: data.result.ride});
-							});
-					}}>Next</Button>
-				<div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult) }</div>
-				</div>
-
-				<br />
-
-				<div style={box}>
-					<h5 style={title}>Find Available Driver</h5>
-					<Input onChange={this.updateFindDriverChanges} />
-					<Button style={searchContainerButtons} onClick={() => {
-							console.log('onClick ' + this.state.findDriverValue);
-							var splitArray = this.state.findDriverValue.split(',');
-							FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
-								if (data.result.success == false || data.result.message.length == 0) {
-									console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-									alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-									return;
-								}
-								console.log(data.result.message[0].phoneNumber);
-								this.setState({ findDriverResult: data.result.message[0]});
-							});
-					}}>Find Driver</Button>
-				<div style={responseTempText}>{ JSON.stringify(this.state.findDriverResult) }</div>
-				</div>
-
-				<br />
-
-				<div style={box}>
-					<h5 style={title}>Send Ride to Driver</h5>
-					<Button style={searchContainerButtons} onClick={() => {
-							//(driverId, driverGeo, rideId, userGeo, locationString)
-							SendRideApi(this.state.findDriverResult.phoneNumber,
-													this.state.findDriverResult.geo,
-													this.state.requestRideResult.rideId,
-													this.state.requestRideResult.geo,
-													this.state.requestRideResult.locationString).then((data) => {
-								console.log(JSON.stringify(data));
-								// this.setState({ rideSentResult: JSON.stringify(data) });
-							});
-					}}>Send Ride</Button>
-				<div style={responseTempText}>{ this.state.rideSentResult }</div>
-				</div>
-			</div>
-		);
-	}
 
   updateRequestRideChanges(e) {
     this.setState({ requestRideValue: e.target.value });
+		if (String(e.target.value).length >= 2) {
+			if (request) {
+				request = null;
+				console.log('killing request');
+			}
+			request =	AutocompletePlacesApi(String(e.target.value)).then((data) => {
+					//console.log('results count: ' + data);
+					console.log('results count: ' + data.result.message.predictions.length);
+	        this.setState({ autoCompleteResults: data.result.message.predictions}, () => {
+	              this.setState({ showLocationGeoList: true });
+	        });
+			});
+		} else if (event.target.value && event.target.value.length === 0) {
+        this.setState({ autoCompleteResults: [] }, () => {
+              this.setState({ showLocationGeoList: false });
+				});
+    }
   }
 
   updateFindDriverChanges(e) {
@@ -305,14 +249,34 @@ class App extends Component {
 		});
 	}
 
+	handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
 	centerBox() {
 		return (<div style={centerBox}>
 							<div style={leftBox}>{ this.resultList() }</div>
-
 							<div style={rightBox}>
 								<div style={box}>
 									<h5 style={title}>Request Ride</h5>
-									<Input style={input} placeholder={"Where to?"} onChange={this.updateRequestRideChanges} />
+									<input
+										type="text"
+										value={this.state.requestRideValue}
+					          onKeyDown={(e) => {
+											if (e.nativeEvent.key == "ArrowDown") {
+												console.log('go down in the list');
+											}
+										}}
+					          onKeyUp={(e) => {
+											if (e.nativeEvent.key == "ArrowUp") {
+												console.log('go up in the list');
+											}
+										}}
+					          onClick={(e) => {
+											//console.log('onClick');
+										}}
+										style={input} placeholder={this.state.placeholder} onChange={this.updateRequestRideChanges} />
+									{ this.state.showLocationGeoList ? this.getGeolist() : null }
 									<Button style={searchContainerButtons} onClick={() => {
 											console.log('onClick ' + this.state.requestRideValue);
 											RequestApi('0526850487', this.state.requestRideValue).then((data) => {
@@ -395,6 +359,7 @@ class App extends Component {
 		//{ this.getMapView() }
 		//{ this.getInputsContainer() }
 		//{ this.getFlowViews() }
+		//{ this.centerBox() }
     return (
       <div style={AppStyle}>
 				{ this.header() }
@@ -434,7 +399,7 @@ const centerBox = {
 	display: 'flex',
 	alignSelf: 'center',
 	alignItems: 'flex-end',
-	justifyContent: 'flex-start',
+	justifyContent: 'center',
 	flexDirection: 'row',
 	marginTop: '20px',
 	width: '860px',
@@ -473,6 +438,8 @@ const input = {
 	width: '96%',
 	fontSize: 20,
 	textAlign: 'center',
+	alignItems: 'center',
+	justifyContent: 'center',
 };
 
 const row = {
@@ -495,7 +462,7 @@ const row = {
 const cardTop = {
 	display: 'flex',
 	flex: 5,
-	backgroundColor: 'blue',
+	backgroundColor: 'white',
 	width: '100%',
 	justifyContent: 'flex-start',
 	alignItems: 'center',
@@ -505,7 +472,7 @@ const cardTop = {
 const cardBottom = {
 	display: 'flex',
 	flex: 1,
-	backgroundColor: 'red',
+	backgroundColor: 'white',
 	width: '100%',
 	justifyContent: 'center',
 	alignItems: 'flex-end',
@@ -526,6 +493,20 @@ const line = {
 const rowButton = {
 	marginBottom: 10,
 };
+
+const autocompleteTable = {
+  width: '80%',
+  display: 'inline',
+	alignSelf: 'center',
+};
+
+const AutoCompleteRow = {
+	fontSize: 16,
+	backgroundColor: 'clear',
+	flexDirection: 'column',
+	marginLeft: '20px',
+	marginBottom: '14px',
+}
 
 const MapContainer = {
   flex: 1,
@@ -574,7 +555,8 @@ const searchContainerButtons = {
 	flex: 1,
 	alignItems: 'center',
 	justifyContent: 'center',
-	marginLeft: 50,
+	alignSelf: 'center',
+	marginLeft: '34%',
 };
 
 const responseTempText = {
@@ -599,3 +581,68 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 
 
 export default App;
+
+
+
+ /*
+
+ getFlowViews() {
+	 return (
+		 <div style={searchContainer}>
+			 <div style={box}>
+				 <h5 style={title}>Request Ride</h5>
+				 <Input onChange={this.updateRequestRideChanges} />
+				 <Button style={searchContainerButtons} onClick={() => {
+						 console.log('onClick ' + this.state.requestRideValue);
+						 RequestApi('0526850487', this.state.requestRideValue).then((data) => {
+							 console.log(JSON.stringify(data.result.ride));
+							 this.setState({ requestRideResult: data.result.ride});
+						 });
+				 }}>Next</Button>
+			 <div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult) }</div>
+			 </div>
+
+			 <br />
+
+			 <div style={box}>
+				 <h5 style={title}>Find Available Driver</h5>
+				 <Input onChange={this.updateFindDriverChanges} />
+				 <Button style={searchContainerButtons} onClick={() => {
+						 console.log('onClick ' + this.state.findDriverValue);
+						 var splitArray = this.state.findDriverValue.split(',');
+						 FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
+							 if (data.result.success == false || data.result.message.length == 0) {
+								 console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+								 alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+								 return;
+							 }
+							 console.log(data.result.message[0].phoneNumber);
+							 this.setState({ findDriverResult: data.result.message[0]});
+						 });
+				 }}>Find Driver</Button>
+			 <div style={responseTempText}>{ JSON.stringify(this.state.findDriverResult) }</div>
+			 </div>
+
+			 <br />
+
+			 <div style={box}>
+				 <h5 style={title}>Send Ride to Driver</h5>
+				 <Button style={searchContainerButtons} onClick={() => {
+						 //(driverId, driverGeo, rideId, userGeo, locationString)
+						 SendRideApi(this.state.findDriverResult.phoneNumber,
+												 this.state.findDriverResult.geo,
+												 this.state.requestRideResult.rideId,
+												 this.state.requestRideResult.geo,
+												 this.state.requestRideResult.locationString).then((data) => {
+							 console.log(JSON.stringify(data));
+							 // this.setState({ rideSentResult: JSON.stringify(data) });
+						 });
+				 }}>Send Ride</Button>
+			 <div style={responseTempText}>{ this.state.rideSentResult }</div>
+			 </div>
+		 </div>
+	 );
+ }
+
+
+ */

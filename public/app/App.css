@@ -46,7 +46,9 @@ html, body {
 
 .AutoCompleteRow {
    height: 10px;
-   padding: 0,
+   padding: 0;
+   background-color: 'blue';
+   font-size: 18;
 }
 
 .AutoCompleteRow:hover {
