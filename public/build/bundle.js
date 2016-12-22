@@ -21953,7 +21953,6 @@
 														return;
 													}
 													_this7.setState({ findDriverResult: data.result.message });
-	
 													// TODO API
 													_this7.getDestination(destination, 0);
 												});
@@ -21975,6 +21974,8 @@
 		}, {
 			key: 'resultList',
 			value: function resultList() {
+				var _this8 = this;
+	
 				if (this.state.findDriverResult.length == 0) {
 					return;
 				}
@@ -21995,7 +21996,7 @@
 							_react2.default.createElement('div', { style: line }),
 							_react2.default.createElement(
 								'div',
-								null,
+								{ style: driverCardTitle },
 								'Driver Location:'
 							),
 							_react2.default.createElement(
@@ -22005,7 +22006,7 @@
 							),
 							_react2.default.createElement(
 								'div',
-								null,
+								{ style: driverCardTitle },
 								'Passenger Location:'
 							),
 							_react2.default.createElement(
@@ -22015,15 +22016,23 @@
 							),
 							_react2.default.createElement(
 								'div',
-								null,
+								{ style: driverCardTitle },
 								'ETA: ',
-								this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : ""
+								_react2.default.createElement(
+									'span',
+									{ style: driverCardDescription },
+									this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : ""
+								)
 							),
 							_react2.default.createElement(
 								'div',
-								null,
+								{ style: driverCardTitle },
 								'Distance: ',
-								this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : ""
+								_react2.default.createElement(
+									'span',
+									{ style: driverCardDescription },
+									this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : ""
+								)
 							)
 						),
 						_react2.default.createElement(
@@ -22031,7 +22040,12 @@
 							{ style: cardBottom },
 							_react2.default.createElement(
 								_reactMaterialize.Button,
-								{ key: i, style: rowButton },
+								{ onClick: function onClick() {
+										(0, _sendRideApi2.default)(_this8.state.findDriverResult[i].phoneNumber, _this8.state.findDriverResult[i].geo, _this8.state.requestRideResult[i].rideId, _this8.state.requestRideResult[i].geo, _this8.state.requestRideResult[i].locationString).then(function (data) {
+											console.log(JSON.stringify(data));
+											// this.setState({ rideSentResult: JSON.stringify(data) });
+										});
+									}, key: i, style: rowButton },
 								'Order'
 							)
 						)
@@ -22194,7 +22208,17 @@
 		backgroundColor: 'clear',
 		flexDirection: 'column',
 		marginLeft: '20px',
-		marginBottom: '14px'
+		marginBottom: '14px',
+		cursor: 'hand'
+	};
+	
+	var driverCardTitle = {
+		fontWeight: '500',
+		marginTop: '10px'
+	};
+	
+	var driverCardDescription = {
+		fontSize: '24px'
 	};
 	
 	var MapContainer = {

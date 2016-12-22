@@ -77,6 +77,7 @@ module.exports = (function() {
     });
 
     app.post('/sendRideToDriver', function(req, res) {
+      console.log(req.body);
       googleMapsClient.distanceMatrix({
         origins: req.body.driverGeo[0] + ',' + req.body.driverGeo[1],
         destinations: req.body.geo[0] + ',' + req.body.geo[1],

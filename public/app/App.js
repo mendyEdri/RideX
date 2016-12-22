@@ -295,11 +295,9 @@ class App extends Component {
 															return;
 														}
 														this.setState({ findDriverResult: data.result.message});
-
 														// TODO API
 														this.getDestination(destination, 0);
 												});
-
 												}
 												this.setState({ requestRideResult: data.result.ride});
 											});
@@ -325,27 +323,36 @@ class App extends Component {
 						</div>
 						<div style={line}>
 						</div>
-						<div>
+						<div style={driverCardTitle}>
 							Driver Location:
 						</div>
 						<div>
 							{ this.state.drivers.length > 0 ? this.state.drivers[i].origin_addresses : "Fetching.." }
 						</div>
-						<div>
+						<div style={driverCardTitle}>
 							Passenger Location:
 						</div>
 						<div>
 							{ this.state.drivers.length > 0 ? this.state.drivers[i].destination_addresses : "" }
 						</div>
-						<div>
-							ETA: { this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : "" }
+						<div style={driverCardTitle}>
+							ETA: <span style={driverCardDescription}>{ this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].duration.text : "" }</span>
 						</div>
-						<div>
-							Distance: { this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : "" }
+						<div style={driverCardTitle}>
+							Distance: <span style={driverCardDescription}>{ this.state.drivers.length > 0 ? this.state.drivers[i].rows[0].elements[0].distance.text : "" }</span>
 						</div>
 					</div>
 					<div style={cardBottom}>
-						<Button key={i} style={rowButton}>
+						<Button onClick={() => {
+							SendRideApi(this.state.findDriverResult[i].phoneNumber,
+													this.state.findDriverResult[i].geo,
+													this.state.requestRideResult[i].rideId,
+													this.state.requestRideResult[i].geo,
+													this.state.requestRideResult[i].locationString).then((data) => {
+								console.log(JSON.stringify(data));
+								// this.setState({ rideSentResult: JSON.stringify(data) });
+							});
+							}} key={i} style={rowButton}>
 							Order
 						</Button>
 					</div>
@@ -506,7 +513,17 @@ const AutoCompleteRow = {
 	flexDirection: 'column',
 	marginLeft: '20px',
 	marginBottom: '14px',
-}
+	cursor: 'hand',
+};
+
+const driverCardTitle = {
+	fontWeight: '500',
+	marginTop: '10px',
+};
+
+const driverCardDescription = {
+	fontSize: '24px',
+};
 
 const MapContainer = {
   flex: 1,
