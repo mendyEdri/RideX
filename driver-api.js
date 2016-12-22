@@ -140,7 +140,11 @@ module.exports = (function() {
         if (!driver) {
           res.json({ success: false, message: 'driver not found' });
         } else {
-          res.json({ success: true, message: driver});
+          var temp = [];
+          for (var i = 0; i < driver.length; i++) {
+            temp.push(driver[i]);
+          }
+          res.json({ success: true, message: temp});
        }
       });
     });

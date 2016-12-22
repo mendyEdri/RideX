@@ -344,14 +344,15 @@ class App extends Component {
 					</div>
 					<div style={cardBottom}>
 						<Button onClick={() => {
-							SendRideApi(this.state.findDriverResult[i].phoneNumber,
-													this.state.findDriverResult[i].geo,
-													this.state.requestRideResult[i].rideId,
-													this.state.requestRideResult[i].geo,
-													this.state.requestRideResult[i].locationString).then((data) => {
-								console.log(JSON.stringify(data));
-								// this.setState({ rideSentResult: JSON.stringify(data) });
-							});
+								console.log(this.state.findDriverResult);
+							// SendRideApi(this.state.findDriverResult[i].phoneNumber,
+							// 						this.state.findDriverResult[i].geo,
+							// 						this.state.requestRideResult.rideId,
+							// 						this.state.requestRideResult.geo,
+							// 						this.state.requestRideResult.locationString).then((data) => {
+							// 	console.log(JSON.stringify(data));
+							// 	// this.setState({ rideSentResult: JSON.stringify(data) });
+							// });
 							}} key={i} style={rowButton}>
 							Order
 						</Button>

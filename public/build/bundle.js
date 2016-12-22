@@ -22041,10 +22041,15 @@
 							_react2.default.createElement(
 								_reactMaterialize.Button,
 								{ onClick: function onClick() {
-										(0, _sendRideApi2.default)(_this8.state.findDriverResult[i].phoneNumber, _this8.state.findDriverResult[i].geo, _this8.state.requestRideResult[i].rideId, _this8.state.requestRideResult[i].geo, _this8.state.requestRideResult[i].locationString).then(function (data) {
-											console.log(JSON.stringify(data));
-											// this.setState({ rideSentResult: JSON.stringify(data) });
-										});
+										console.log(_this8.state.findDriverResult);
+										// SendRideApi(this.state.findDriverResult[i].phoneNumber,
+										// 						this.state.findDriverResult[i].geo,
+										// 						this.state.requestRideResult.rideId,
+										// 						this.state.requestRideResult.geo,
+										// 						this.state.requestRideResult.locationString).then((data) => {
+										// 	console.log(JSON.stringify(data));
+										// 	// this.setState({ rideSentResult: JSON.stringify(data) });
+										// });
 									}, key: i, style: rowButton },
 								'Order'
 							)
