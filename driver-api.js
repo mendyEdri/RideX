@@ -150,6 +150,7 @@ module.exports = (function() {
     });
 
     app.post('/getDriverById', function(req, res) {
+      console.log(req.body);
       if (!req.body.driverId) {
         req.json({ success: false, message: 'driverId must be provided' });
         return;
