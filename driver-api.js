@@ -168,6 +168,7 @@ module.exports = (function() {
     app.post('/updateState', function(req, res) {
       if (!req.body.driverId) {
         res.json({ success: false, message: "driver id is mandatory" });
+        return;
       }
       Driver.findOneAndUpdate({ phoneNumber: req.body.driverId }, { freeForRide: req.body.freeForRide }, function(err, driver) {
         if (err) {

@@ -21584,7 +21584,7 @@
 	
 	var _reactMaterialize = __webpack_require__(182);
 	
-	var _geoAutocomplete = __webpack_require__(545);
+	var _geoAutocomplete = __webpack_require__(224);
 	
 	var _geoAutocomplete2 = _interopRequireDefault(_geoAutocomplete);
 	
@@ -43464,7 +43464,29 @@
 	exports.default = Toast;
 
 /***/ },
-/* 224 */,
+/* 224 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function (input) {
+	  var url = 'https://mendy-edri-server.herokuapp.com/geo?input=' + input;
+	  return fetch(url, {
+	    method: 'GET'
+	  }).then(function (response) {
+	    return response.json();
+	  }).then(function (json) {
+	    return {
+	      result: json
+	    };
+	  }).catch(function (error) {
+	    return {
+	      error: error
+	    };
+	  });
+	};
+
+/***/ },
 /* 225 */
 /***/ function(module, exports) {
 
@@ -54971,30 +54993,6 @@
 	
 	// exports
 
-
-/***/ },
-/* 544 */,
-/* 545 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	module.exports = function (input) {
-	  var url = 'https://mendy-edri-server.herokuapp.com/geo?input=' + input;
-	  return fetch(url, {
-	    method: 'GET'
-	  }).then(function (response) {
-	    return response.json();
-	  }).then(function (json) {
-	    return {
-	      result: json
-	    };
-	  }).catch(function (error) {
-	    return {
-	      error: error
-	    };
-	  });
-	};
 
 /***/ }
 /******/ ]);
