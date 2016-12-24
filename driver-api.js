@@ -166,6 +166,7 @@ module.exports = (function() {
     });
 
     app.post('/updateState', function(req, res) {
+      console.log(req.body);
       if (!req.body.driverId) {
         res.json({ success: false, message: "driver id is mandatory" });
         return;
