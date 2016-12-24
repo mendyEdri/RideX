@@ -173,9 +173,11 @@ module.exports = (function() {
       Driver.findOneAndUpdate({ phoneNumber: req.body.driverId }, { freeForRide: req.body.freeForRide }, function(err, driver) {
         if (err) {
           res.json({ success: false, message: "internal server error"});
+          return;
         }
         if (!driver) {
           res.json({ success: false, message: "Driver not found" });
+          return;
         }
         res.json({ success: true, message: driver });
       });
