@@ -105,7 +105,7 @@ module.exports = (function() {
         });
         rides.push(newRide);
         if (newRide) {
-          res.json({ success: true, message: newRide });
+          res.json({ success: true, ride: newRide });
           return;
         }
         res.json({ success: false, message: 'error, please try again'});
