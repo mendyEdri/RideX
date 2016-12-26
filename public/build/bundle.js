@@ -22109,12 +22109,12 @@
 	var _centerBox = {
 		display: 'flex',
 		alignSelf: 'center',
-		alignItems: 'flex-end',
+		alignItems: 'flex-start',
 		justifyContent: 'center',
 		flexDirection: 'row',
 		marginTop: '20px',
 		width: '860px',
-		height: '500px',
+		height: window.innerHeight - 110 + 'px',
 		backgroundColor: 'clear',
 		'boxShadow': '10px 10px 10px 2px #0000'
 	};
@@ -22136,7 +22136,7 @@
 		alignItems: 'flex-start',
 		justifyContent: 'flex-start',
 		flexDirection: 'column',
-		height: '500px',
+		height: '100%',
 		backgroundColor: 'clear',
 		borderRadius: 4,
 		fontSize: 30,
