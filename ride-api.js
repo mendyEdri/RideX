@@ -1,10 +1,13 @@
 module.exports = (function() {
     'use strict';
+
+    var rides = [];
     var express     = require('express');
     var app         = express();
     var bodyParser  = require('body-parser');
     var morgan      = require('morgan');
     var mongoose    = require('mongoose');
+    var server    = require('./server.js');
     var FCM = require('fcm-push');
     var serverKey = 'AAAAacxj0vM:APA91bGj74iPbIyslE_2lJF6xSLSBap70orqYGNpwSWsBiu3Hn0cwLi2WYv8Ypk8oZEdd9Te54yKG8FVxUM0PvCfwHQ8siMU2hwCgtJX_tBObb0n9ead8nPrg9gf8wmj6x0lKnZR03-5VPcZioH-DVdqzXOpOPNFwg';
     var fcm = new FCM(serverKey);
@@ -31,18 +34,17 @@ module.exports = (function() {
     });
 
 
-    function saveRide(userId, locationString) {
+    function saveRide(userId, locationString, callback) {
       Ride.findOne({ userId: userId }, function(err, ride) {
         if (err) {
-          //res.json({ success: false, message: 'User Aleardy has an active ride' });
-          return { success: false, message: 'User Aleardy has an active ride' };
+          callback({ success: false, message: 'User Aleardy has an active ride' });
+          return;
         }
         if (!userId) {
-          //res.json({success: false, message: 'User Phone number must be provided'});
-          return {success: false, message: 'User Phone number must be provided'};
+          callback({success: false, message: 'User Phone number must be provided'});
+          return;
         }
         if (!ride) {
-          // TODO get geo coordinate from google
           googleMapsClient.geocode({
             address: locationString,
           }, function(err, response) {
@@ -59,37 +61,55 @@ module.exports = (function() {
             });
             newRide.save(function(err) {
               if (err) {
-                //res.json({ success: false, message: 'Error saving ride. please try again' });
-                return { success: false, message: 'Error saving ride. please try again' };
+                callback({ success: false, message: 'Error saving ride. please try again' })
+                return;
               };
               console.log('Ride saved successfully');
-              // res.json({
-              //   success: true,
-              //   message: 'Ride has been added',
-              //   rideId: newRide._id,
-              //   ride: newRide
-              // });
-              return {
+              callback({
                 success: true,
                 message: 'Ride has been added',
                 rideId: newRide._id,
                 ride: newRide
-              };
+              });
+              return;
             });
           });
         } else if (ride) {
           //res.json({ success: false, message: 'cannot override and existing ride' });
-          return { success: false, message: 'cannot override and existing ride' };
+          callback({ success: false, message: 'cannot override and existing ride' });
+          return;
         }
       })
     }
 
     app.post('/requestRide', function(req, res) {
+      // saveRide(req.body.userId, req.body.locationString, function(data) {
+      //   console.log(data);
+      //   res.json(data);
+      // });
 
-      //req.body.userId
-      //req.body.locationString
-      var value = saveRide(req.body.userId, req.body.locationString);
-      res.json(value);
+      //TODO add ride and hold it till driver answer
+      googleMapsClient.geocode({
+        address: req.body.locationString,
+      }, function(err, response) {
+        if (err) {
+          console.log('error: ' + err);
+        }
+
+        var newRide = new Ride({
+          userId: req.body.userId,
+          orderTime: new Date(),
+          locationString: req.body.locationString,
+          geo: [response.json.results[0].geometry.location.lat, response.json.results[0].geometry.location.lng],
+          pending: true,
+        });
+        rides.push(newRide);
+        if (newRide) {
+          res.json({ success: true, message: newRide });
+          return;
+        }
+        res.json({ success: false, message: 'error, please try again'});
+      });
     });
 
     app.post('/sendRideToDriver', function(req, res) {

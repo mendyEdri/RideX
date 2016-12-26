@@ -62,7 +62,7 @@ function PendingRide(passengerId, driverId, rideId, passengerLocation, orderTime
     this.rideId = rideId;
     this.passengerLocation = passengerLocation;
     this.orderTime = orderTime;
-    watingTime = watingTime;
+    this.watingTime = watingTime;
 }
 
 // =======================
@@ -100,7 +100,6 @@ app.use(allowCrossDomain);
 
 app.use('/mytaxi', routes);
 app.use('/users', users);
-
 
 app.use('/api/driver', DriverApi);
 app.use('/api/ride', RideApi);
