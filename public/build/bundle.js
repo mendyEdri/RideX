@@ -21655,7 +21655,8 @@
 				openRideValue: '',
 				openRideResult: '',
 				driverId: '',
-				drivers: []
+				drivers: [],
+				tempDrivers: []
 			};
 	
 			_this.handleMapLoad = _this.handleMapLoad.bind(_this);
@@ -21866,15 +21867,19 @@
 				var _this6 = this;
 	
 				if (index >= this.state.findDriverResult.length) {
+					this.setState({ drivers: this.state.tempDrivers });
 					return;
 				}
 	
 				(0, _calculateDistanceApi2.default)(this.state.findDriverResult[index].geo, destination).then(function (data) {
-					console.log(JSON.stringify(data.result));
 					if (data.result.success == true) {
-						var temp = _this6.state.drivers;
+						var temp = _this6.state.tempDrivers;
+						for (var i = 0; i < _this6.state.drivers.length; i++) {
+							temp.push(_this6.state.drivers[i]);
+						}
 						temp.push(data.result.message);
-						_this6.setState({ drivers: temp });
+						_this6.setState({ tempDrivers: temp });
+						//this.setState({ drivers: temp });
 					}
 					index = index + 1;
 					_this6.getDestination(destination, index);

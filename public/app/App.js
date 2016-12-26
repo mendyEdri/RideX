@@ -44,6 +44,7 @@ class App extends Component {
 			openRideResult: '',
 			driverId: '',
 			drivers: [],
+      tempDrivers: [],
 		};
 
 		this.handleMapLoad = this.handleMapLoad.bind(this);
@@ -228,15 +229,19 @@ class App extends Component {
 
 	getDestination(destination, index) {
 		if (index >= this.state.findDriverResult.length) {
+        this.setState({drivers: this.state.tempDrivers });
 				return;
 		}
 
 		ArrivalTime(this.state.findDriverResult[index].geo, destination).then((data) => {
-			console.log(JSON.stringify(data.result));
 			if (data.result.success == true) {
-				var temp = this.state.drivers;
+				var temp = this.state.tempDrivers;
+        for (var i = 0; i < this.state.drivers.length; i++) {
+          temp.push(this.state.drivers[i]);
+        }
 				temp.push(data.result.message);
-				this.setState({ drivers: temp });
+        this.setState({ tempDrivers: temp});
+				//this.setState({ drivers: temp });
 			}
 			index = index+1;
 			this.getDestination(destination, index);
