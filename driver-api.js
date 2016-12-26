@@ -129,8 +129,7 @@ module.exports = (function() {
             coords[0],
             coords[1]
           ],
-          $maxDistance: 3,
-          loc : "2dsphere"
+          $maxDistance: 3
         },
       }).where({ "freeForRide" : true }).where({ "blocked": false });
       query.exec(function (err, driver) {
