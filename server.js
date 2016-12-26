@@ -102,7 +102,11 @@ app.use('/mytaxi', routes);
 app.use('/users', users);
 
 app.use('/api/driver', DriverApi);
-app.use('/api/ride', RideApi);
+app.use('/api/ride', RideApi.api());
+
+app.get('/printRides', function(req, res) {
+  res.json({ message: RideApi.rides() });
+});
 
 app.get('/', function(req, res) {
   res.json({ message: 'api server' });
