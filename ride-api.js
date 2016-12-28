@@ -88,15 +88,47 @@ module.exports = {
       }
 
       app.post('/getDriverState', function(req, res) {
-        if (!req.rideId || !req.driverId) {
+        if (!req.body.rideId || !req.body.driverId) {
           res.json({ success: false, message: 'ride id and driver id are mandatory'});
           return;
         }
         for (var i = 0; i < rides.length; i++) {
-          if (req.rideId === rides[i].rideId) {
+          if (req.body.rideId === rides[i].rideId) {
             res.json({ success: true, message: rides[i]});
             return;
           }
+        }
+        res.json({ success: false, message: 'can not find ride with this id' });
+      });
+
+      app.post('/updateDriverState', function(req, res) {
+        if (!req.body.rideId || !req.body.driverId) {
+          res.json({ success: false, message: 'ride id and driver id are mandatory'});
+          return;
+        }
+        for (var i = 0; i < rides.length; i++) {
+          if (req.body.rideId != rides[i].rideId) {
+            continue;
+          }
+
+          if (rides[i].taken === true) {
+            res.json({ success: false, message: 'ride already been taken'});
+            return;
+          }
+
+          if (req.body.accepted === false) {
+            rides[i].ignoredDriversId.push(req.body.driverId);
+            res.json({ success: true, message: rides[i]});
+            return;
+          } else if (req.body.accepted === true) {
+            rides[i].taken = true;
+            rides[i].driverId = req.body.driverId;
+            res.json({ success: true, message: rides[i]});
+            return;
+          }
+
+          res.json({ success: true, message: rides[i]});
+          return;
         }
         res.json({ success: false, message: 'can not find ride with this id' });
       });
