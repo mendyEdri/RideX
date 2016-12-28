@@ -21612,6 +21612,10 @@
 	
 	var _locationAutocompleteApi2 = _interopRequireDefault(_locationAutocompleteApi);
 	
+	var _checkDriverRideStateApi = __webpack_require__(603);
+	
+	var _checkDriverRideStateApi2 = _interopRequireDefault(_checkDriverRideStateApi);
+	
 	__webpack_require__(231);
 	
 	var _reactGoogleMaps = __webpack_require__(235);
@@ -21631,10 +21635,10 @@
 	var App = function (_Component) {
 		_inherits(App, _Component);
 	
-		function App(props) {
+		function App(props, context) {
 			_classCallCheck(this, App);
 	
-			var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props, context));
 	
 			_this.state = {
 				markers: [{
@@ -21666,6 +21670,7 @@
 			_this.updateFindDriverChanges = _this.updateFindDriverChanges.bind(_this);
 			_this.updateOpenRideChanges = _this.updateOpenRideChanges.bind(_this);
 			_this.handleChange = _this.handleChange.bind(_this);
+			_this.hanldeMessage = _this.hanldeMessage.bind(_this);
 			return _this;
 		}
 	
@@ -21964,16 +21969,30 @@
 				);
 			}
 		}, {
+			key: 'checkRideIdDriverAnswer',
+			value: function checkRideIdDriverAnswer(rideId, driverId) {
+				(0, _checkDriverRideStateApi2.default)(rideId, driverId).then(function (data) {
+					console.log('driver answer');
+					console.log(data);
+				});
+			}
+		}, {
 			key: 'handleSendDriverClick',
 			value: function handleSendDriverClick(index) {
+				var _this8 = this;
+	
 				(0, _sendRideApi2.default)(this.state.findDriverResult[index].phoneNumber, this.state.findDriverResult[index].geo, this.state.requestRideResult.rideId, this.state.requestRideResult.geo, this.state.requestRideResult.locationString).then(function (data) {
 					// this.setState({ rideSentResult: JSON.stringify(data) });
+	
+					//TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
+	
+					_this8.checkRideIdDriverAnswer(_this8.state.requestRideResult.rideId, _this8.state.findDriverResult[index].phoneNumber);
 				});
 			}
 		}, {
 			key: 'resultList',
 			value: function resultList() {
-				var _this8 = this;
+				var _this9 = this;
 	
 				if (this.state.findDriverResult.length == 0) {
 					return;
@@ -21989,7 +22008,7 @@
 							_react2.default.createElement(
 								'div',
 								{ style: titleLabel },
-								_this8.state.findDriverResult[i].phoneNumber
+								_this9.state.findDriverResult[i].phoneNumber
 							),
 							_react2.default.createElement('div', { style: line }),
 							_react2.default.createElement(
@@ -22000,7 +22019,7 @@
 							_react2.default.createElement(
 								'div',
 								{ style: driverCardDescription },
-								_this8.state.drivers.length > 0 ? _this8.state.drivers[i].origin_addresses : "Fetching.."
+								_this9.state.drivers.length > 0 ? _this9.state.drivers[i].origin_addresses : "Fetching.."
 							),
 							_react2.default.createElement(
 								'div',
@@ -22010,7 +22029,7 @@
 							_react2.default.createElement(
 								'div',
 								{ style: driverCardDescription },
-								_this8.state.drivers.length > 0 ? _this8.state.drivers[i].destination_addresses : ""
+								_this9.state.drivers.length > 0 ? _this9.state.drivers[i].destination_addresses : ""
 							),
 							_react2.default.createElement(
 								'div',
@@ -22024,7 +22043,7 @@
 										_react2.default.createElement(
 											'div',
 											{ style: buttomDriverCardTitle },
-											_this8.state.drivers.length > 0 ? _this8.state.drivers[i].rows[0].elements[0].duration.text : ""
+											_this9.state.drivers.length > 0 ? _this9.state.drivers[i].rows[0].elements[0].duration.text : ""
 										),
 										_react2.default.createElement(
 											'div',
@@ -22039,7 +22058,7 @@
 										_react2.default.createElement(
 											'div',
 											{ style: buttomDriverCardTitle },
-											_this8.state.drivers.length > 0 ? _this8.state.drivers[i].rows[0].elements[0].distance.text : ""
+											_this9.state.drivers.length > 0 ? _this9.state.drivers[i].rows[0].elements[0].distance.text : ""
 										),
 										_react2.default.createElement(
 											'div',
@@ -22052,7 +22071,7 @@
 							_react2.default.createElement(
 								_reactMaterialize.Button,
 								{ onClick: function onClick(event) {
-										return _this8.handleSendDriverClick(i);
+										return _this9.handleSendDriverClick(i);
 									}, key: i, style: rowButton },
 								'Order'
 							)
@@ -22060,6 +22079,11 @@
 					));
 				});
 				return temp;
+			}
+		}, {
+			key: 'hanldeMessage',
+			value: function hanldeMessage(message) {
+				console.log(message);
 			}
 		}, {
 			key: 'render',
@@ -54998,6 +55022,95 @@
 	
 	// exports
 
+
+/***/ },
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */,
+/* 575 */,
+/* 576 */,
+/* 577 */,
+/* 578 */,
+/* 579 */,
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */,
+/* 584 */,
+/* 585 */,
+/* 586 */,
+/* 587 */,
+/* 588 */,
+/* 589 */,
+/* 590 */,
+/* 591 */,
+/* 592 */,
+/* 593 */,
+/* 594 */,
+/* 595 */,
+/* 596 */,
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function (rideId, driverId) {
+	  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/getDriverState', {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({
+	      rideId: rideId,
+	      driverId: driverId
+	    })
+	  }).then(function (response) {
+	    return response.json();
+	  }).then(function (json) {
+	    return {
+	      result: json
+	    };
+	  }).catch(function (error) {
+	    return {
+	      error: error
+	    };
+	  });
+	};
 
 /***/ }
 /******/ ]);

@@ -4,7 +4,6 @@ var rides = [];
 module.exports = {
 
   api: function() {
-
       var express     = require('express');
       var app         = express();
       var bodyParser  = require('body-parser');
@@ -87,6 +86,20 @@ module.exports = {
           }
         })
       }
+
+      app.post('/getDriverState', function(req, res) {
+        if (!req.rideId || !req.driverId) {
+          res.json({ success: false, message: 'ride id and driver id are mandatory'});
+          return;
+        }
+        for (var i = 0; i < rides.length; i++) {
+          if (req.rideId === rides[i].rideId) {
+            res.json({ success: true, message: rides[i]});
+            return;
+          }
+        }
+        res.json({ success: false, message: 'can not find ride with this id' });
+      });
 
       app.post('/requestRide', function(req, res) {
         // saveRide(req.body.userId, req.body.locationString, function(data) {

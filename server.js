@@ -5,6 +5,22 @@
 var express     = require('express');
 var bodyParser  = require('body-parser');
 var app         = express();
+
+
+// var http = require('http').Server(app);
+// var io = require('socket.io')(http);
+//
+// io.on('connection', function(socket){
+//   console.log('user connected ' + socket.id);
+//   socket.on('msg', function(msg) {
+//     console.log(msg);
+//   });
+// });
+//
+// http.listen(3000, function(){
+//   console.log('socket running on :3000');
+// });
+
 var morgan      = require('morgan');
 var mongoose    = require('mongoose');
 var FCM = require('fcm-push');
@@ -706,7 +722,7 @@ apiRoutes.get('/validate', function(req, res) {
 // start the server ======
 // =======================
 app.listen(port);
-console.log('🍺🍺 http://localhost:' + port);
+console.log('🍺🍺  http://localhost:' + port);
 
 var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:'));

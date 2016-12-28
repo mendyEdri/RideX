@@ -9,7 +9,7 @@ import SendRideApi from '../api/send-ride-api';
 import GetAllDrivers from '../api/get-all-drivers-api';
 import ArrivalTime from '../api/calculate-distance-api';
 import AutocompletePlacesApi from '../api/location-autocomplete-api';
-
+import CheckDriverRideState from '../api/check-driver-ride-state-api';
 import './App.css';
 
 var request;
@@ -21,8 +21,8 @@ import {
 } from "react-google-maps";
 
 class App extends Component {
-	constructor(props) {
-		super(props);
+	constructor(props, context) {
+		super(props, context);
 
 		this.state = {
 			markers: [{
@@ -54,6 +54,7 @@ class App extends Component {
 	  this.updateFindDriverChanges = this.updateFindDriverChanges.bind(this);
 	  this.updateOpenRideChanges = this.updateOpenRideChanges.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+    this.hanldeMessage = this.hanldeMessage.bind(this);
 	}
 
   handleMapLoad(map) {
@@ -78,7 +79,6 @@ class App extends Component {
 					temp.push(marker);
 				}
 				this.setState({ markers: temp });
-
 			});
 
     }
@@ -304,6 +304,13 @@ class App extends Component {
 		</div>);
 	}
 
+  checkRideIdDriverAnswer(rideId, driverId) {
+    CheckDriverRideState(rideId, driverId).then((data) => {
+      console.log('driver answer');
+      console.log(data);
+    });
+  }
+
 	handleSendDriverClick(index) {
 		SendRideApi(this.state.findDriverResult[index].phoneNumber,
 								this.state.findDriverResult[index].geo,
@@ -311,6 +318,10 @@ class App extends Component {
 								this.state.requestRideResult.geo,
 								this.state.requestRideResult.locationString).then((data) => {
 			// this.setState({ rideSentResult: JSON.stringify(data) });
+
+      //TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
+
+      this.checkRideIdDriverAnswer(this.state.requestRideResult.rideId, this.state.findDriverResult[index].phoneNumber);
 		});
 	}
 
@@ -363,6 +374,10 @@ class App extends Component {
 		return temp;
 	}
 
+  hanldeMessage(message) {
+    console.log(message);
+  }
+
   render() {
 		//{ this.getMapView() }
 		//{ this.getInputsContainer() }
@@ -371,7 +386,7 @@ class App extends Component {
     return (
       <div style={AppStyle}>
 				{ this.header() }
-				{ this.centerBox() }
+        { this.centerBox() }
 				{ this.footer() }
       </div>
     );
