@@ -21945,6 +21945,8 @@
 												console.log('location not found');
 												return;
 											}
+	
+											console.log(data.result.ride);
 											_this7.setState({ requestRideResult: data.result.ride });
 											if (data.result.ride.geo.length == 2) {
 												// TODO SPINNER
@@ -21970,39 +21972,35 @@
 			}
 		}, {
 			key: 'checkRideIdDriverAnswer',
-			value: function (_checkRideIdDriverAnswer) {
-				function checkRideIdDriverAnswer(_x, _x2) {
-					return _checkRideIdDriverAnswer.apply(this, arguments);
-				}
+			value: function checkRideIdDriverAnswer(rideId, driverId) {
+				var _this8 = this;
 	
-				checkRideIdDriverAnswer.toString = function () {
-					return _checkRideIdDriverAnswer.toString();
-				};
-	
-				return checkRideIdDriverAnswer;
-			}(function (rideId, driverId) {
 				(0, _checkDriverRideStateApi2.default)(rideId, driverId).then(function (data) {
 					console.log('driver answer');
 					console.log(data);
-					checkRideIdDriverAnswer(rideId, driverId);
+					setTimeout(function () {
+						_this8.checkRideIdDriverAnswer(rideId, driverId);
+					}, 2000);
 				});
-			})
+			}
 		}, {
 			key: 'handleSendDriverClick',
 			value: function handleSendDriverClick(index) {
-				var _this8 = this;
+				var _this9 = this;
 	
-				(0, _sendRideApi2.default)(this.state.findDriverResult[index].phoneNumber, this.state.findDriverResult[index].geo, this.state.requestRideResult.rideId, this.state.requestRideResult.geo, this.state.requestRideResult.locationString).then(function (data) {
+				(0, _sendRideApi2.default)(this.state.findDriverResult[index].phoneNumber, this.state.findDriverResult[index].geo, this.state.requestRideResult._id, this.state.requestRideResult.geo, this.state.requestRideResult.locationString).then(function (data) {
 					// this.setState({ rideSentResult: JSON.stringify(data) });
 	
 					// TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
-					_this8.checkRideIdDriverAnswer(_this8.state.requestRideResult.rideId, _this8.state.findDriverResult[index].phoneNumber);
+					console.log('rideId: ' + _this9.state.requestRideResult._id);
+					console.log('DRIVERID: ' + _this9.state.findDriverResult[index].phoneNumber);
+					_this9.checkRideIdDriverAnswer(_this9.state.requestRideResult._id, _this9.state.findDriverResult[index].phoneNumber);
 				});
 			}
 		}, {
 			key: 'resultList',
 			value: function resultList() {
-				var _this9 = this;
+				var _this10 = this;
 	
 				if (this.state.findDriverResult.length == 0) {
 					return;
@@ -22018,7 +22016,7 @@
 							_react2.default.createElement(
 								'div',
 								{ style: titleLabel },
-								_this9.state.findDriverResult[i].phoneNumber
+								_this10.state.findDriverResult[i].phoneNumber
 							),
 							_react2.default.createElement('div', { style: line }),
 							_react2.default.createElement(
@@ -22029,7 +22027,7 @@
 							_react2.default.createElement(
 								'div',
 								{ style: driverCardDescription },
-								_this9.state.drivers.length > 0 ? _this9.state.drivers[i].origin_addresses : "Fetching.."
+								_this10.state.drivers.length > 0 ? _this10.state.drivers[i].origin_addresses : "Fetching.."
 							),
 							_react2.default.createElement(
 								'div',
@@ -22039,7 +22037,7 @@
 							_react2.default.createElement(
 								'div',
 								{ style: driverCardDescription },
-								_this9.state.drivers.length > 0 ? _this9.state.drivers[i].destination_addresses : ""
+								_this10.state.drivers.length > 0 ? _this10.state.drivers[i].destination_addresses : ""
 							),
 							_react2.default.createElement(
 								'div',
@@ -22053,7 +22051,7 @@
 										_react2.default.createElement(
 											'div',
 											{ style: buttomDriverCardTitle },
-											_this9.state.drivers.length > 0 ? _this9.state.drivers[i].rows[0].elements[0].duration.text : ""
+											_this10.state.drivers.length > 0 ? _this10.state.drivers[i].rows[0].elements[0].duration.text : ""
 										),
 										_react2.default.createElement(
 											'div',
@@ -22068,7 +22066,7 @@
 										_react2.default.createElement(
 											'div',
 											{ style: buttomDriverCardTitle },
-											_this9.state.drivers.length > 0 ? _this9.state.drivers[i].rows[0].elements[0].distance.text : ""
+											_this10.state.drivers.length > 0 ? _this10.state.drivers[i].rows[0].elements[0].distance.text : ""
 										),
 										_react2.default.createElement(
 											'div',
@@ -22081,7 +22079,7 @@
 							_react2.default.createElement(
 								_reactMaterialize.Button,
 								{ onClick: function onClick(event) {
-										return _this9.handleSendDriverClick(i);
+										return _this10.handleSendDriverClick(i);
 									}, key: i, style: rowButton },
 								'Order'
 							)

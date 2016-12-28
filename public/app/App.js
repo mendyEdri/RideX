@@ -282,6 +282,8 @@ class App extends Component {
 													console.log('location not found');
 													return;
 												}
+
+                        console.log(data.result.ride);
 												this.setState({ requestRideResult: data.result.ride });
 												if (data.result.ride.geo.length == 2) {
 													// TODO SPINNER
@@ -308,20 +310,24 @@ class App extends Component {
     CheckDriverRideState(rideId, driverId).then((data) => {
       console.log('driver answer');
       console.log(data);
-      checkRideIdDriverAnswer(rideId, driverId);
+      setTimeout(() => {
+        this.checkRideIdDriverAnswer(rideId, driverId);
+      }, 2000);
     });
   }
 
 	handleSendDriverClick(index) {
 		SendRideApi(this.state.findDriverResult[index].phoneNumber,
 								this.state.findDriverResult[index].geo,
-								this.state.requestRideResult.rideId,
+								this.state.requestRideResult._id,
 								this.state.requestRideResult.geo,
 								this.state.requestRideResult.locationString).then((data) => {
 			// this.setState({ rideSentResult: JSON.stringify(data) });
 
       // TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
-       this.checkRideIdDriverAnswer(this.state.requestRideResult.rideId, this.state.findDriverResult[index].phoneNumber);
+      console.log('rideId: ' + this.state.requestRideResult._id);
+      console.log('DRIVERID: ' + this.state.findDriverResult[index].phoneNumber);
+       this.checkRideIdDriverAnswer(this.state.requestRideResult._id, this.state.findDriverResult[index].phoneNumber);
 		});
 	}
 

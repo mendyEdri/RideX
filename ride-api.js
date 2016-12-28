@@ -93,7 +93,7 @@ module.exports = {
           return;
         }
         for (var i = 0; i < rides.length; i++) {
-          if (req.body.rideId === rides[i].rideId) {
+          if (req.body.rideId === rides[i]._id) {
             res.json({ success: true, message: rides[i]});
             return;
           }
@@ -107,7 +107,7 @@ module.exports = {
           return;
         }
         for (var i = 0; i < rides.length; i++) {
-          if (req.body.rideId != rides[i].rideId) {
+          if (req.body.rideId != rides[i]._id) {
             continue;
           }
 
