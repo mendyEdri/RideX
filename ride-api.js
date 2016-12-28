@@ -126,14 +126,27 @@ module.exports = {
             Ride.update({ _id: req.body.rideId }, {$set: {ignoredDriversId: temp} }, function(err) {
               if (!err) {
                 res.json({ success: true, message: rides[i]});
+                return;
               }
+              res.json({ success: false, message: 'please try again'});
             });
-            //rides[i].ignoredDriversId.push(req.body.driverId);
             return;
           } else if (req.body.accepted === true) {
-            rides[i].taken = true;
-            rides[i].driverId = req.body.driverId;
-            res.json({ success: true, message: rides[i]});
+            Ride.update({ _id: req.body.rideId }, {$set: {taken: true, driverId: req.body.driverId}}, function(err) {
+              if (!err) {
+                rides[i].save(function(err) {
+                if (err) {
+                  callback({ success: false, message: 'Error saving ride. please try again' })
+                  return;
+                };
+                console.log('Ride saved successfully');
+                res.json({ success: true, message: rides[i]});
+                return;
+              });
+                return;
+              }
+              res.json({ success: false, message: 'please try again'});
+            });
             return;
           }
 
@@ -164,6 +177,8 @@ module.exports = {
             locationString: req.body.locationString,
             geo: [response.json.results[0].geometry.location.lat, response.json.results[0].geometry.location.lng],
             pending: true,
+            taken: false,
+            driverId: ''
           });
           rides.push(newRide);
           if (newRide) {
