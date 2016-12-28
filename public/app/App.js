@@ -310,6 +310,15 @@ class App extends Component {
     CheckDriverRideState(rideId, driverId).then((data) => {
       console.log('driver answer');
       console.log(JSON.stringify(data));
+      console.log(driverId);
+      if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
+        console.log('driver dont won\'t');
+        return;
+      }
+      if (data.result.message.driverId == driverId) {
+        console.log('driver accepted');;
+        return;
+      }
       setTimeout(() => {
         this.checkRideIdDriverAnswer(rideId, driverId);
       }, 2000);

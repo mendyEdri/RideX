@@ -21978,6 +21978,15 @@
 				(0, _checkDriverRideStateApi2.default)(rideId, driverId).then(function (data) {
 					console.log('driver answer');
 					console.log(JSON.stringify(data));
+					console.log(driverId);
+					if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
+						console.log('driver dont won\'t');
+						return;
+					}
+					if (data.result.message.driverId == driverId) {
+						console.log('driver accepted');;
+						return;
+					}
 					setTimeout(function () {
 						_this8.checkRideIdDriverAnswer(rideId, driverId);
 					}, 2000);

@@ -122,21 +122,13 @@ module.exports = {
 
           if (req.body.accepted === false) {
             var temp = rides[i].ignoredDriversId;
-            temp.push(req.body.rideId);
+            temp.push(req.body.driverId);
 
             var obj = rides[i].toObject();
             obj.ignoredDriversId = temp;
             rides[i] = obj;
-            res.json({ success: true, message: rides[i]});
+            res.json({ success: true, message: rides[i] });
             return;
-            // Ride.update({ _id: req.body.rideId }, {$set: {ignoredDriversId: temp} }, function(err) {
-            //   if (!err) {
-            //     res.json({ success: true, message: rides[i]});
-            //     return;
-            //   }
-            //   res.json({ success: false, message: 'please try again'});
-            // });
-            // return;
           } else if (req.body.accepted === true) {
             // saves to DB
             Ride.update({ _id: req.body.rideId }, {$set: {taken: true, driverId: req.body.driverId}}, function(err) {
