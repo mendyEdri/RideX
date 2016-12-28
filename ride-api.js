@@ -97,8 +97,10 @@ module.exports = {
             res.json({ success: true, message: rides[i]});
             return;
           }
+          if (i == rides.length) {
+            res.json({ success: false, message: 'can not find ride with this id' });
+          }
         }
-        res.json({ success: false, message: 'can not find ride with this id' });
       });
 
       app.post('/updateRideState', function(req, res) {
