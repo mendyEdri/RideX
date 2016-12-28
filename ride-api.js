@@ -105,6 +105,7 @@ module.exports = {
       });
 
       app.post('/updateRideState', function(req, res) {
+        console.log(req.body);
         if (!req.body.rideId || !req.body.driverId) {
           res.json({ success: false, message: 'ride id and driver id are mandatory'});
           return;

@@ -8,7 +8,7 @@ module.exports = function(rideId, driverId, accept) {
     body: JSON.stringify({
 	    rideId: rideId,
       driverId: driverId,
-      accept: accept
+      accepted: accept
     })
   })
   .then((response) => response.json())

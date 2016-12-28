@@ -309,7 +309,7 @@ class App extends Component {
   checkRideIdDriverAnswer(rideId, driverId) {
     CheckDriverRideState(rideId, driverId).then((data) => {
       console.log('driver answer');
-      console.log(data);
+      console.log(JSON.stringify(data));
       setTimeout(() => {
         this.checkRideIdDriverAnswer(rideId, driverId);
       }, 2000);
