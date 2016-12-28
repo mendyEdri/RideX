@@ -98,7 +98,7 @@ module.exports = {
             res.json({ success: true, message: rides[i]});
             return;
           }
-          if (i == rides.length) {
+          if (i+1 == rides.length) {
             res.json({ success: false, message: 'can not find ride with this id' });
           }
         }
