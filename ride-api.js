@@ -121,8 +121,14 @@ module.exports = {
           }
 
           if (req.body.accepted === false) {
-            rides[i].ignoredDriversId.push(req.body.driverId);
-            res.json({ success: true, message: rides[i]});
+            var temp = rides[i].ignoredDriversId;
+            temp.push(req.body.rideId);
+            Ride.update({ _id: req.body.rideId }, {$set: {ignoredDriversId: temp} }, function(err) {
+              if (!err) {
+                res.json({ success: true, message: rides[i]});
+              }
+            });
+            //rides[i].ignoredDriversId.push(req.body.driverId);
             return;
           } else if (req.body.accepted === true) {
             rides[i].taken = true;
