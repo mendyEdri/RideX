@@ -94,7 +94,7 @@ module.exports = {
         }
         console.log(rides);
         for (var i = 0; i < rides.length; i++) {
-          if (req.body.rideId === rides[i]._id) {
+          if (req.body.rideId == rides[i]._id) {
             res.json({ success: true, message: rides[i]});
             return;
           }
