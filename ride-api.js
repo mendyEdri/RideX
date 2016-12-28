@@ -92,6 +92,7 @@ module.exports = {
           res.json({ success: false, message: 'ride id and driver id are mandatory'});
           return;
         }
+        console.log(rides.length);
         for (var i = 0; i < rides.length; i++) {
           if (req.body.rideId === rides[i]._id) {
             res.json({ success: true, message: rides[i]});
