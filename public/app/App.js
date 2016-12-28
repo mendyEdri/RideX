@@ -308,6 +308,7 @@ class App extends Component {
     CheckDriverRideState(rideId, driverId).then((data) => {
       console.log('driver answer');
       console.log(data);
+      checkRideIdDriverAnswer(rideId, driverId);
     });
   }
 
@@ -319,9 +320,8 @@ class App extends Component {
 								this.state.requestRideResult.locationString).then((data) => {
 			// this.setState({ rideSentResult: JSON.stringify(data) });
 
-      //TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
-
-      this.checkRideIdDriverAnswer(this.state.requestRideResult.rideId, this.state.findDriverResult[index].phoneNumber);
+      // TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
+       this.checkRideIdDriverAnswer(this.state.requestRideResult.rideId, this.state.findDriverResult[index].phoneNumber);
 		});
 	}
 

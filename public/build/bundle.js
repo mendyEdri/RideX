@@ -21970,12 +21970,23 @@
 			}
 		}, {
 			key: 'checkRideIdDriverAnswer',
-			value: function checkRideIdDriverAnswer(rideId, driverId) {
+			value: function (_checkRideIdDriverAnswer) {
+				function checkRideIdDriverAnswer(_x, _x2) {
+					return _checkRideIdDriverAnswer.apply(this, arguments);
+				}
+	
+				checkRideIdDriverAnswer.toString = function () {
+					return _checkRideIdDriverAnswer.toString();
+				};
+	
+				return checkRideIdDriverAnswer;
+			}(function (rideId, driverId) {
 				(0, _checkDriverRideStateApi2.default)(rideId, driverId).then(function (data) {
 					console.log('driver answer');
 					console.log(data);
+					checkRideIdDriverAnswer(rideId, driverId);
 				});
-			}
+			})
 		}, {
 			key: 'handleSendDriverClick',
 			value: function handleSendDriverClick(index) {
@@ -21984,8 +21995,7 @@
 				(0, _sendRideApi2.default)(this.state.findDriverResult[index].phoneNumber, this.state.findDriverResult[index].geo, this.state.requestRideResult.rideId, this.state.requestRideResult.geo, this.state.requestRideResult.locationString).then(function (data) {
 					// this.setState({ rideSentResult: JSON.stringify(data) });
 	
-					//TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
-	
+					// TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
 					_this8.checkRideIdDriverAnswer(_this8.state.requestRideResult.rideId, _this8.state.findDriverResult[index].phoneNumber);
 				});
 			}
@@ -55089,7 +55099,7 @@
 	'use strict';
 	
 	module.exports = function (rideId, driverId) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/getDriverState', {
+	  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/getRideState', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',

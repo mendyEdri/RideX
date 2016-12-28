@@ -87,7 +87,7 @@ module.exports = {
         })
       }
 
-      app.post('/getDriverState', function(req, res) {
+      app.post('/getRideState', function(req, res) {
         if (!req.body.rideId || !req.body.driverId) {
           res.json({ success: false, message: 'ride id and driver id are mandatory'});
           return;
@@ -101,7 +101,7 @@ module.exports = {
         res.json({ success: false, message: 'can not find ride with this id' });
       });
 
-      app.post('/updateDriverState', function(req, res) {
+      app.post('/updateRideState', function(req, res) {
         if (!req.body.rideId || !req.body.driverId) {
           res.json({ success: false, message: 'ride id and driver id are mandatory'});
           return;
