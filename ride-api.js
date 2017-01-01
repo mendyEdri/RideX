@@ -198,10 +198,12 @@ module.exports = {
                 res.json({ success: false, message: 'driver already passed this ride' });
                 return;
             }
+            if (i == rides.length) {
+              sendPush(req.body.driverId, req.body.locationString, response.json.rows[0].elements[0].duration.text,  response.json.rows[0].elements[0].distance.text, req.body.rideId, function(success) {
+                res.json({ success: success });
+              });
+            }
           }
-          sendPush(req.body.driverId, req.body.locationString, response.json.rows[0].elements[0].duration.text,  response.json.rows[0].elements[0].distance.text, req.body.rideId, function(success) {
-            res.json({ success: success });
-          });
         });
       });
 
