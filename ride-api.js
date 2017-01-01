@@ -192,6 +192,12 @@ module.exports = {
             return;
           }
 
+          if (rides.length == 0) {
+            sendPush(req.body.driverId, req.body.locationString, response.json.rows[0].elements[0].duration.text,  response.json.rows[0].elements[0].distance.text, req.body.rideId, function(success) {
+              res.json({ success: success });
+            });
+            return;
+          }
           // check if driver already ignored this ride
           for (var i = 0; i < rides.length; i++) {
             if (rides[i].rideId == req.body.rideId && rides[i].ignoredDriversId.indexOf(req.body.driverId) > -1) {
