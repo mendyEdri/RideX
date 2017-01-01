@@ -199,7 +199,7 @@ module.exports = {
             return;
           }
           // check if driver already ignored this ride
-          for (var i = 0; i < rides.length; i++) {
+          for (var i = 0; i <= rides.length; i++) {
             if (rides[i].rideId == req.body.rideId && rides[i].ignoredDriversId.indexOf(req.body.driverId) > -1) {
                 res.json({ success: false, message: 'driver already passed this ride' });
                 return;
