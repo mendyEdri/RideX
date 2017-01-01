@@ -116,7 +116,7 @@ module.exports = {
           }
 
           if (rides[i].taken === true) {
-            res.json({ success: false, message: 'ride already been taken'});
+            res.json({ success: false, message: 'ride has already been taken'});
             return;
           }
 
@@ -190,6 +190,14 @@ module.exports = {
           if (err) {
             res.json({ success: false, message: err });
             return;
+          }
+
+          // check if driver already ignored this ride
+          for (var i = 0; i < rides.length; i++) {
+            if (rides[i].rideId == req.body.rideId && rides[i].ignoredDriversId.indexOf(req.body.driverId) > -1) {
+                res.json({ success: false, message: 'driver already passed this ride' });
+                return;
+            }
           }
           sendPush(req.body.driverId, req.body.locationString, response.json.rows[0].elements[0].duration.text,  response.json.rows[0].elements[0].distance.text, req.body.rideId, function(success) {
             res.json({ success: success });

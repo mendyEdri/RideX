@@ -1,7 +1,7 @@
 import _ from "lodash"
 
 import React, { Component } from 'react';
-import { Button } from 'react-materialize';
+import { Button, Navbar, NavItem, Icon, Preloader, Footer } from 'react-materialize';
 import Geoautocomplete from '../api/geo-autocomplete';
 import RequestApi from '../api/request-ride';
 import FindDriverApi from '../api/find-driver-api';
@@ -45,6 +45,8 @@ class App extends Component {
 			driverId: '',
 			drivers: [],
       tempDrivers: [],
+      spin: false,
+      requestRideSpinner: false,
 		};
 
 		this.handleMapLoad = this.handleMapLoad.bind(this);
@@ -217,13 +219,33 @@ class App extends Component {
 
 	header() {
 		return (
-			<div style={header}>Header</div>
+      <Navbar brand='Backoffice' right>
+        <NavItem href='#'><Icon>search</Icon></NavItem>
+        <NavItem href='#'><Icon>view_module</Icon></NavItem>
+        <NavItem href='#'><Icon>refresh</Icon></NavItem>
+        <NavItem href='#'><Icon>more_vert</Icon></NavItem>
+      </Navbar>
 		);
 	}
 
 	footer() {
 		return (
-			<div style={footer}>Footer</div>
+      <Footer copyrights="&copy; 2015 Copyright Text"
+        moreLinks={
+          <a className="grey-text text-lighten-4 right" href="#!">More Links</a>
+        }
+        links={
+          <ul>
+            <li><a className="grey-text text-lighten-3" href="#!">Link 1</a></li>
+            <li><a className="grey-text text-lighten-3" href="#!">Link 2</a></li>
+            <li><a className="grey-text text-lighten-3" href="#!">Link 3</a></li>
+            <li><a className="grey-text text-lighten-3" href="#!">Link 4</a></li>
+          </ul>
+        }
+        className='example'>
+          <h5 className="white-text">Footer Content</h5>
+          <p className="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+      </Footer>
 		);
 	}
 
@@ -277,9 +299,11 @@ class App extends Component {
 										style={input} placeholder={this.state.placeholder} onChange={this.updateRequestRideChanges} />
 									{ this.state.showLocationGeoList ? this.getGeolist() : null }
 									<Button style={searchContainerButtons} onClick={() => {
+                      this.setState({ requestRideSpinner: true });
 											RequestApi('0526850487', this.state.requestRideValue).then((data) => {
 												if (!data.result.ride) {
 													console.log('location not found');
+                          this.setState({ requestRideSpinner: false });
 													return;
 												}
 
@@ -289,6 +313,7 @@ class App extends Component {
 													// TODO SPINNER
 													var destination = data.result.ride.geo;
 													FindDriverApi([data.result.ride.geo[0], data.result.ride.geo[1]]).then((data) => {
+                            this.setState({ requestRideSpinner: false });
 														if (data.result.success == false || data.result.message.length == 0) {
 															console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 															alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
@@ -302,6 +327,7 @@ class App extends Component {
 											});
 									}}>Request Ride</Button>
 								</div>
+                <div style={requestRideSpinner}><Preloader active={this.state.requestRideSpinner} size='small'/></div>
 							</div>
 		</div>);
 	}
@@ -312,11 +338,13 @@ class App extends Component {
       console.log(JSON.stringify(data));
       console.log(driverId);
       if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
-        console.log('driver dont won\'t');
+        console.log('driver won\'t take the ride');
+        this.setState({ spin: false });
         return;
       }
       if (data.result.message.driverId == driverId) {
-        console.log('driver accepted');;
+        console.log('driver accepted');
+        this.setState({ spin: false });
         return;
       }
       setTimeout(() => {
@@ -326,6 +354,7 @@ class App extends Component {
   }
 
 	handleSendDriverClick(index) {
+    this.setState({ spin: true });
 		SendRideApi(this.state.findDriverResult[index].phoneNumber,
 								this.state.findDriverResult[index].geo,
 								this.state.requestRideResult._id,
@@ -347,7 +376,7 @@ class App extends Component {
 		var temp = [];
 		this.state.findDriverResult.map((driver, i) => {
 			temp.push(
-				<div style={row}>
+				<div style={row} key={i}>
 					<div style={cardTop}>
 						<div style={titleLabel}>
 							{ this.state.findDriverResult[i].phoneNumber }
@@ -366,6 +395,7 @@ class App extends Component {
 						<div style={driverCardDescription}>
 							{ this.state.drivers.length > 0 ? this.state.drivers[i].destination_addresses : "" }
 						</div>
+          <Preloader style={cardSpinner} active={this.state.spin} size='small'/>
 					<div style={cardBottom}>
 						<div style={grayDetails}>
 							<div style={buttomDriverCard}>
@@ -589,6 +619,16 @@ const buttomDriverCard = {
 	alignItems: 'center',
 	justifyContent: 'center',
 	flex: 1,
+};
+
+const cardSpinner = {
+  marginTop: 15,
+};
+
+const requestRideSpinner = {
+  alignSelf: 'center',
+  position: 'absolute',
+  marginLeft: '220px'
 };
 
 const MapContainer = {

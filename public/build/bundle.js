@@ -21660,7 +21660,9 @@
 				openRideResult: '',
 				driverId: '',
 				drivers: [],
-				tempDrivers: []
+				tempDrivers: [],
+				spin: false,
+				requestRideSpinner: false
 			};
 	
 			_this.handleMapLoad = _this.handleMapLoad.bind(_this);
@@ -21852,18 +21854,108 @@
 			key: 'header',
 			value: function header() {
 				return _react2.default.createElement(
-					'div',
-					{ style: _header },
-					'Header'
+					_reactMaterialize.Navbar,
+					{ brand: 'Backoffice', right: true },
+					_react2.default.createElement(
+						_reactMaterialize.NavItem,
+						{ href: '#' },
+						_react2.default.createElement(
+							_reactMaterialize.Icon,
+							null,
+							'search'
+						)
+					),
+					_react2.default.createElement(
+						_reactMaterialize.NavItem,
+						{ href: '#' },
+						_react2.default.createElement(
+							_reactMaterialize.Icon,
+							null,
+							'view_module'
+						)
+					),
+					_react2.default.createElement(
+						_reactMaterialize.NavItem,
+						{ href: '#' },
+						_react2.default.createElement(
+							_reactMaterialize.Icon,
+							null,
+							'refresh'
+						)
+					),
+					_react2.default.createElement(
+						_reactMaterialize.NavItem,
+						{ href: '#' },
+						_react2.default.createElement(
+							_reactMaterialize.Icon,
+							null,
+							'more_vert'
+						)
+					)
 				);
 			}
 		}, {
 			key: 'footer',
 			value: function footer() {
 				return _react2.default.createElement(
-					'div',
-					{ style: _footer },
-					'Footer'
+					_reactMaterialize.Footer,
+					{ copyrights: '\xA9 2015 Copyright Text',
+						moreLinks: _react2.default.createElement(
+							'a',
+							{ className: 'grey-text text-lighten-4 right', href: '#!' },
+							'More Links'
+						),
+						links: _react2.default.createElement(
+							'ul',
+							null,
+							_react2.default.createElement(
+								'li',
+								null,
+								_react2.default.createElement(
+									'a',
+									{ className: 'grey-text text-lighten-3', href: '#!' },
+									'Link 1'
+								)
+							),
+							_react2.default.createElement(
+								'li',
+								null,
+								_react2.default.createElement(
+									'a',
+									{ className: 'grey-text text-lighten-3', href: '#!' },
+									'Link 2'
+								)
+							),
+							_react2.default.createElement(
+								'li',
+								null,
+								_react2.default.createElement(
+									'a',
+									{ className: 'grey-text text-lighten-3', href: '#!' },
+									'Link 3'
+								)
+							),
+							_react2.default.createElement(
+								'li',
+								null,
+								_react2.default.createElement(
+									'a',
+									{ className: 'grey-text text-lighten-3', href: '#!' },
+									'Link 4'
+								)
+							)
+						),
+						className: 'example' },
+					_react2.default.createElement(
+						'h5',
+						{ className: 'white-text' },
+						'Footer Content'
+					),
+					_react2.default.createElement(
+						'p',
+						{ className: 'grey-text text-lighten-4' },
+						'You can use rows and columns here to organize your footer content.'
+					)
 				);
 			}
 		}, {
@@ -21940,9 +22032,11 @@
 							_react2.default.createElement(
 								_reactMaterialize.Button,
 								{ style: searchContainerButtons, onClick: function onClick() {
+										_this7.setState({ requestRideSpinner: true });
 										(0, _requestRide2.default)('0526850487', _this7.state.requestRideValue).then(function (data) {
 											if (!data.result.ride) {
 												console.log('location not found');
+												_this7.setState({ requestRideSpinner: false });
 												return;
 											}
 	
@@ -21952,6 +22046,7 @@
 												// TODO SPINNER
 												var destination = data.result.ride.geo;
 												(0, _findDriverApi2.default)([data.result.ride.geo[0], data.result.ride.geo[1]]).then(function (data) {
+													_this7.setState({ requestRideSpinner: false });
 													if (data.result.success == false || data.result.message.length == 0) {
 														console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 														alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
@@ -21966,6 +22061,11 @@
 									} },
 								'Request Ride'
 							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ style: requestRideSpinner },
+							_react2.default.createElement(_reactMaterialize.Preloader, { active: this.state.requestRideSpinner, size: 'small' })
 						)
 					)
 				);
@@ -21980,11 +22080,13 @@
 					console.log(JSON.stringify(data));
 					console.log(driverId);
 					if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
-						console.log('driver dont won\'t');
+						console.log('driver won\'t take the ride');
+						_this8.setState({ spin: false });
 						return;
 					}
 					if (data.result.message.driverId == driverId) {
-						console.log('driver accepted');;
+						console.log('driver accepted');
+						_this8.setState({ spin: false });
 						return;
 					}
 					setTimeout(function () {
@@ -21997,6 +22099,7 @@
 			value: function handleSendDriverClick(index) {
 				var _this9 = this;
 	
+				this.setState({ spin: true });
 				(0, _sendRideApi2.default)(this.state.findDriverResult[index].phoneNumber, this.state.findDriverResult[index].geo, this.state.requestRideResult._id, this.state.requestRideResult.geo, this.state.requestRideResult.locationString).then(function (data) {
 					// this.setState({ rideSentResult: JSON.stringify(data) });
 	
@@ -22018,7 +22121,7 @@
 				this.state.findDriverResult.map(function (driver, i) {
 					temp.push(_react2.default.createElement(
 						'div',
-						{ style: row },
+						{ style: row, key: i },
 						_react2.default.createElement(
 							'div',
 							{ style: cardTop },
@@ -22048,6 +22151,7 @@
 								{ style: driverCardDescription },
 								_this10.state.drivers.length > 0 ? _this10.state.drivers[i].destination_addresses : ""
 							),
+							_react2.default.createElement(_reactMaterialize.Preloader, { style: cardSpinner, active: _this10.state.spin, size: 'small' }),
 							_react2.default.createElement(
 								'div',
 								{ style: cardBottom },
@@ -22129,7 +22233,7 @@
 		height: '100%'
 	};
 	
-	var _header = {
+	var header = {
 		backgroundColor: 'white',
 		top: 0,
 		width: '100%',
@@ -22137,7 +22241,7 @@
 		fontSize: 40
 	};
 	
-	var _footer = {
+	var footer = {
 		backgroundColor: '#333636',
 		bottom: 0,
 		flex: 1,
@@ -22303,6 +22407,16 @@
 		alignItems: 'center',
 		justifyContent: 'center',
 		flex: 1
+	};
+	
+	var cardSpinner = {
+		marginTop: 15
+	};
+	
+	var requestRideSpinner = {
+		alignSelf: 'center',
+		position: 'absolute',
+		marginLeft: '220px'
 	};
 	
 	var MapContainer = {
@@ -43738,7 +43852,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".App__App___16_p3 {\n  display: flex;\n  flex: 1;\n  width: 100%;\n  height: 100%;\n  flex-direction: column;\n  font-size: 40;\n  background-color: '#F9F9F9'\n}\n\n.App__MapContainer___E-edr {\n  flex: 1;\n  margin: 0;\n  background-color: #224;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n.App__MapElement___8drEp  {\n  flex: 1;\n  margin: 0;\n  background-color: #222;\n  width: 100%;\n  height: 100%;\n}\n\nmap {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\n\nhtml, body {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  background-color: #1B90A1;\n  display: flex;\n  flex-direction: column;\n}\n\n.App__AutoCompleteRow___1rlTw {\n   height: 10px;\n   padding: 0;\n   background-color: 'blue';\n   font-size: 18;\n}\n\n.App__AutoCompleteRow___1rlTw:hover {\n    background-color: #F0EDED;\n}\n\n.App__autocompleteTable___dMVM5 {\n  width: 100%;\n  display:block;\n}\n\ntbody {\n    height: 200px;\n    display: inline-block;\n    width: 100%;\n    overflow: scroll;\n    background-color: #F9F9F9;\n}\n\n.App__RowContainer___3PS9J {\n  background-color: #F9F9F9;\n  position: absolute;\n  margin-top: 44px;\n  width: 30%;\n  min-width: 300px;\n  margin-left: 30px;\n  align-items: center;\n  justify-content: center;\n}\n\n.App__TableBody___2OYo6 {\n  margin-top: 20px;\n  background-color: #F9F9F9;\n  width: 90%;\n  margin-left: 5%;\n}\n\n.App__request___1jna7 {\n  width: 50%;\n  margin-left: 25%;\n  margin-bottom: 20px;\n}\n\n.App__test___2HWRH {\n  margin: 20px;\n  width: 100%;\n  height: 100%;\n}\n\n@keyframes App__App-logo-spin___1R5gY {\n  from { transform: rotate(0deg); }\n  to { transform: rotate(360deg); }\n}\n", ""]);
+	exports.push([module.id, ".App__App___16_p3 {\n  display: flex;\n  flex: 1;\n  width: 100%;\n  height: 100%;\n  flex-direction: column;\n  font-size: 40;\n  background-color: 'red'\n}\n\n.App__MapContainer___E-edr {\n  flex: 1;\n  margin: 0;\n  background-color: 'red';\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n.App__MapElement___8drEp  {\n  flex: 1;\n  margin: 0;\n  background-color: \"red\";\n  width: 100%;\n  height: 100%;\n}\n\nmap {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\n\nhtml, body {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  background-color: #bdc3c7;\n  display: flex;\n  flex-direction: column;\n}\n\n.App__AutoCompleteRow___1rlTw {\n   height: 10px;\n   padding: 0;\n   background-color: 'blue';\n   font-size: 18;\n}\n\n.App__AutoCompleteRow___1rlTw:hover {\n    background-color: #F0EDED;\n}\n\n.App__autocompleteTable___dMVM5 {\n  width: 100%;\n  display:block;\n}\n\ntbody {\n    height: 200px;\n    display: inline-block;\n    width: 100%;\n    overflow: scroll;\n    background-color: #F9F9F9;\n}\n\n.App__RowContainer___3PS9J {\n  background-color: #F9F9F9;\n  position: absolute;\n  margin-top: 44px;\n  width: 30%;\n  min-width: 300px;\n  margin-left: 30px;\n  align-items: center;\n  justify-content: center;\n}\n\n.App__TableBody___2OYo6 {\n  margin-top: 20px;\n  background-color: #F9F9F9;\n  width: 90%;\n  margin-left: 5%;\n}\n\n.App__request___1jna7 {\n  width: 50%;\n  margin-left: 25%;\n  margin-bottom: 20px;\n}\n\n.App__test___2HWRH {\n  margin: 20px;\n  width: 100%;\n  height: 100%;\n}\n\n@keyframes App__App-logo-spin___1R5gY {\n  from { transform: rotate(0deg); }\n  to { transform: rotate(360deg); }\n}\n", ""]);
 	
 	// exports
 	exports.locals = {
