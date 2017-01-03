@@ -11,7 +11,6 @@ import ArrivalTime from '../api/calculate-distance-api';
 import AutocompletePlacesApi from '../api/location-autocomplete-api';
 import CheckDriverRideState from '../api/check-driver-ride-state-api';
 import './App.css';
-
 var request;
 
 import {
@@ -46,6 +45,7 @@ class App extends Component {
 			drivers: [],
       tempDrivers: [],
       spin: false,
+      spinKey: '',
       requestRideSpinner: false,
 		};
 
@@ -325,7 +325,7 @@ class App extends Component {
 												});
 												}
 											});
-									}}>Request Ride</Button>
+									}}>Find Driver</Button>
 								</div>
                 <div style={requestRideSpinner}><Preloader active={this.state.requestRideSpinner} size='small'/></div>
 							</div>
@@ -354,7 +354,7 @@ class App extends Component {
   }
 
 	handleSendDriverClick(index) {
-    this.setState({ spin: true });
+    this.setState({ spin: true, spinKey: index });
 		SendRideApi(this.state.findDriverResult[index].phoneNumber,
 								this.state.findDriverResult[index].geo,
 								this.state.requestRideResult._id,
@@ -395,7 +395,7 @@ class App extends Component {
 						<div style={driverCardDescription}>
 							{ this.state.drivers.length > 0 ? this.state.drivers[i].destination_addresses : "" }
 						</div>
-          <Preloader style={cardSpinner} active={this.state.spin} size='small'/>
+          { this.state.spinKey != i ? null : <Preloader style={cardSpinner} active={this.state.spin} size='small'/> }
 					<div style={cardBottom}>
 						<div style={grayDetails}>
 							<div style={buttomDriverCard}>

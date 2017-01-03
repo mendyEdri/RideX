@@ -37,6 +37,8 @@ var Passenger = require('./app/models/passenger'); // get our mongoose model
 var Ride = require('./app/models/ride'); // get our mongoose model
 var DriverApi = require('./driver-api.js');
 var RideApi = require('./ride-api.js');
+var Crawler = require("crawler");
+var url = require('url');
 
 var request = require('request');
 var routes = require('./routes/index');
@@ -126,6 +128,26 @@ app.get('/printRides', function(req, res) {
 
 app.get('/', function(req, res) {
   res.json({ message: 'api server' });
+});
+
+app.get('/crawler', function(req, res) {
+  var c = new Crawler({
+      maxConnections : 10,
+      // This will be called for each crawled page
+      callback : function (error, res, done) {
+          if(error){
+              console.log(error);
+          }else{
+              var $ = res.$;
+              // $ is Cheerio by default
+              //a lean implementation of core jQuery designed specifically for the server
+              console.log($("link").text);
+          }
+          done();
+      }
+  });
+  c.queue('http://www.talenttribe.me');
+  res.json({ success: true });
 });
 
 
