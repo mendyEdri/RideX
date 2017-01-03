@@ -130,8 +130,6 @@ module.exports = (function() {
             coords[1]
           ],
           $maxDistance: 3/111.12,
-          $distanceField : "dist",
-          $spherical : true
         },
       }).where({ "freeForRide" : true }).where({ "blocked": false });
       query.exec(function (err, driver) {
