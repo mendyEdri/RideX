@@ -22052,7 +22052,7 @@
 														alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 														return;
 													}
-													_this7.setState({ findDriverResult: data.result.message }, function () {
+													_this7.setState({ findDriverResult: data.result.message.reverse() }, function () {
 														_this7.getDestination(destination, 0);
 													});
 												});
@@ -43744,7 +43744,7 @@
 	'use strict';
 	
 	module.exports = function (geo) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/geo?input=' + geo, {
+	  return fetch('/geo?input=' + geo, {
 	    method: 'GET'
 	  }).then(function (response) {
 	    return response.json();

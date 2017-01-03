@@ -1,5 +1,5 @@
 module.exports = function(geo) {
-  return fetch('https://mendy-edri-server.herokuapp.com/geo?input=' + geo, {
+  return fetch('/geo?input=' + geo, {
     method: 'GET',
   })
   .then((response) => response.json())
