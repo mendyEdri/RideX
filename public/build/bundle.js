@@ -22044,7 +22044,6 @@
 											console.log(data.result.ride);
 											_this7.setState({ requestRideResult: data.result.ride });
 											if (data.result.ride.geo.length == 2) {
-												// TODO SPINNER
 												var destination = data.result.ride.geo;
 												(0, _findDriverApi2.default)([data.result.ride.geo[0], data.result.ride.geo[1]]).then(function (data) {
 													_this7.setState({ requestRideSpinner: false });
@@ -22053,9 +22052,9 @@
 														alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 														return;
 													}
-													_this7.setState({ findDriverResult: data.result.message });
-													// TODO API
-													_this7.getDestination(destination, 0);
+													_this7.setState({ findDriverResult: data.result.message }, function () {
+														_this7.getDestination(destination, 0);
+													});
 												});
 											}
 										});
@@ -22495,64 +22494,6 @@
 	});
 	
 	exports.default = App;
-	
-	// getFlowViews() {
-	//  return (
-	// 	 <div style={searchContainer}>
-	// 		 <div style={box}>
-	// 			 <h5 style={title}>Request Ride</h5>
-	// 			 <Input onChange={this.updateRequestRideChanges} />
-	// 			 <Button style={searchContainerButtons} onClick={() => {
-	// 					 console.log('onClick ' + this.state.requestRideValue);
-	// 					 RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-	// 						 console.log(JSON.stringify(data.result.ride));
-	// 						 this.setState({ requestRideResult: data.result.ride});
-	// 					 });
-	// 			 }}>Next</Button>
-	// 		 <div style={responseTempText}>{ JSON.stringify(this.state.requestRideResult) }</div>
-	// 		 </div>
-	//
-	// 		 <br />
-	//
-	// 		 <div style={box}>
-	// 			 <h5 style={title}>Find Available Driver</h5>
-	// 			 <Input onChange={this.updateFindDriverChanges} />
-	// 			 <Button style={searchContainerButtons} onClick={() => {
-	// 					 console.log('onClick ' + this.state.findDriverValue);
-	// 					 var splitArray = this.state.findDriverValue.split(',');
-	// 					 FindDriverApi([splitArray[0], splitArray[1]]).then((data) => {
-	// 						 if (data.result.success == false || data.result.message.length == 0) {
-	// 							 console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-	// 							 alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-	// 							 return;
-	// 						 }
-	// 						 console.log(data.result.message);
-	// 						 this.setState({ findDriverResult: data.result.message});
-	// 					 });
-	// 			 }}>Find Driver</Button>
-	// 		 <div style={responseTempText}>{ JSON.stringify(this.state.findDriverResult) }</div>
-	// 		 </div>
-	//
-	// 		 <br />
-	//
-	// 		 <div style={box}>
-	// 			 <h5 style={title}>Send Ride to Driver</h5>
-	// 			 <Button style={searchContainerButtons} onClick={() => {
-	// 					 //(driverId, driverGeo, rideId, userGeo, locationString)
-	// 					 SendRideApi(this.state.findDriverResult.phoneNumber,
-	// 											 this.state.findDriverResult.geo,
-	// 											 this.state.requestRideResult.rideId,
-	// 											 this.state.requestRideResult.geo,
-	// 											 this.state.requestRideResult.locationString).then((data) => {
-	// 						 console.log(JSON.stringify(data));
-	// 						 // this.setState({ rideSentResult: JSON.stringify(data) });
-	// 					 });
-	// 			 }}>Send Ride</Button>
-	// 		 <div style={responseTempText}>{ this.state.rideSentResult }</div>
-	// 		 </div>
-	// 	 </div>
-	//  );
-	// }
 
 /***/ },
 /* 180 */
