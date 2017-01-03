@@ -133,7 +133,7 @@ module.exports = (function() {
           $distanceField : "dist",
           $spherical : true
         },
-      }).sort({'$near': { "dist" : 1, "_id" : 1 } }).where({ "freeForRide" : true }).where({ "blocked": false });
+      }).sort({'$near': { "dist" : 1 } }).where({ "freeForRide" : true }).where({ "blocked": false });
       query.exec(function (err, driver) {
         if (err) {
           console.log(err);
