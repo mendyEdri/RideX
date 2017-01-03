@@ -131,7 +131,7 @@ module.exports = (function() {
           ],
           $maxDistance: 3/111.12
         },
-      }).sort('geo').where({ "freeForRide" : true }).where({ "blocked": false });
+      }).sort('$near').where({ "freeForRide" : true }).where({ "blocked": false });
       query.exec(function (err, driver) {
         if (err) {
           console.log(err);
