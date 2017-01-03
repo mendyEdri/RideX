@@ -86,6 +86,13 @@
     });
   }
 
+  function someLogin() {
+    FB.login(function(response){
+      // Handle the response object, like in statusChangeCallback() in our demo
+    // code.
+    });
+  }
+
   function logout(){
     FB.logout(function(response) {
      // Person is now logged out
@@ -106,6 +113,7 @@
 <div id="status">
 </div>
 <div>
+  <button onclick="someLogin();">LOGIN</button>
   <button onclick="logout();">logout</button>
 </div>
 </body>
