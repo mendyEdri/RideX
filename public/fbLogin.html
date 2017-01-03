@@ -84,6 +84,13 @@
         'Thanks for logging in, ' + response.name + '!';
     });
   }
+
+  function logout(){
+    FB.logout(function(response) {
+     // Person is now logged out
+     console.log('Log out');
+   });
+  }
 </script>
 
 <!--
@@ -96,6 +103,9 @@
 </fb:login-button>
 
 <div id="status">
+  <div>
+    <button onclick="logout_onclick();">logout</button>
+  </div>
 </div>
 </body>
 </html>
