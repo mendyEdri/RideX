@@ -43572,7 +43572,7 @@
 	'use strict';
 	
 	module.exports = function (input) {
-	  var url = 'https://mendy-edri-server.herokuapp.com/geo?input=' + input;
+	  var url = '/geo?input=' + input;
 	  return fetch(url, {
 	    method: 'GET'
 	  }).then(function (response) {
@@ -43595,7 +43595,7 @@
 	'use strict';
 	
 	module.exports = function (userId, locationString) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/requestRide', {
+	  return fetch('/api/ride/requestRide', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
@@ -43625,7 +43625,7 @@
 	'use strict';
 	
 	module.exports = function (geo) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/api/driver/findFreeDriver', {
+	  return fetch('/api/driver/findFreeDriver', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
@@ -43654,7 +43654,7 @@
 	'use strict';
 	
 	module.exports = function (driverId, driverGeo, rideId, userGeo, locationString) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/sendRideToDriver', {
+	  return fetch('/api/ride/sendRideToDriver', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
@@ -43687,7 +43687,7 @@
 	'use strict';
 	
 	module.exports = function (geo) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/api/driver/findall', {
+	  return fetch('/api/driver/findall', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
@@ -43714,7 +43714,7 @@
 	'use strict';
 	
 	module.exports = function (origin, destination) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/api/arrivalTime', {
+	  return fetch('/api/arrivalTime', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
@@ -43766,7 +43766,7 @@
 	'use strict';
 	
 	module.exports = function (rideId, driverId) {
-	  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/getRideState', {
+	  return fetch('/api/ride/getRideState', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',

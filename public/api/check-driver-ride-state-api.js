@@ -1,5 +1,5 @@
 module.exports = function(rideId, driverId) {
-  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/getRideState', {
+  return fetch('/api/ride/getRideState', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

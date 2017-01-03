@@ -1,5 +1,5 @@
 module.exports = function(origin, destination) {
-  return fetch('https://mendy-edri-server.herokuapp.com/api/arrivalTime', {
+  return fetch('/api/arrivalTime', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

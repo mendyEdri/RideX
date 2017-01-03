@@ -1,5 +1,5 @@
 module.exports = function(geo) {
-  return fetch('https://mendy-edri-server.herokuapp.com/api/driver/findFreeDriver', {
+  return fetch('/api/driver/findFreeDriver', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
