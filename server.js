@@ -170,6 +170,10 @@ function loadLogin() {
   return fs.readFileSync('public/login.html').toString();
 }
 
+function loadFBLogin() {
+  return fs.readFileSync('public/fbLogin.html').toString();
+}
+
 function loadLoginSuccess() {
   return fs.readFileSync('public/login_success.html').toString();
 }
@@ -186,7 +190,7 @@ app.get('/facebook', function(request, response){
     version: 'v1.0',
   };
 
-  var html = Mustache.to_html(loadLogin(), view);
+  var html = Mustache.to_html(loadFBLogin(), view);
   response.send(html);
 });
 
