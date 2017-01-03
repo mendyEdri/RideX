@@ -129,9 +129,11 @@ module.exports = (function() {
             coords[0],
             coords[1]
           ],
-          $maxDistance: 3/111.12
+          $maxDistance: 3/111.12,
+          $distanceField : "dist",
+          $spherical : true
         },
-      }).sort({'$near': coords}).where({ "freeForRide" : true }).where({ "blocked": false });
+      }).sort({'$near': { "dist" : 1, "_id" : 1 } }).where({ "freeForRide" : true }).where({ "blocked": false });
       query.exec(function (err, driver) {
         if (err) {
           console.log(err);
