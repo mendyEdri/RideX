@@ -81,7 +81,7 @@
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
+        'Thanks for logging in, ' + response.name + '!' + '    Email:' + response.email;
     });
   }
 
@@ -105,7 +105,7 @@
 <div id="status">
 </div>
 <div>
-  <button onclick="logout_onclick();">logout</button>
+  <button onclick="logout();">logout</button>
 </div>
 </body>
 </html>
