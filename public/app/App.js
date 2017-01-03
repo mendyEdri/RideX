@@ -219,7 +219,7 @@ class App extends Component {
 
 	header() {
 		return (
-      <Navbar brand='Backoffice' right>
+      <Navbar brand='MyTaxi Backoffice' right>
         <NavItem href='#'><Icon>search</Icon></NavItem>
         <NavItem href='#'><Icon>view_module</Icon></NavItem>
         <NavItem href='#'><Icon>refresh</Icon></NavItem>

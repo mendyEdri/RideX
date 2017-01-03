@@ -21856,7 +21856,7 @@
 			value: function header() {
 				return _react2.default.createElement(
 					_reactMaterialize.Navbar,
-					{ brand: 'Backoffice', right: true },
+					{ brand: 'MyTaxi Backoffice', right: true },
 					_react2.default.createElement(
 						_reactMaterialize.NavItem,
 						{ href: '#' },
