@@ -22078,17 +22078,18 @@
 			value: function cardWithDriverAnswer(driverId, answer) {
 				var _this8 = this;
 	
-				this.setState({ driverAccept: answer });
+				console.log('cardWithDriverAnswer');
+				this.setState({ driverAccept: answer, findDriverResult: [], drivers: [] });
 				this.state.findDriverResult.map(function (driver, i) {
 					if (driverId == driver.driverId) {
 						var temp = _this8.state.findDriverResult;
-						temp.splice(i, 1);
+						temp = temp.splice(i, 1);
 						_this8.setState({ findDriverResult: temp });
 	
 						var tempDrivers = _this8.state.drivers;
 						for (var i = 0; i < _this8.state.drivers.length; i++) {
 							if (drivers[i] == driverId) {
-								tempDrivers.splice(i, 1);
+								tempDrivers = tempDrivers.splice(i, 1);
 								_this8.setState({ drivers: tempDrivers });
 								break;
 								return;

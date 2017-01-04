@@ -335,17 +335,18 @@ class App extends Component {
 	}
 
   cardWithDriverAnswer(driverId, answer) {
+    console.log('cardWithDriverAnswer');
     this.setState({ driverAccept: answer });
     this.state.findDriverResult.map((driver, i) => {
       if (driverId == driver.driverId) {
           var temp = this.state.findDriverResult;
-          temp.splice(i, 1);
+          temp = temp.splice(i, 1);
           this.setState({ findDriverResult: temp });
 
           var tempDrivers = this.state.drivers;
           for (var i = 0; i < this.state.drivers.length; i++) {
               if (drivers[i] == driverId) {
-                tempDrivers.splice(i, 1);
+                tempDrivers = tempDrivers.splice(i, 1);
                 this.setState({ drivers: tempDrivers });
                 break;
                 return;
