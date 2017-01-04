@@ -47,6 +47,7 @@ class App extends Component {
       spin: false,
       spinKey: '',
       requestRideSpinner: false,
+      driverReacted: '',
 		};
 
 		this.handleMapLoad = this.handleMapLoad.bind(this);
@@ -340,25 +341,25 @@ class App extends Component {
     });
   }
 
-  checkRideIdDriverAnswer(rideId, driverId) {
+  checkRideIdDriverAnswer(rideId, driverId, index) {
     CheckDriverRideState(rideId, driverId).then((data) => {
       console.log('driver answer');
       console.log(JSON.stringify(data));
       console.log(driverId);
       if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
         console.log('driver won\'t take the ride');
-        this.setState({ spin: false });
+        this.setState({ spin: false, driverReacted: index });
         this.cardWithDriverAnswer(data.result.message.driverId, false);
         return;
       }
       if (data.result.message.driverId == driverId) {
         console.log('driver accepted');
-        this.setState({ spin: false });
+        this.setState({ spin: false, driverReacted: index });
         this.cardWithDriverAnswer(data.result.message.driverId, true);
         return;
       }
       setTimeout(() => {
-        this.checkRideIdDriverAnswer(rideId, driverId);
+        this.checkRideIdDriverAnswer(rideId, driverId, index);
       }, 2000);
     });
   }
@@ -375,7 +376,7 @@ class App extends Component {
       // TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
       console.log('rideId: ' + this.state.requestRideResult._id);
       console.log('DRIVERID: ' + this.state.findDriverResult[index].phoneNumber);
-       this.checkRideIdDriverAnswer(this.state.requestRideResult._id, this.state.findDriverResult[index].phoneNumber);
+       this.checkRideIdDriverAnswer(this.state.requestRideResult._id, this.state.findDriverResult[index].phoneNumber, index);
 		});
 	}
 
@@ -419,7 +420,7 @@ class App extends Component {
 							</div>
 							</div>
 						</div>
-						<Button disabled={ this.state.spinKey == i ? true : false } onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
+						<Button disabled={ this.state.driverReacted == i ? true : false } onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
 							Order
 						</Button>
 					</div>

@@ -21663,7 +21663,8 @@
 				tempDrivers: [],
 				spin: false,
 				spinKey: '',
-				requestRideSpinner: false
+				requestRideSpinner: false,
+				driverReacted: ''
 			};
 	
 			_this.handleMapLoad = _this.handleMapLoad.bind(_this);
@@ -22080,7 +22081,7 @@
 			}
 		}, {
 			key: 'checkRideIdDriverAnswer',
-			value: function checkRideIdDriverAnswer(rideId, driverId) {
+			value: function checkRideIdDriverAnswer(rideId, driverId, index) {
 				var _this8 = this;
 	
 				(0, _checkDriverRideStateApi2.default)(rideId, driverId).then(function (data) {
@@ -22089,18 +22090,18 @@
 					console.log(driverId);
 					if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
 						console.log('driver won\'t take the ride');
-						_this8.setState({ spin: false });
+						_this8.setState({ spin: false, driverReacted: index });
 						_this8.cardWithDriverAnswer(data.result.message.driverId, false);
 						return;
 					}
 					if (data.result.message.driverId == driverId) {
 						console.log('driver accepted');
-						_this8.setState({ spin: false });
+						_this8.setState({ spin: false, driverReacted: index });
 						_this8.cardWithDriverAnswer(data.result.message.driverId, true);
 						return;
 					}
 					setTimeout(function () {
-						_this8.checkRideIdDriverAnswer(rideId, driverId);
+						_this8.checkRideIdDriverAnswer(rideId, driverId, index);
 					}, 2000);
 				});
 			}
@@ -22116,7 +22117,7 @@
 					// TODO add 15 sec timer, if till end, no answer from the driver, set as decliend
 					console.log('rideId: ' + _this9.state.requestRideResult._id);
 					console.log('DRIVERID: ' + _this9.state.findDriverResult[index].phoneNumber);
-					_this9.checkRideIdDriverAnswer(_this9.state.requestRideResult._id, _this9.state.findDriverResult[index].phoneNumber);
+					_this9.checkRideIdDriverAnswer(_this9.state.requestRideResult._id, _this9.state.findDriverResult[index].phoneNumber, index);
 				});
 			}
 		}, {
@@ -22201,7 +22202,7 @@
 							),
 							_react2.default.createElement(
 								_reactMaterialize.Button,
-								{ disabled: _this10.state.spinKey == i ? _this10.state.driverAccept ? true : true : false, onClick: function onClick(event) {
+								{ disabled: _this10.state.driverReacted == i ? true : false, onClick: function onClick(event) {
 										return _this10.handleSendDriverClick(i);
 									}, key: i, style: rowButton },
 								'Order'
