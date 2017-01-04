@@ -22078,8 +22078,7 @@
 			value: function cardWithDriverAnswer(driverId, answer) {
 				var _this8 = this;
 	
-				console.log('cardWithDriverAnswer');
-				this.setState({ driverAccept: answer, findDriverResult: [], drivers: [] });
+				this.setState({ driverAccept: answer });
 				this.state.findDriverResult.map(function (driver, i) {
 					if (driverId == driver.driverId) {
 						var temp = _this8.state.findDriverResult;
@@ -22092,6 +22091,7 @@
 								tempDrivers.splice(i, 1);
 								_this8.setState({ drivers: tempDrivers });
 								break;
+								return;
 							}
 						}
 					}
