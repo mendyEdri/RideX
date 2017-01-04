@@ -300,7 +300,7 @@ class App extends Component {
 										style={input} placeholder={this.state.placeholder} onChange={this.updateRequestRideChanges} />
 									{ this.state.showLocationGeoList ? this.getGeolist() : null }
 									<Button style={searchContainerButtons} onClick={() => {
-                      this.setState({ requestRideSpinner: true });
+                      this.setState({ requestRideSpinner: true, findDriverResult: [], drivers: [] });
 											RequestApi('0526850487', this.state.requestRideValue).then((data) => {
 												if (!data.result.ride) {
 													console.log('location not found');
