@@ -174,6 +174,10 @@ function loadFBLogin() {
   return fs.readFileSync('public/fbLogin.html').toString();
 }
 
+function loadInLogin() {
+  return fs.readFileSync('public/linkedin.html').toString();
+}
+
 function loadLoginSuccess() {
   return fs.readFileSync('public/login_success.html').toString();
 }
@@ -181,6 +185,11 @@ function loadLoginSuccess() {
 app.get('/location', function(req, res) {
   var html = Mustache.to_html(loadLogin(), null);
   res.send(html);
+});
+
+app.get('/linkedin', function(request, response){
+  var html = Mustache.to_html(loadInLogin(), null);
+  response.send(html);
 });
 
 app.get('/facebook', function(request, response){

@@ -318,7 +318,7 @@ class App extends Component {
 															alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 															return;
 														}
-														this.setState({ findDriverResult: data.result.message.reverse() }, () => {
+														this.setState({ findDriverResult: data.result.message }, () => {
                               this.getDestination(destination, 0);
                             });
 												});
@@ -331,6 +331,15 @@ class App extends Component {
 		</div>);
 	}
 
+  cardWithDriverAnswer(driverId, answer) {
+    this.setState({ driverAccept: answer });
+    this.state.findDriverResult.map((driver, i) => {
+      if (driverId == driver.driverId) {
+
+      }
+    });
+  }
+
   checkRideIdDriverAnswer(rideId, driverId) {
     CheckDriverRideState(rideId, driverId).then((data) => {
       console.log('driver answer');
@@ -339,11 +348,13 @@ class App extends Component {
       if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
         console.log('driver won\'t take the ride');
         this.setState({ spin: false });
+        this.cardWithDriverAnswer(data.result.message.driverId, false);
         return;
       }
       if (data.result.message.driverId == driverId) {
         console.log('driver accepted');
         this.setState({ spin: false });
+        this.cardWithDriverAnswer(data.result.message.driverId, true);
         return;
       }
       setTimeout(() => {
@@ -408,7 +419,7 @@ class App extends Component {
 							</div>
 							</div>
 						</div>
-						<Button onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
+						<Button disabled={ this.state.spinKey != i ? this.state.driverAccept ? this.state.driverAccept : false : false } onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
 							Order
 						</Button>
 					</div>
