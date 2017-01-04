@@ -22034,7 +22034,7 @@
 							_react2.default.createElement(
 								_reactMaterialize.Button,
 								{ style: searchContainerButtons, onClick: function onClick() {
-										_this7.setState({ requestRideSpinner: true, findDriverResult: [], drivers: [] });
+										_this7.setState({ requestRideSpinner: true, findDriverResult: [], drivers: [], tempDrivers: [] });
 										(0, _requestRide2.default)('0526850487', _this7.state.requestRideValue).then(function (data) {
 											if (!data.result.ride) {
 												console.log('location not found');

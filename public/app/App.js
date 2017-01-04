@@ -300,32 +300,33 @@ class App extends Component {
 										style={input} placeholder={this.state.placeholder} onChange={this.updateRequestRideChanges} />
 									{ this.state.showLocationGeoList ? this.getGeolist() : null }
 									<Button style={searchContainerButtons} onClick={() => {
-                      this.setState({ requestRideSpinner: true, findDriverResult: [], drivers: [], tempDrivers: [] });
-											RequestApi('0526850487', this.state.requestRideValue).then((data) => {
-												if (!data.result.ride) {
-													console.log('location not found');
-                          this.setState({ requestRideSpinner: false });
-													return;
-												}
-
-                        console.log(data.result.ride);
-												this.setState({ requestRideResult: data.result.ride });
-												if (data.result.ride.geo.length == 2) {
-													var destination = data.result.ride.geo;
-													FindDriverApi([data.result.ride.geo[0], data.result.ride.geo[1]]).then((data) => {
+                      this.setState({ requestRideSpinner: true, findDriverResult: [], drivers: [], tempDrivers: [] }, () => {
+                        RequestApi('0526850487', this.state.requestRideValue).then((data) => {
+                          if (!data.result.ride) {
+                            console.log('location not found');
                             this.setState({ requestRideSpinner: false });
-														if (data.result.success == false || data.result.message.length == 0) {
-															console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-															alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
-															return;
-														}
-                            console.log(JSON.stringify(data.result.message));
-														this.setState({ findDriverResult: data.result.message }, () => {
-                              this.getDestination(destination, 0);
-                            });
-												});
-												}
-											});
+                            return;
+                          }
+
+                          console.log(data.result.ride);
+                          this.setState({ requestRideResult: data.result.ride });
+                          if (data.result.ride.geo.length == 2) {
+                            var destination = data.result.ride.geo;
+                            FindDriverApi([data.result.ride.geo[0], data.result.ride.geo[1]]).then((data) => {
+                              this.setState({ requestRideSpinner: false });
+                              if (data.result.success == false || data.result.message.length == 0) {
+                                console.log(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+                                alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
+                                return;
+                              }
+                              console.log(JSON.stringify(data.result.message));
+                              this.setState({ findDriverResult: data.result.message }, () => {
+                                this.getDestination(destination, 0);
+                              });
+                          });
+                          }
+                        });
+                      });
 									}}>Find Driver</Button>
 								</div>
                 <div style={requestRideSpinner}><Preloader active={this.state.requestRideSpinner} size='small'/></div>
