@@ -22201,7 +22201,7 @@
 							),
 							_react2.default.createElement(
 								_reactMaterialize.Button,
-								{ disabled: _this10.state.spinKey != i ? _this10.state.driverAccept ? _this10.state.driverAccept : false : false, onClick: function onClick(event) {
+								{ disabled: _this10.state.spinKey != i ? _this10.state.driverAccept ? true : true : false, onClick: function onClick(event) {
 										return _this10.handleSendDriverClick(i);
 									}, key: i, style: rowButton },
 								'Order'
