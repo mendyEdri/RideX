@@ -419,7 +419,7 @@ class App extends Component {
 							</div>
 							</div>
 						</div>
-						<Button disabled={ this.state.spinKey != i ? this.state.driverAccept ? this.state.driverAccept : false : false } onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
+						<Button disabled={ this.state.spinKey != i ? this.state.driverAccept ? true : true : false } onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
 							Order
 						</Button>
 					</div>
