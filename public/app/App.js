@@ -338,7 +338,9 @@ class App extends Component {
     this.setState({ driverAccept: answer });
     this.state.findDriverResult.map((driver, i) => {
       if (driverId == driver.driverId) {
-
+        var temp = this.state.findDriverResult;
+        temp = temp.splice(i, 1);
+        this.setState({ findDriverResult: temp });
       }
     });
   }
