@@ -336,7 +336,7 @@ class App extends Component {
 
   cardWithDriverAnswer(driverId, answer) {
     console.log('cardWithDriverAnswer');
-    this.setState({ driverAccept: answer,  findDriverResult: [], drivers: [] });
+    this.setState({ driverAccept: answer });
     this.state.findDriverResult.map((driver, i) => {
       if (driverId == driver.driverId) {
           var temp = this.state.findDriverResult;
