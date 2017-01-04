@@ -319,6 +319,7 @@ class App extends Component {
 															alert(data.result.success == true ? "No Drivers Around" : "Error, please try again later");
 															return;
 														}
+                            console.log(data.result.message);
 														this.setState({ findDriverResult: data.result.message }, () => {
                               this.getDestination(destination, 0);
                             });
