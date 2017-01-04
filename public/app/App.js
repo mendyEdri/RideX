@@ -420,7 +420,7 @@ class App extends Component {
 							</div>
 							</div>
 						</div>
-						<Button disabled={ this.state.driverReacted == driver.driverId ? true : false } onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
+						<Button disabled={ this.state.spinKey != i ? true : false } onClick={(event) => this.handleSendDriverClick(i)} key={i} style={rowButton}>
 							Order
 						</Button>
 					</div>

@@ -22202,7 +22202,7 @@
 							),
 							_react2.default.createElement(
 								_reactMaterialize.Button,
-								{ disabled: _this10.state.driverReacted == driver.driverId ? true : false, onClick: function onClick(event) {
+								{ disabled: _this10.state.spinKey != i ? true : false, onClick: function onClick(event) {
 										return _this10.handleSendDriverClick(i);
 									}, key: i, style: rowButton },
 								'Order'
