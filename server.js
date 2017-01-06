@@ -277,6 +277,49 @@ app.post('/push', function(req, res) {
   });
 });
 
+app.get('/inbound', function(req, res) {
+  res.json({ success: true, message: req.query });
+});
+
+app.get('/bulkGet', function(req, res) {
+  request({
+      url: "https://api.aceappsltd.com/v1/bulksms?username=mytaxi&password=mytaxigh&from='MyTaxi'&to=%2B233246744420&message='test1'"
+  }, function (error, response, body){
+      console.log(response);
+      if (error) {
+        res.json({ success: false, ass: true, message: error });
+        return;
+      }
+      res.json({ success: true, response: response, body: body });
+  });
+});
+
+app.get('/bulkSend', function(req, res) {
+  var auth = "Basic " + new Buffer('mytaxi' + ":" + 'mytaxigh').toString("base64");
+  var myJSONObject = {
+      "from": "MyTaxi",
+      "to": "+233246744440",
+      "message": "Test message 2"
+  };
+  request({
+      url: "https://api.aceappsltd.com/v1/bulksms",
+      method: "POST",
+      json: true,
+      headers: {
+       'content-type': "application/json",
+       'Authorization': auth
+     },
+      body: myJSONObject
+  }, function (error, response, body){
+      console.log(response);
+      if (error) {
+        res.json({ success: false, message: error });
+        return;
+      }
+      res.json({ success: true, response: response, body: body });
+  });
+});
+
 app.post('/sms/out', function(req, res) {
   console.log('sms/out');
   res.json({message: 'done'})

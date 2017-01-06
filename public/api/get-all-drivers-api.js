@@ -1,5 +1,5 @@
 module.exports = function(geo) {
-  return fetch('/api/driver/findall', {
+  return fetch('https://mendy-edri-server.herokuapp.com/api/driver/findall', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

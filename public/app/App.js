@@ -335,23 +335,23 @@ class App extends Component {
 	}
 
   cardWithDriverAnswer(driverId, answer) {
-    console.log('cardWithDriverAnswer');
     this.setState({ driverAccept: answer });
     this.state.findDriverResult.map((driver, i) => {
-      if (driverId == driver.driverId) {
+      if (driverId == driver.phoneNumber) {
           var temp = this.state.findDriverResult;
-          temp = temp.splice(i, 1);
-          this.setState({ findDriverResult: temp });
+          temp.splice(i, 1);
+          this.setState({ findDriverResult: temp }, () => {
+            console.log('remove:' + i);
 
-          var tempDrivers = this.state.drivers;
-          for (var i = 0; i < this.state.drivers.length; i++) {
-              if (drivers[i] == driverId) {
-                tempDrivers = tempDrivers.splice(i, 1);
-                this.setState({ drivers: tempDrivers });
-                break;
-                return;
-              }
-          }
+            var tempDrivers = this.state.drivers;
+            for (var y = 0; y < this.state.drivers.length; y++) {
+                if (this.state.drivers[y] == driverId) {
+                  tempDrivers.splice(y, 1);
+                  this.setState({ drivers: tempDrivers });
+                  return;
+                }
+            }
+          });
       }
     });
   }
@@ -361,16 +361,20 @@ class App extends Component {
       console.log('driver answer');
       console.log(JSON.stringify(data));
       console.log(driverId);
+      if (data.result.success == false) {
+        alert(data.result.message);
+        return;
+      }
       if (data.result.message.ignoredDriversId.indexOf(driverId) > -1) {
         console.log('driver won\'t take the ride');
         this.setState({ spin: false, driverReacted: driverId });
-        this.cardWithDriverAnswer(data.result.message.driverId, false);
+        this.cardWithDriverAnswer(driverId, false);
         return;
       }
       if (data.result.message.driverId == driverId) {
         console.log('driver accepted');
         this.setState({ spin: false, driverReacted: driverId });
-        this.cardWithDriverAnswer(data.result.message.driverId, true);
+        this.cardWithDriverAnswer(driverId, true);
         return;
       }
       setTimeout(() => {

@@ -1,5 +1,5 @@
 module.exports = function(userId, locationString) {
-  return fetch('/api/ride/requestRide', {
+  return fetch('https://mendy-edri-server.herokuapp.com/api/ride/requestRide', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
