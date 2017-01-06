@@ -281,6 +281,10 @@ app.get('/inbound', function(req, res) {
   res.json({ success: true, message: req.query });
 });
 
+app.post('/inbound', function(req, res) {
+  res.json({ success: true, message: req.body });
+});
+
 app.get('/bulkGet', function(req, res) {
   request({
       url: "https://api.aceappsltd.com/v1/bulksms?username=mytaxi&password=mytaxigh&from='MyTaxi'&to=%2B233246744420&message='test1'"
