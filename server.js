@@ -66,7 +66,7 @@ const Mustache  = require('mustache');
 const Request = require('request');
 const Querystring  = require('querystring');
 
-var csrf_guid = "112233445599";//Guid.raw();
+var csrf_guid = "112233445599";
 
 const api_version = 'v1.0';
 const app_id = '769607079858170';
@@ -282,12 +282,14 @@ app.get('/inbound', function(req, res) {
 });
 
 app.post('/inbound', function(req, res) {
+  console.log('----------------- INBOUD MESSAGE --------------------');
+  console.log(req.body);
   res.json({ success: true, message: req.body });
 });
 
 app.get('/bulkGet', function(req, res) {
   request({
-      url: "https://api.aceappsltd.com/v1/bulksms?username=mytaxi&password=mytaxigh&from='MyTaxi'&to=%2B233246744420&message='test1'"
+      url: "https://api.aceappsltd.com/v1/bulksms?username=mytaxi&password=mytaxigh&from=MyTaxi&to=%2B233246744420&message=test3"
   }, function (error, response, body){
       console.log(response);
       if (error) {
@@ -311,7 +313,7 @@ app.get('/bulkSend', function(req, res) {
       json: true,
       headers: {
        'content-type': "application/json",
-       'Authorization': auth
+       'authorization': auth
      },
       body: myJSONObject
   }, function (error, response, body){
@@ -659,7 +661,7 @@ app.post('/registerPassenger', function(req, res) {
     } else if (passenger) {
       res.json({success: false, message: 'Passenger already exist'});
     }
-  })
+  });
 });
 
 app.post('/validateNumber', function(req, res) {
