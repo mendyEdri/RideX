@@ -292,14 +292,14 @@ app.get('/api/fire', function(req, res) {
 
 app.post('/api/greenhouse', function(req, res) {
   console.log('/api/greenhouse');
-  if (req.body.boardId) {
-    var url = 'https://api.greenhouse.io/v1/boards/' + req.body.boardId + '/jobs';
+  console.log(req.body);
+  if (req.body.greenhouseId) {
+    var url = 'https://api.greenhouse.io/v1/boards/' + req.body.greenhouseId + '/jobs';
     request.get({url: url, json: true}, function(err, resp, respBody) {
       if (err) {
         res.json({ success: false, isError: true, error: err });
         return;
       }
-
       // iterate the job list and get the data
       var jobIds = [];
       for (var i = 0; i < respBody.jobs.length; i++) {
@@ -309,7 +309,7 @@ app.post('/api/greenhouse', function(req, res) {
             for (var i = 0; i < jobs.length; i++) {
               uploadPositions(jobs[i].title, jobs[i].location.name, jobs[i].location.name, jobs[i].internal_job_id, jobs[i].content, req.body.companyName, req.body.companyId, i, function(index) {
                 console.log('done with index: ' + index);
-                if (respBody.jobs.length == index+1) {
+                if (respBody.jobs.length >= index) {
                   res.json({ success: true, message: 'your position is uploaded' });
                 }
               });
@@ -909,7 +909,7 @@ function uploadPositions(title, address, city, positionNumber, description, comp
               }   }
     },
     function (error, response, body) {
-      console.log(error);
+        console.log(error);
         if (response) {
           done(index);
         }
