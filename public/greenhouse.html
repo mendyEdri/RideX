@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript">
+        // Setup an event listener to make an API call once auth is complete
+        function fetch() {
+          console.log('hey fetching things');
+
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", '/api/greenhouse', true);
+
+          //Send the proper header information along with the request
+          xhr.setRequestHeader("Content-type", "application/json");
+
+          xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+              // Request finished. Do processing here.
+              console.log(xhr);
+            }
+          }
+          xhr.send("companyName=" + document.getElementById("companyName").value + "&comapnyId=" + document.getElementById("companyId").value + "&greenhouseId=" + document.getElementById("greenhouseId").value);
+          // xhr.send('string');
+          // xhr.send(new Blob());
+          // xhr.send(new Int8Array());
+          // xhr.send({ form: 'data' });
+          // xhr.send(document);
+        }
+    </script>
+
+    <title>Linkedin Login</title>
+  </head>
+  <body>
+    <div id="root">
+      <div>
+        <input placeholder="Company Name" id="companyName"> Company Name</input>
+        </br>
+        </br>
+        <input placeholder="Company id" id="companyId"> Company id</input>
+        </br>
+        </br>
+        <input placeholder="Greenhouse board id" id="greenhouseId"> Hey</input>
+        </br>
+        </br>
+        <button onclick="fetch();">Fetch</button>
+    </div>
+  </body>
+</html>

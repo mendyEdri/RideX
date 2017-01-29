@@ -170,6 +170,10 @@ function loadLogin() {
   return fs.readFileSync('public/login.html').toString();
 }
 
+function greenhousePage() {
+  return fs.readFileSync('public/greenhouse.html').toString();
+}
+
 function loadFBLogin() {
   return fs.readFileSync('public/fbLogin.html').toString();
 }
@@ -181,6 +185,11 @@ function loadInLogin() {
 function loadLoginSuccess() {
   return fs.readFileSync('public/login_success.html').toString();
 }
+
+app.get('/greenhouse', function(req, res) {
+  var html = Mustache.to_html(greenhousePage(), null);
+  res.send(html);
+});
 
 app.get('/location', function(req, res) {
   var html = Mustache.to_html(loadLogin(), null);
