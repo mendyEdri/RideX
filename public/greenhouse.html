@@ -21,7 +21,11 @@
               console.log(xhr);
             }
           }
-          xhr.send("companyName=TalentTribe&comapnyId=4b2e48ca-af8b-45bf-8e27-a36b39e5de15&greenhouseId=talenttribesandboxsandbox");
+          xhr.send({
+            "companyName": "TalentTribe",
+            "companyId": "4b2e48ca-af8b-45bf-8e27-a36b39e5de15",
+            "greenhouseId": "talenttribesandboxsandbox"
+          });
           // xhr.send('string');
           // xhr.send(new Blob());
           // xhr.send(new Int8Array());
