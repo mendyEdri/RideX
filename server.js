@@ -841,6 +841,83 @@ function sendMessage(number, body, callback) {
   });
 }
 
+// Greenhouse
+
+function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, done) {
+  // var title = data.source.job[index].title.__cdata;
+  // var location = data.source.job[index].city.__cdata + ', ' + data.source.job[index].state.__cdata;
+  // var city = data.source.job[index].city.__cdata;
+  // var country = data.source.job[index].country.__cdata;
+  // var positionNumber = data.source.job[index].referencenumber.__cdata;
+  // var description = data.source.job[index].linkedin_description.__cdata
+  // var companyName = data.source.job[index].company.__cdata;
+  // var companyId = '47033f3d-e807-4669-b537-a5e9992f3d1e'; //'e510559d-13c9-4072-866c-7f3e4126a22e';
+
+  request.post(
+    'https://dev.talenttribe.me/tt-server/rest/positionCompany/addUpdateOpenPosition',
+    { json: { title: title, location: { address: location, city: city }, positionNumber: positionNumber, description: description,
+              company: {
+                companyName: companyName,
+                companyId: companyId
+              }   }
+    },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            index++;
+            done(index);
+        }
+    }
+  );
+}
+
+function getJobData(jobIds, done) {
+  var jobs = [];
+  for (var i = 0; i < jobIds.length; i++) {
+    var url = 'https://api.greenhouse.io/v1/boards/talenttribesandboxsandbox/jobs/' + jobIds[i];
+    request.get({url: url, json: true}, function(err, resp, respBody) {
+      if (err) {
+        done(null);
+        return;
+      }
+      jobs.push(respBody);
+      console.log(respBody);
+      if (jobs.length === jobIds.length) {
+        done(jobs);
+      }
+    });
+  }
+}
+
+app.post('/api/greenhouse', function(req, res) {
+  if (req.body.boardId) {
+    var url = 'https://api.greenhouse.io/v1/boards/' + req.body.boardId + '/jobs';
+    request.get({url: url, json: true}, function(err, resp, respBody) {
+      if (err) {
+        res.json({ success: false, error: err });
+        return;
+      }
+
+      // iterate the job list and get the data
+      var jobIds = [];;
+      for (var i = 0; i < respBody.jobs.length; i++) {
+        jobIds.push(respBody.jobs[i].id);
+        if (respBody.jobs.length === i+1) {
+          getJobData(jobIds, function(jobs) {
+            for (var i = 0; i < jobs.length; i++) {
+              uploadPositions(jobs[i].title, jobs[i].location.name, jobs[i].internal_job_id, jobs[i].content, req.body.companyName, req.body.companyId, function(index) {
+                console.log('done with index: ' + index);
+              });
+              //function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, done) {
+            }
+            //res.json({ success: jobs.length > 0 ? true : false , ids: jobIds, data: jobs });
+          });
+        }
+      }
+    });
+    return;
+  }
+  res.json({ success: false });
+});
 
 
 // callback example
@@ -855,6 +932,7 @@ app.get('/callback', function(req, res) {
 
   res.json({ message: 'finish' });
 });
+
 
 
 
