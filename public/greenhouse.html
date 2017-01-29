@@ -21,16 +21,13 @@
               console.log(xhr);
             }
           }
-          xhr.send({
+
+          var data = JSON.stringify({
             "companyName": "TalentTribe",
             "companyId": "4b2e48ca-af8b-45bf-8e27-a36b39e5de15",
             "greenhouseId": "talenttribesandboxsandbox"
           });
-          // xhr.send('string');
-          // xhr.send(new Blob());
-          // xhr.send(new Int8Array());
-          // xhr.send({ form: 'data' });
-          // xhr.send(document);
+          xhr.send(data);
         }
     </script>
 
