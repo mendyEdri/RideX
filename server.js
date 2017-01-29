@@ -302,7 +302,7 @@ app.post('/api/greenhouse', function(req, res) {
         if (respBody.jobs.length === i+1) {
           getJobData(jobIds, function(jobs) {
             for (var i = 0; i < jobs.length; i++) {
-              uploadPositions(jobs[i].title, jobs[i].location.name, jobs[i].internal_job_id, jobs[i].content, req.body.companyName, req.body.companyId, i, function(index) {
+              uploadPositions(jobs[i].title, jobs[i].location.name, jobs[i].location.name, jobs[i].internal_job_id, jobs[i].content, req.body.companyName, req.body.companyId, i, function(index) {
                 console.log('done with index: ' + index);
                 if (respBody.jobs.length == index+1) {
                   res.json({ success: true, message: 'your position is uploaded' });
@@ -908,7 +908,7 @@ function uploadPositions(title, address, city, positionNumber, description, comp
     function (error, response, body) {
       console.log(error);
         if (response) {
-            done(index);
+          done(index);
         }
     }
   );
