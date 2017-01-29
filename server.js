@@ -116,7 +116,7 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
-app.use('/mytaxi', routes);
+//app.use('/mytaxi', routes);
 app.use('/users', users);
 
 app.use('/api/driver', DriverApi);
@@ -285,6 +285,41 @@ app.post('/push', function(req, res) {
     }
   });
 });
+
+app.post('/api/greenhouse', function(req, res) {
+  if (req.body.boardId) {
+    var url = 'https://api.greenhouse.io/v1/boards/' + req.body.boardId + '/jobs';
+    request.get({url: url, json: true}, function(err, resp, respBody) {
+      if (err) {
+        res.json({ success: false, error: err });
+        return;
+      }
+
+      // iterate the job list and get the data
+      var jobIds = [];;
+      for (var i = 0; i < respBody.jobs.length; i++) {
+        jobIds.push(respBody.jobs[i].id);
+        if (respBody.jobs.length === i+1) {
+          getJobData(jobIds, function(jobs) {
+            for (var i = 0; i < jobs.length; i++) {
+              uploadPositions(jobs[i].title, jobs[i].location.name, jobs[i].internal_job_id, jobs[i].content, req.body.companyName, req.body.companyId, i, function(index) {
+                console.log('done with index: ' + index);
+                if (respBody.jobs.length == index+1) {
+                  res.json({ success: true, message: 'your position is uploaded' });
+                }
+              });
+              //function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, done) {
+            }
+            //res.json({ success: jobs.length > 0 ? true : false , ids: jobIds, data: jobs });
+          });
+        }
+      }
+    });
+    return;
+  }
+  res.json({ success: false });
+});
+
 
 app.get('/inbound', function(req, res) {
   res.json({ success: true, message: req.query });
@@ -852,7 +887,7 @@ function sendMessage(number, body, callback) {
 
 // Greenhouse
 
-function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, done) {
+function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, index, done) {
   // var title = data.source.job[index].title.__cdata;
   // var location = data.source.job[index].city.__cdata + ', ' + data.source.job[index].state.__cdata;
   // var city = data.source.job[index].city.__cdata;
@@ -864,15 +899,15 @@ function uploadPositions(title, address, city, positionNumber, description, comp
 
   request.post(
     'https://dev.talenttribe.me/tt-server/rest/positionCompany/addUpdateOpenPosition',
-    { json: { title: title, location: { address: location, city: city }, positionNumber: positionNumber, description: description,
+    { json: { title: title, location: { address: address, city: city }, positionNumber: positionNumber, description: description,
               company: {
                 companyName: companyName,
                 companyId: companyId
               }   }
     },
     function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            index++;
+      console.log(error);
+        if (response) {
             done(index);
         }
     }
@@ -896,38 +931,6 @@ function getJobData(jobIds, done) {
     });
   }
 }
-
-app.post('/api/greenhouse', function(req, res) {
-  if (req.body.boardId) {
-    var url = 'https://api.greenhouse.io/v1/boards/' + req.body.boardId + '/jobs';
-    request.get({url: url, json: true}, function(err, resp, respBody) {
-      if (err) {
-        res.json({ success: false, error: err });
-        return;
-      }
-
-      // iterate the job list and get the data
-      var jobIds = [];;
-      for (var i = 0; i < respBody.jobs.length; i++) {
-        jobIds.push(respBody.jobs[i].id);
-        if (respBody.jobs.length === i+1) {
-          getJobData(jobIds, function(jobs) {
-            for (var i = 0; i < jobs.length; i++) {
-              uploadPositions(jobs[i].title, jobs[i].location.name, jobs[i].internal_job_id, jobs[i].content, req.body.companyName, req.body.companyId, function(index) {
-                console.log('done with index: ' + index);
-              });
-              //function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, done) {
-            }
-            //res.json({ success: jobs.length > 0 ? true : false , ids: jobIds, data: jobs });
-          });
-        }
-      }
-    });
-    return;
-  }
-  res.json({ success: false });
-});
-
 
 // callback example
 var usingItNow = function(callback) {
