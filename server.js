@@ -321,7 +321,6 @@ app.post('/api/greenhouse', function(req, res) {
     });
     return;
   }
-  res.json({ success: false });
 });
 
 
