@@ -299,6 +299,8 @@ app.post('/api/greenhouse', function(req, res) {
         res.json({ success: false, error: err });
         return;
       }
+      res.json({ success: true, message: 'testing done' });
+      return;
 
       // iterate the job list and get the data
       var jobIds = [];
