@@ -286,7 +286,12 @@ app.post('/push', function(req, res) {
   });
 });
 
+app.get('/api/fire', function(req, res) {
+  res.json({ success: true });
+});
+
 app.post('/api/greenhouse', function(req, res) {
+  console.log('/api/greenhouse');
   if (req.body.boardId) {
     var url = 'https://api.greenhouse.io/v1/boards/' + req.body.boardId + '/jobs';
     request.get({url: url, json: true}, function(err, resp, respBody) {
@@ -296,7 +301,7 @@ app.post('/api/greenhouse', function(req, res) {
       }
 
       // iterate the job list and get the data
-      var jobIds = [];;
+      var jobIds = [];
       for (var i = 0; i < respBody.jobs.length; i++) {
         jobIds.push(respBody.jobs[i].id);
         if (respBody.jobs.length === i+1) {
@@ -924,7 +929,6 @@ function getJobData(jobIds, done) {
         return;
       }
       jobs.push(respBody);
-      console.log(respBody);
       if (jobs.length === jobIds.length) {
         done(jobs);
       }
