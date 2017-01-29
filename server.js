@@ -296,7 +296,7 @@ app.post('/api/greenhouse', function(req, res) {
     var url = 'https://api.greenhouse.io/v1/boards/' + req.body.boardId + '/jobs';
     request.get({url: url, json: true}, function(err, resp, respBody) {
       if (err) {
-        res.json({ success: false, error: err, isError: true });
+        res.json({ success: false, isError: true, error: err });
         return;
       }
 
@@ -313,7 +313,6 @@ app.post('/api/greenhouse', function(req, res) {
                   res.json({ success: true, message: 'your position is uploaded' });
                 }
               });
-              //function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, done) {
             }
             //res.json({ success: jobs.length > 0 ? true : false , ids: jobIds, data: jobs });
           });
