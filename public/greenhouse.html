@@ -23,9 +23,9 @@
           }
 
           var data = JSON.stringify({
-            "companyName": "TalentTribe",
-            "companyId": "4b2e48ca-af8b-45bf-8e27-a36b39e5de15",
-            "greenhouseId": "talenttribesandboxsandbox"
+            "companyName": document.getElementById('companyName'),
+            "companyId": document.getElementById('companyId'),
+            "greenhouseId": document.getElementById('greenhouseId')
           });
           xhr.send(data);
         }
@@ -36,13 +36,16 @@
   <body>
     <div id="root">
       <div>
-        <input placeholder="Company Name" id="companyName" value="TalentTribe"> Company Name</input>
+        <input placeholder="Company Name" id="companyName"> Company Name</input>
+        <!-- TalentTribe -->
         </br>
         </br>
-        <input placeholder="Company id" id="companyId" value="4b2e48ca-af8b-45bf-8e27-a36b39e5de15"> Company id</input>
+        <input placeholder="Company id" id="companyId"> Company id</input>
+        <!-- 4b2e48ca-af8b-45bf-8e27-a36b39e5de15 -->
         </br>
         </br>
-        <input placeholder="Greenhouse board id" id="greenhouseId" value="talenttribesandboxsandbox"> Hey</input>
+        <input placeholder="Greenhouse board id" id="greenhouseId"> Hey</input>
+        <!-- talenttribesandboxsandbox -->
         </br>
         </br>
         <button onclick="fetch();">Fetch</button>
