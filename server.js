@@ -291,8 +291,6 @@ app.get('/api/fire', function(req, res) {
 
 app.post('/api/greenhouse', function(req, res) {
   console.log('/api/greenhouse');
-  res.json({ success: 'true' });
-  return;
   console.log(req.body);
   if (req.body.greenhouseId) {
     var url = 'https://api.greenhouse.io/v1/boards/' + req.body.greenhouseId + '/jobs';
