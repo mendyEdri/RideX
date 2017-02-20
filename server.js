@@ -924,7 +924,7 @@ app.post('/api/greenhouse', function(req, res) {
 
 function uploadPositions(title, address, city, positionNumber, description, companyName, companyId, index, done) {
   request.post(
-    'https://dev.talenttribe.me/tt-server/rest/positionCompany/addUpdateOpenPosition',
+    'https://talenttribe.me/tt-server/rest/positionCompany/addUpdateOpenPosition',
     { json: { title: title, location: { address: address, city: city }, positionNumber: positionNumber, description: description,
               company: {
                 companyName: companyName,
