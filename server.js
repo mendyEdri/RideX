@@ -291,8 +291,10 @@ app.get('/api/fire', function(req, res) {
 
 app.post('/api/greenhouse', function(req, res) {
   console.log('/api/greenhouse');
+  console.log(req.body);
   if (req.body.greenhouseId) {
-    var url = 'https://api.greenhouse.io/v1/boards/' + req.body.greenhouseId + '/jobs';
+    //var url = 'https://api.greenhouse.io/v1/boards/' + req.body.greenhouseId + '/jobs';
+    var url = 'https://api.greenhouse.io/v1/boards/mongodb/jobs?content=true';
     request.get({url: url, json: true}, function(err, resp, respBody) {
       if (err) {
         res.json({ success: false, isError: true, error: err });
@@ -301,20 +303,14 @@ app.post('/api/greenhouse', function(req, res) {
       // iterate the job list and get the data
       var jobIds = [];
       for (var i = 0; i < respBody.jobs.length; i++) {
-        jobIds.push(respBody.jobs[i].id);
-        if (respBody.jobs.length === i+1) {
-          getJobData(jobIds, function(jobs) {
-            for (var i = 0; i < jobs.length; i++) {
-              uploadPositions(jobs[i].title, jobs[i].location.name, jobs[i].location.name, jobs[i].internal_job_id, jobs[i].content, req.body.companyName, req.body.companyId, i, function(index) {
-                console.log('done with index: ' + index);
-                if (respBody.jobs.length >= index) {
-                  res.json({ success: true, message: 'your position is uploaded' });
-                }
-              });
-            }
-            //res.json({ success: jobs.length > 0 ? true : false , ids: jobIds, data: jobs });
-          });
-        }
+        uploadPositions(respBody.jobs[i].title, respBody.jobs[i].location.name, respBody.jobs[i].location.name, respBody.jobs[i].internal_job_id, respBody.jobs[i].content, req.body.companyName, req.body.companyId, i, function(index) {
+          console.log('done with index: ' + index);
+          if (jobIds.length >= i) {
+            res.json({ success: true, message: 'your position is uploaded' });
+            return;
+          }
+          jobIds.push(respBody.jobs[i].internal_job_id);
+        });
       }
     });
     return;
